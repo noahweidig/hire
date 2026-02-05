@@ -45,9 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
+                const isBelowViewport = entry.boundingClientRect.top >= window.innerHeight;
                 if (entry.isIntersecting && (scrollingDown || window.scrollY === 0)) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
+                } else if (!entry.isIntersecting && !scrollingDown && isBelowViewport) {
+                    entry.target.classList.remove('is-visible');
                 }
             });
         }, {
