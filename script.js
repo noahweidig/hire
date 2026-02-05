@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-links li a');
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-links');
+    const navBar = document.querySelector('.nav-bar');
     const themeToggle = document.querySelector('.theme-toggle');
     const themeIcon = document.querySelector('.theme-icon');
     const themeText = document.querySelector('.theme-text');
@@ -42,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navToggle.addEventListener('click', () => {
             const isOpen = navMenu.classList.toggle('open');
             navToggle.classList.toggle('is-open', isOpen);
+            if (navBar) {
+                navBar.classList.toggle('nav-open', isOpen);
+            }
             navToggle.setAttribute('aria-expanded', String(isOpen));
         });
 
@@ -49,6 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('open');
                 navToggle.classList.remove('is-open');
+                if (navBar) {
+                    navBar.classList.remove('nav-open');
+                }
                 navToggle.setAttribute('aria-expanded', 'false');
             });
         });
@@ -63,6 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             navMenu.classList.remove('open');
             navToggle.classList.remove('is-open');
+            if (navBar) {
+                navBar.classList.remove('nav-open');
+            }
             navToggle.setAttribute('aria-expanded', 'false');
         });
     }
