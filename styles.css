@@ -16,6 +16,7 @@
     --border-soft: rgba(15, 23, 42, 0.08);
     --shadow-soft: 0 14px 30px rgba(15, 23, 42, 0.08);
     --shadow-tight: 0 10px 24px rgba(15, 23, 42, 0.12);
+    --icon-contrast: var(--primary-indigo);
     --font-main: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --max-width: 1200px;
     --nav-height: 74px;
@@ -39,6 +40,7 @@ body[data-theme="dark"] {
     --border-soft: rgba(148, 163, 184, 0.2);
     --shadow-soft: 0 18px 40px rgba(5, 7, 15, 0.4);
     --shadow-tight: 0 10px 30px rgba(5, 7, 15, 0.6);
+    --icon-contrast: #f8fafc;
 }
 
 body[data-theme="dark"] .sticky-nav {
@@ -608,7 +610,7 @@ p {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary-indigo);
+    color: var(--icon-contrast);
     margin: 0 auto 0.85rem;
 }
 
@@ -702,9 +704,33 @@ footer p {
     transform: translateY(0);
 }
 
+.scroll-slide {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.scroll-slide.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.scroll-slide.is-exiting {
+    opacity: 0;
+    transform: translateX(60px);
+}
+
 @media (prefers-reduced-motion: reduce) {
     .scroll-fade,
     .scroll-fade.is-visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .scroll-slide,
+    .scroll-slide.is-visible,
+    .scroll-slide.is-exiting {
         opacity: 1;
         transform: none;
         transition: none;
@@ -806,23 +832,21 @@ footer p {
 
 @media (max-width: 1180px) {
     .nav-bar {
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
+        justify-content: space-between;
         row-gap: 0.75rem;
     }
 
     .nav-links {
-        flex-wrap: wrap;
-        justify-content: center;
         width: 100%;
     }
 
     .nav-actions {
-        order: 2;
+        order: 0;
     }
 
     .nav-links {
-        order: 3;
+        order: 0;
     }
 }
 
@@ -835,6 +859,13 @@ footer p {
 @media (max-width: 560px) {
     .brand {
         font-size: 0.98rem;
+        min-width: 0;
+    }
+
+    .brand span {
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .brand-logo {
