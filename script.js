@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateThemeToggle = (theme) => {
         const isDark = theme === 'dark';
         themeIcon.textContent = isDark ? '☀️' : '🌙';
-        themeText.textContent = isDark ? 'Light' : 'Dark';
+        if (themeText) {
+            themeText.textContent = isDark ? 'Light' : 'Dark';
+        }
         themeToggle.setAttribute('aria-label', isDark ? 'Toggle light mode' : 'Toggle dark mode');
     };
 
@@ -39,12 +41,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navToggle && navMenu) {
         navToggle.addEventListener('click', () => {
             const isOpen = navMenu.classList.toggle('open');
+            navToggle.classList.toggle('is-open', isOpen);
             navToggle.setAttribute('aria-expanded', String(isOpen));
         });
 
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('open');
+                navToggle.classList.remove('is-open');
                 navToggle.setAttribute('aria-expanded', 'false');
             });
         });
