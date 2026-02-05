@@ -172,6 +172,7 @@ p {
     justify-content: space-between;
     gap: 1.5rem;
     height: 100%;
+    flex-wrap: nowrap;
 }
 
 .brand {
@@ -183,6 +184,7 @@ p {
     color: var(--text-charcoal);
     letter-spacing: 0.02em;
     font-size: 1.1rem;
+    white-space: nowrap;
 }
 
 .brand-logo {
@@ -246,6 +248,7 @@ p {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    flex-shrink: 0;
 }
 
 .nav-toggle {
@@ -716,6 +719,7 @@ footer p {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
     }
 
     .nav-links {
@@ -761,5 +765,21 @@ footer p {
 @media (max-width: 720px) {
     .grid-3 {
         grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .brand {
+        font-size: 0.98rem;
+    }
+
+    .brand-logo {
+        width: 32px;
+        height: 32px;
+    }
+
+    .btn-small {
+        padding: 0.45rem 1.15rem;
+        font-size: 0.85rem;
     }
 }
