@@ -1,6 +1,10 @@
 :root {
     --primary-teal: #0f766e;
     --primary-teal-dark: #115e59;
+    --primary-indigo: #4f46e5;
+    --accent-pink: #ec4899;
+    --accent-sky: #38bdf8;
+    --accent-lime: #84cc16;
     --bg-off-white: #f7f8fb;
     --bg-white: #ffffff;
     --white: #ffffff;
@@ -19,6 +23,10 @@
 body[data-theme="dark"] {
     --primary-teal: #5eead4;
     --primary-teal-dark: #2dd4bf;
+    --primary-indigo: #818cf8;
+    --accent-pink: #f472b6;
+    --accent-sky: #7dd3fc;
+    --accent-lime: #bef264;
     --bg-off-white: #0b1220;
     --bg-white: #0f172a;
     --white: #0b1220;
@@ -117,8 +125,9 @@ p {
 .hero-section {
     padding: 8rem 0 6rem;
     text-align: center;
-    background: radial-gradient(circle at top, rgba(15, 118, 110, 0.12), transparent 55%),
-        linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(217, 119, 6, 0.08)),
+    background: radial-gradient(circle at top, rgba(56, 189, 248, 0.25), transparent 55%),
+        radial-gradient(circle at 20% 20%, rgba(236, 72, 153, 0.18), transparent 45%),
+        linear-gradient(135deg, rgba(79, 70, 229, 0.18), rgba(132, 204, 22, 0.12)),
         var(--bg-off-white);
 }
 
@@ -159,11 +168,22 @@ p {
 }
 
 .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
     font-weight: 700;
     text-decoration: none;
     color: var(--text-charcoal);
     letter-spacing: 0.02em;
     font-size: 1.1rem;
+}
+
+.brand-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
 }
 
 .nav-links {
@@ -223,17 +243,21 @@ p {
 }
 
 .btn-primary {
-    background-color: var(--primary-teal);
+    background: linear-gradient(135deg, var(--primary-indigo), var(--primary-teal));
     color: var(--white);
-    border: 2px solid var(--primary-teal);
+    border: 2px solid transparent;
     box-shadow: var(--shadow-tight);
 }
 
 .btn-primary:hover {
-    background-color: var(--highlight-warm);
-    border-color: var(--highlight-warm);
+    background: linear-gradient(135deg, var(--accent-pink), var(--highlight-warm));
+    border-color: transparent;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(217, 119, 6, 0.3);
+}
+
+.btn-rounded {
+    border-radius: 999px;
 }
 
 .btn-ghost {
@@ -279,11 +303,23 @@ p {
     box-shadow: var(--shadow-soft);
     border: 1px solid var(--border-soft);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--accent-pink), var(--accent-sky), var(--accent-lime));
 }
 
 .skills-list {
@@ -296,8 +332,8 @@ p {
 }
 
 .skills-list li {
-    background-color: rgba(0, 128, 128, 0.1);
-    color: var(--primary-teal-dark);
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(56, 189, 248, 0.15));
+    color: var(--primary-indigo);
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-weight: 500;
@@ -310,8 +346,8 @@ p {
     gap: 0.5rem;
     padding: 0.4rem 1rem;
     border-radius: 999px;
-    background-color: rgba(15, 118, 110, 0.12);
-    color: var(--primary-teal-dark);
+    background: linear-gradient(120deg, rgba(79, 70, 229, 0.2), rgba(236, 72, 153, 0.2));
+    color: var(--primary-indigo);
     font-weight: 600;
     margin-bottom: 1.5rem;
 }
@@ -334,7 +370,7 @@ p {
 .hero-metrics h3 {
     margin-bottom: 0.25rem;
     font-size: 1.4rem;
-    color: var(--text-charcoal);
+    color: var(--primary-indigo);
 }
 
 .hero-metrics p {
@@ -358,7 +394,7 @@ p {
 .placeholder-img {
     width: 100%;
     height: 200px;
-    background: linear-gradient(135deg, rgba(15, 118, 110, 0.2), rgba(217, 119, 6, 0.2));
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.25), rgba(236, 72, 153, 0.2), rgba(132, 204, 22, 0.2));
     display: flex;
     align-items: center;
     justify-content: center;
