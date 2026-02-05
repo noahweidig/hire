@@ -324,6 +324,24 @@ p {
 .nav-actions .btn-hire {
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+    transform-origin: center;
+    will-change: transform;
+    animation: hire-pulse 4.2s ease-in-out infinite;
+}
+
+.nav-actions .btn-hire::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    background:
+        radial-gradient(circle at 20% 35%, rgba(255, 255, 255, 0.9), transparent 35%),
+        radial-gradient(circle at 70% 25%, rgba(255, 255, 255, 0.7), transparent 40%),
+        radial-gradient(circle at 45% 75%, rgba(255, 255, 255, 0.6), transparent 45%);
+    opacity: 0;
+    transform: scale(0.9);
+    animation: hire-sparkle 4.2s ease-in-out infinite;
+    pointer-events: none;
 }
 
 .nav-actions .btn-hire::after {
@@ -336,26 +354,60 @@ p {
     background: linear-gradient(120deg, transparent 15%, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0.1) 60%, transparent 75%);
     opacity: 0;
     transform: translateX(-120%) rotate(18deg);
-    animation: hire-shimmer 6.5s ease-in-out infinite;
+    animation: hire-shimmer 4.2s ease-in-out infinite;
     pointer-events: none;
 }
 
 @keyframes hire-shimmer {
     0%,
-    68% {
+    60% {
         opacity: 0;
         transform: translateX(-140%) rotate(18deg);
     }
-    72% {
-        opacity: 0.6;
+    66% {
+        opacity: 0.8;
     }
-    85% {
-        opacity: 0.85;
-        transform: translateX(220%) rotate(18deg);
+    78% {
+        opacity: 1;
+        transform: translateX(240%) rotate(18deg);
     }
     100% {
         opacity: 0;
-        transform: translateX(220%) rotate(18deg);
+        transform: translateX(240%) rotate(18deg);
+    }
+}
+
+@keyframes hire-sparkle {
+    0%,
+    55% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    64% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    74% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1);
+    }
+}
+
+@keyframes hire-pulse {
+    0%,
+    55%,
+    100% {
+        transform: scale(1);
+    }
+    68% {
+        transform: scale(1.03);
+    }
+    78% {
+        transform: scale(1.015);
     }
 }
 
@@ -626,6 +678,14 @@ footer p {
     }
 
     .nav-actions .btn-hire::after {
+        animation: none;
+    }
+
+    .nav-actions .btn-hire::before {
+        animation: none;
+    }
+
+    .nav-actions .btn-hire {
         animation: none;
     }
 }
