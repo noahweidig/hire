@@ -12,8 +12,14 @@
 <body>
 
     <header class="sticky-nav">
-        <nav>
-            <ul>
+        <nav class="nav-bar container">
+            <a class="brand" href="#hero">GeoCraft Analytics</a>
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
+            <ul class="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#what-i-do">What I Do</a></li>
                 <li><a href="#skills">Skills & Tools</a></li>
@@ -21,15 +27,40 @@
                 <li><a href="#why-me">Why Hire Me</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+                    <span class="theme-icon" aria-hidden="true">🌙</span>
+                    <span class="theme-text">Dark</span>
+                </button>
+                <a href="https://forms.gle/UCx9wFKc7UuAMTME6" class="btn btn-primary btn-small">Hire Me</a>
+            </div>
         </nav>
     </header>
 
     <main>
         <section id="hero" class="hero-section">
             <div class="container">
+                <div class="hero-badge">Available for consulting & long-term engagements</div>
                 <h1>GIS Analyst, Data Scientist &<br>Data Visualization Specialist</h1>
                 <p class="subheading">Expert in spatial analysis, environmental data, reproducible workflows, and publication-quality graphics.</p>
-                <a href="https://forms.gle/UCx9wFKc7UuAMTME6" class="btn btn-primary">Hire Me</a>
+                <div class="hero-actions">
+                    <a href="https://forms.gle/UCx9wFKc7UuAMTME6" class="btn btn-primary">Hire Me</a>
+                    <a href="#work" class="btn btn-ghost">View Work</a>
+                </div>
+                <div class="hero-metrics">
+                    <div>
+                        <h3>10+ yrs</h3>
+                        <p>Spatial analytics leadership</p>
+                    </div>
+                    <div>
+                        <h3>50+ projects</h3>
+                        <p>Data products delivered</p>
+                    </div>
+                    <div>
+                        <h3>100%</h3>
+                        <p>Client-first delivery</p>
+                    </div>
+                </div>
             </div>
         </section>
 
