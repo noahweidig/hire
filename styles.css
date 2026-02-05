@@ -188,7 +188,7 @@ p {
 .brand-logo {
     width: 36px;
     height: 36px;
-    border-radius: 12px;
+    border-radius: 999px;
     object-fit: cover;
     box-shadow: 0 8px 18px rgba(15, 118, 110, 0.25);
 }
@@ -287,6 +287,11 @@ p {
 
 .btn-rounded {
     border-radius: 999px;
+    overflow: hidden;
+}
+
+.btn-hire .btn-text-short {
+    display: none;
 }
 
 .btn-ghost {
@@ -402,6 +407,16 @@ p {
     border-radius: 20px;
     font-weight: 500;
     font-size: 1rem;
+}
+
+.skills-group {
+    margin-top: 2rem;
+}
+
+.skills-group h3 {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    color: var(--primary-indigo);
 }
 
 .hero-badge {
@@ -556,6 +571,20 @@ footer p {
 
     .brand {
         justify-self: start;
+    }
+
+    .brand,
+    .nav-toggle,
+    .nav-actions {
+        align-self: center;
+    }
+
+    .btn-hire .btn-text-full {
+        display: none;
+    }
+
+    .btn-hire .btn-text-short {
+        display: inline;
     }
 
     .brand span {
