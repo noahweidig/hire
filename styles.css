@@ -605,17 +605,17 @@ p {
 .metric-icon {
     width: 38px;
     height: 38px;
-    border-radius: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(67, 56, 202, 0.16), rgba(15, 118, 110, 0.18));
     color: var(--primary-indigo);
     margin: 0 auto 0.85rem;
 }
 
-.metric-icon i {
-    font-size: 1rem;
+.metric-icon svg {
+    width: 22px;
+    height: 22px;
+    display: block;
 }
 
 .hero-metrics h3 {
