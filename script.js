@@ -36,17 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const animatedItems = document.querySelectorAll('main * , footer *');
+    const animatedItems = document.querySelectorAll('main > *, footer > *');
     animatedItems.forEach(item => item.classList.add('scroll-fade'));
+
+    let lastScrollY = window.scrollY;
+    let scrollingDown = true;
 
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                entry.target.classList.toggle('is-visible', entry.isIntersecting);
+                if (entry.isIntersecting && (scrollingDown || window.scrollY === 0)) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
             });
         }, {
-            threshold: 0.2,
-            rootMargin: '0px 0px -10% 0px',
+            threshold: 0.15,
+            rootMargin: '0px 0px -6% 0px',
         });
 
         animatedItems.forEach(item => observer.observe(item));
@@ -55,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        scrollingDown = currentScrollY > lastScrollY;
+        lastScrollY = currentScrollY;
         let current = '';
 
         sections.forEach(section => {
