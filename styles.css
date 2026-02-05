@@ -321,6 +321,44 @@ p {
     display: none;
 }
 
+.nav-actions .btn-hire {
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-actions .btn-hire::after {
+    content: "";
+    position: absolute;
+    top: -120%;
+    left: -40%;
+    width: 60%;
+    height: 320%;
+    background: linear-gradient(120deg, transparent 15%, rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0.1) 60%, transparent 75%);
+    opacity: 0;
+    transform: translateX(-120%) rotate(18deg);
+    animation: hire-shimmer 6.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes hire-shimmer {
+    0%,
+    68% {
+        opacity: 0;
+        transform: translateX(-140%) rotate(18deg);
+    }
+    72% {
+        opacity: 0.6;
+    }
+    85% {
+        opacity: 0.85;
+        transform: translateX(220%) rotate(18deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(220%) rotate(18deg);
+    }
+}
+
 .btn-ghost {
     border: 2px solid var(--border-soft);
     color: var(--text-charcoal);
@@ -585,6 +623,10 @@ footer p {
         opacity: 1;
         transform: none;
         transition: none;
+    }
+
+    .nav-actions .btn-hire::after {
+        animation: none;
     }
 }
 
