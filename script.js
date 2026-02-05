@@ -52,6 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 navToggle.setAttribute('aria-expanded', 'false');
             });
         });
+
+        document.addEventListener('click', (event) => {
+            const target = event.target;
+            if (!navMenu.classList.contains('open')) {
+                return;
+            }
+            if (navMenu.contains(target) || navToggle.contains(target)) {
+                return;
+            }
+            navMenu.classList.remove('open');
+            navToggle.classList.remove('is-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+        });
     }
 
     window.addEventListener('scroll', () => {
