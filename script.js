@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.querySelector('.theme-toggle');
     const themeIcon = document.querySelector('.theme-icon');
     const themeText = document.querySelector('.theme-text');
+    const skillItems = document.querySelectorAll('.skills-list li');
     const desktopQuery = window.matchMedia('(min-width: 1101px)');
 
     const setNavIndicator = (link) => {
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const animatedItems = document.querySelectorAll('main > *, footer > *');
     animatedItems.forEach(item => item.classList.add('scroll-fade'));
+    skillItems.forEach(item => item.classList.add('scroll-slide'));
 
     let lastScrollY = window.scrollY;
     let scrollingDown = true;
@@ -78,8 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         animatedItems.forEach(item => observer.observe(item));
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    entry.target.classList.remove('is-exiting');
+                    return;
+                }
+
+                if (scrollingDown && entry.boundingClientRect.top < window.innerHeight) {
+                    entry.target.classList.remove('is-visible');
+                    entry.target.classList.add('is-exiting');
+                } else {
+                    entry.target.classList.remove('is-exiting');
+                }
+            });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -10% 0px',
+        });
+
+        skillItems.forEach(item => slideObserver.observe(item));
     } else {
         animatedItems.forEach(item => item.classList.add('is-visible'));
+        skillItems.forEach(item => item.classList.add('is-visible'));
     }
 
     window.addEventListener('scroll', () => {
