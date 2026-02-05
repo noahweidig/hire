@@ -1,9 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links li a');
+    const navList = document.querySelector('.nav-links');
     const themeToggle = document.querySelector('.theme-toggle');
     const themeIcon = document.querySelector('.theme-icon');
     const themeText = document.querySelector('.theme-text');
+    const desktopQuery = window.matchMedia('(min-width: 1101px)');
+
+    const setNavIndicator = (link) => {
+        if (!navList) {
+            return;
+        }
+
+        if (!link || !desktopQuery.matches) {
+            navList.style.setProperty('--indicator-opacity', '0');
+            return;
+        }
+
+        const linkRect = link.getBoundingClientRect();
+        const listRect = navList.getBoundingClientRect();
+        const left = linkRect.left - listRect.left;
+        navList.style.setProperty('--indicator-left', `${left}px`);
+        navList.style.setProperty('--indicator-width', `${linkRect.width}px`);
+        navList.style.setProperty('--indicator-opacity', '1');
+    };
 
     const updateThemeToggle = (theme) => {
         const isDark = theme === 'dark';
@@ -83,5 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 link.classList.add('active');
             }
         });
+
+        const activeLink = document.querySelector('.nav-links a.active') || navLinks[0];
+        setNavIndicator(activeLink);
     });
+
+    window.addEventListener('resize', () => {
+        const activeLink = document.querySelector('.nav-links a.active') || navLinks[0];
+        setNavIndicator(activeLink);
+    });
+
+    setNavIndicator(document.querySelector('.nav-links a.active') || navLinks[0]);
 });
