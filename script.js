@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links li a');
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-links');
-    const navBar = document.querySelector('.nav-bar');
     const themeToggle = document.querySelector('.theme-toggle');
     const themeIcon = document.querySelector('.theme-icon');
     const themeText = document.querySelector('.theme-text');
@@ -39,42 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (navToggle && navMenu) {
-        navToggle.addEventListener('click', () => {
-            const isOpen = navMenu.classList.toggle('open');
-            navToggle.classList.toggle('is-open', isOpen);
-            if (navBar) {
-                navBar.classList.toggle('nav-open', isOpen);
-            }
-            navToggle.setAttribute('aria-expanded', String(isOpen));
-        });
+    const animatedItems = document.querySelectorAll('main * , footer *');
+    animatedItems.forEach(item => item.classList.add('scroll-fade'));
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('open');
-                navToggle.classList.remove('is-open');
-                if (navBar) {
-                    navBar.classList.remove('nav-open');
-                }
-                navToggle.setAttribute('aria-expanded', 'false');
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle('is-visible', entry.isIntersecting);
             });
+        }, {
+            threshold: 0.2,
+            rootMargin: '0px 0px -10% 0px',
         });
 
-        document.addEventListener('click', (event) => {
-            const target = event.target;
-            if (!navMenu.classList.contains('open')) {
-                return;
-            }
-            if (navMenu.contains(target) || navToggle.contains(target)) {
-                return;
-            }
-            navMenu.classList.remove('open');
-            navToggle.classList.remove('is-open');
-            if (navBar) {
-                navBar.classList.remove('nav-open');
-            }
-            navToggle.setAttribute('aria-expanded', 'false');
-        });
+        animatedItems.forEach(item => observer.observe(item));
+    } else {
+        animatedItems.forEach(item => item.classList.add('is-visible'));
     }
 
     window.addEventListener('scroll', () => {
