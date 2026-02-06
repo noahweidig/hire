@@ -597,7 +597,7 @@ p {
 
 .hero-metrics {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 230px));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     justify-content: center;
     justify-items: center;
     gap: 1.5rem;
@@ -829,6 +829,10 @@ footer p {
         max-width: 560px;
         width: 100%;
     }
+
+    .hero-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 1240px) {
@@ -876,6 +880,10 @@ footer p {
 
 @media (max-width: 720px) {
     .grid-3 {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero-metrics {
         grid-template-columns: minmax(0, 1fr);
     }
 }
