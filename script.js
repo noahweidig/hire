@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeText = document.querySelector('.theme-text');
     const skillItems = document.querySelectorAll('.skills-list li');
     const desktopQuery = window.matchMedia('(min-width: 1101px)');
+    const supportsIO = 'IntersectionObserver' in window;
+    let sectionData = [];
+    let activeSectionId = '';
+    let lastScrollY = window.scrollY;
+    let scrollingDown = true;
+    let ticking = false;
 
     const setNavIndicator = (link) => {
         if (!navList) {
@@ -61,10 +67,55 @@ document.addEventListener('DOMContentLoaded', () => {
     animatedItems.forEach(item => item.classList.add('scroll-fade'));
     skillItems.forEach(item => item.classList.add('scroll-slide'));
 
-    let lastScrollY = window.scrollY;
-    let scrollingDown = true;
+    const updateSectionMetrics = () => {
+        sectionData = Array.from(sections, (section) => ({
+            id: section.getAttribute('id'),
+            top: section.offsetTop,
+        }));
+    };
 
-    if ('IntersectionObserver' in window) {
+    const updateActiveSection = () => {
+        let current = '';
+        const scrollY = lastScrollY;
+
+        for (let i = 0; i < sectionData.length; i += 1) {
+            if (scrollY >= (sectionData[i].top - 150)) {
+                current = sectionData[i].id;
+            }
+        }
+
+        if (current === activeSectionId) {
+            return;
+        }
+
+        activeSectionId = current;
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (current && link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+
+        const activeLink = document.querySelector('.nav-links a.active') || navLinks[0];
+        setNavIndicator(activeLink);
+    };
+
+    const handleScroll = () => {
+        const currentScrollY = window.scrollY;
+        scrollingDown = currentScrollY > lastScrollY;
+        lastScrollY = currentScrollY;
+        if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(() => {
+                updateActiveSection();
+                ticking = false;
+            });
+        }
+    };
+
+    updateSectionMetrics();
+
+    if (supportsIO) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const isBelowViewport = entry.boundingClientRect.top >= window.innerHeight;
@@ -107,36 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
         skillItems.forEach(item => item.classList.add('is-visible'));
     }
 
-    window.addEventListener('scroll', () => {
-        const currentScrollY = window.scrollY;
-        scrollingDown = currentScrollY > lastScrollY;
-        lastScrollY = currentScrollY;
-        let current = '';
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            // Adjustment for sticky nav height (~70px) and some buffer
-            if (window.scrollY >= (sectionTop - 150)) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (current && link.getAttribute('href').includes(current)) {
-                link.classList.add('active');
-            }
-        });
-
-        const activeLink = document.querySelector('.nav-links a.active') || navLinks[0];
-        setNavIndicator(activeLink);
-    });
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     window.addEventListener('resize', () => {
+        updateSectionMetrics();
         const activeLink = document.querySelector('.nav-links a.active') || navLinks[0];
         setNavIndicator(activeLink);
     });
 
     setNavIndicator(document.querySelector('.nav-links a.active') || navLinks[0]);
+    updateActiveSection();
 });
