@@ -386,6 +386,18 @@ p {
     }
 }
 
+@keyframes theme-spin {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    60% {
+        transform: rotate(300deg) scale(1.08);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
 .btn-ghost {
     border: 2px solid var(--border-soft);
     color: var(--text-charcoal);
@@ -437,6 +449,10 @@ p {
 
 .floating-toggle .theme-icon {
     font-size: 1.2rem;
+}
+
+.theme-icon.is-spinning {
+    animation: theme-spin 0.6s ease-in-out;
 }
 
 /* Cards & Content */
