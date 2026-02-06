@@ -41,6 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.setAttribute('aria-label', isDark ? 'Toggle light mode' : 'Toggle dark mode');
     };
 
+    const triggerThemeSpin = () => {
+        if (!themeIcon) {
+            return;
+        }
+
+        themeIcon.classList.remove('is-spinning');
+        void themeIcon.offsetWidth;
+        themeIcon.classList.add('is-spinning');
+        themeIcon.addEventListener('animationend', () => {
+            themeIcon.classList.remove('is-spinning');
+        }, { once: true });
+    };
+
     const storedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
@@ -60,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             localStorage.setItem('theme', nextTheme);
             updateThemeToggle(nextTheme);
+            triggerThemeSpin();
         });
     }
 
