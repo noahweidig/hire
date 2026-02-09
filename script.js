@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     const sections = document.querySelectorAll('section');
     const navLinks = document.querySelectorAll('.nav-links li a');
     const navList = document.querySelector('.nav-links');
@@ -110,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const activeLink = document.querySelector('.nav-links a.active') || navLinks[0];
+        const activeLink = document.querySelector('.nav-links a.active');
         setNavIndicator(activeLink);
     };
 
@@ -176,10 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('resize', () => {
         updateSectionMetrics();
-        const activeLink = document.querySelector('.nav-links a.active') || navLinks[0];
+        const activeLink = document.querySelector('.nav-links a.active');
         setNavIndicator(activeLink);
     });
 
-    setNavIndicator(document.querySelector('.nav-links a.active') || navLinks[0]);
+    setNavIndicator(document.querySelector('.nav-links a.active'));
     updateActiveSection();
 });
