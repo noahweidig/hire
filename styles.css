@@ -69,6 +69,7 @@ body {
     line-height: 1.6;
     font-size: 1.0625rem;
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Typography */
@@ -77,6 +78,7 @@ h1, h2, h3 {
     line-height: 1.2;
     color: var(--text-charcoal);
     text-align: center;
+    transition: color 0.3s ease;
 }
 
 h1 {
@@ -102,6 +104,7 @@ p {
     margin-bottom: 1.5rem;
     color: var(--text-muted);
     font-size: 1.05rem;
+    transition: color 0.3s ease;
 }
 
 .subheading {
@@ -138,6 +141,7 @@ p {
 
 .alt-bg {
     background-color: var(--bg-off-white);
+    transition: background-color 0.3s ease;
 }
 
 .grid-3 {
@@ -426,6 +430,7 @@ p {
     color: var(--text-charcoal);
     font-weight: 600;
     cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.3s ease;
 }
 
 .theme-toggle:hover {
@@ -462,7 +467,7 @@ p {
     border-radius: 14px;
     box-shadow: var(--shadow-soft);
     border: 1px solid var(--border-soft);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
     position: relative;
     overflow: hidden;
 }
@@ -525,6 +530,7 @@ p {
     width: max-content;
     animation: skills-scroll 170s linear infinite;
     will-change: transform;
+    backface-visibility: hidden;
 }
 
 .skills-track--slow {
@@ -559,6 +565,7 @@ p {
     letter-spacing: 0.01em;
     white-space: nowrap;
     flex-shrink: 0;
+    transition: color 0.3s ease;
 }
 
 @keyframes skills-scroll {
@@ -612,6 +619,7 @@ p {
     box-shadow: var(--shadow-soft);
     text-align: center;
     width: 100%;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .metric-icon {
@@ -646,7 +654,7 @@ p {
     border-radius: 14px;
     overflow: hidden;
     box-shadow: var(--shadow-soft);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
     border: 1px solid var(--border-soft);
     position: relative;
 }
@@ -683,6 +691,7 @@ footer {
     padding: 2rem 0;
     text-align: center;
     border-top: 1px solid var(--border-soft);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 footer p {
@@ -706,7 +715,7 @@ footer p {
 .scroll-fade {
     opacity: 0;
     transform: translateY(16px);
-    transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .scroll-fade.is-visible {
@@ -717,7 +726,7 @@ footer p {
 .scroll-slide {
     opacity: 0;
     transform: translateX(-40px);
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    transition: opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .scroll-slide.is-visible {
