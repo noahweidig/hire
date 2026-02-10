@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastScrollY = window.scrollY;
     let scrollingDown = true;
     let ticking = false;
+    let indicatorTimeout;
 
     const setNavIndicator = (link) => {
         if (!navList) {
@@ -31,9 +32,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkRect = link.getBoundingClientRect();
         const listRect = navList.getBoundingClientRect();
         const left = linkRect.left - listRect.left;
+        const wasHidden = navList.style.getPropertyValue('--indicator-opacity') !== '1';
+
+        if (wasHidden) {
+            clearTimeout(indicatorTimeout);
+            navList.classList.add('indicator-appear');
+        }
+
         navList.style.setProperty('--indicator-left', `${left}px`);
         navList.style.setProperty('--indicator-width', `${linkRect.width}px`);
         navList.style.setProperty('--indicator-opacity', '1');
+
+        if (wasHidden) {
+            indicatorTimeout = setTimeout(() => navList.classList.remove('indicator-appear'), 300);
+        }
     };
 
     const updateThemeToggle = (theme) => {
