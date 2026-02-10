@@ -179,10 +179,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
 
+    let resizeRaf;
     window.addEventListener('resize', () => {
-        updateSectionMetrics();
-        const activeLink = document.querySelector('.nav-links a.active');
-        setNavIndicator(activeLink);
+        if (resizeRaf) cancelAnimationFrame(resizeRaf);
+        resizeRaf = requestAnimationFrame(() => {
+            updateSectionMetrics();
+            const activeLink = document.querySelector('.nav-links a.active');
+            setNavIndicator(activeLink);
+        });
     });
 
     setNavIndicator(document.querySelector('.nav-links a.active'));
