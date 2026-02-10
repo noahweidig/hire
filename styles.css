@@ -224,6 +224,10 @@ p {
     z-index: 0;
 }
 
+.nav-links.indicator-appear::before {
+    transition: opacity 0.3s ease;
+}
+
 .nav-links li {
     position: relative;
     z-index: 1;
