@@ -12,11 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeText = document.querySelector('.theme-text');
     const desktopQuery = window.matchMedia('(min-width: 1101px)');
     const supportsIO = 'IntersectionObserver' in window;
-    let sectionData = [];
+
+    // Create Map for O(1) nav link lookup
+    const sectionIdToNavLink = new Map();
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            const id = href.substring(1);
+            sectionIdToNavLink.set(id, link);
+        }
+    });
+
     let activeSectionId = '';
+    let activeNavLink = null;
     let lastScrollY = window.scrollY;
     let scrollingDown = true;
-    let ticking = false;
     let indicatorTimeout;
 
     const setNavIndicator = (link) => {
@@ -96,56 +106,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const animatedItems = document.querySelectorAll('main > *, footer > *');
     animatedItems.forEach(item => item.classList.add('scroll-fade'));
 
-    const updateSectionMetrics = () => {
-        sectionData = Array.from(sections, (section) => ({
-            id: section.getAttribute('id'),
-            top: section.offsetTop,
-        }));
-    };
+    // Replaced manual active section tracking with IntersectionObserver
+    const setActiveSection = (id) => {
+        if (activeSectionId === id) return;
 
-    const updateActiveSection = () => {
-        let current = '';
-        const scrollY = lastScrollY;
-
-        for (let i = 0; i < sectionData.length; i += 1) {
-            if (scrollY >= (sectionData[i].top - 150)) {
-                current = sectionData[i].id;
-            }
+        // Remove active class from previous link
+        if (activeNavLink) {
+            activeNavLink.classList.remove('active');
         }
 
-        if (current === activeSectionId) {
-            return;
+        activeSectionId = id;
+        activeNavLink = sectionIdToNavLink.get(id);
+
+        if (activeNavLink) {
+            activeNavLink.classList.add('active');
+            setNavIndicator(activeNavLink);
+        } else {
+            setNavIndicator(null);
         }
-
-        activeSectionId = current;
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (current && link.getAttribute('href').includes(current)) {
-                link.classList.add('active');
-            }
-        });
-
-        const activeLink = document.querySelector('.nav-links a.active');
-        setNavIndicator(activeLink);
     };
 
+    // Scroll handler only tracks direction now
     const handleScroll = () => {
         const currentScrollY = window.scrollY;
         scrollingDown = currentScrollY > lastScrollY;
         lastScrollY = currentScrollY;
-        if (!ticking) {
-            ticking = true;
-            window.requestAnimationFrame(() => {
-                updateActiveSection();
-                ticking = false;
-            });
-        }
     };
 
-    updateSectionMetrics();
-
     if (supportsIO) {
-        const observer = new IntersectionObserver((entries) => {
+        // Observer for scroll animations
+        const animationObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const isBelowViewport = entry.boundingClientRect.top >= window.innerHeight;
                 if (entry.isIntersecting && (scrollingDown || window.scrollY === 0)) {
@@ -159,7 +149,23 @@ document.addEventListener('DOMContentLoaded', () => {
             rootMargin: '0px 0px -6% 0px',
         });
 
-        animatedItems.forEach(item => observer.observe(item));
+        animatedItems.forEach(item => animationObserver.observe(item));
+
+        // Observer for Active Section
+        // rootMargin: '-20% 0px -80% 0px' creates a detection line at 20% from top.
+        const activeSectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                }
+            });
+        }, {
+            rootMargin: '-20% 0px -80% 0px',
+            threshold: 0
+        });
+
+        sections.forEach(section => activeSectionObserver.observe(section));
+
     } else {
         animatedItems.forEach(item => item.classList.add('is-visible'));
     }
@@ -170,12 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
         if (resizeRaf) cancelAnimationFrame(resizeRaf);
         resizeRaf = requestAnimationFrame(() => {
-            updateSectionMetrics();
-            const activeLink = document.querySelector('.nav-links a.active');
-            setNavIndicator(activeLink);
+            // Re-calculate indicator position for current active link
+            if (activeNavLink) {
+                setNavIndicator(activeNavLink);
+            }
         });
     });
-
-    setNavIndicator(document.querySelector('.nav-links a.active'));
-    updateActiveSection();
 });
