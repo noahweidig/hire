@@ -127,6 +127,10 @@ p {
 
 .section {
     padding: 5rem 0;
+    /* Performance: Defer rendering of off-screen sections (reduces initial load time) */
+    content-visibility: auto;
+    /* Estimated size to prevent scrollbar jumping. 1px width avoids horizontal overflow issues. */
+    contain-intrinsic-size: 1px 800px;
 }
 
 .hero-section {
