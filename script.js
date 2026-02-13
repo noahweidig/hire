@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Dynamic copyright year
+    const yearElement = document.getElementById('copyright-year');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
+
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
