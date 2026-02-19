@@ -733,33 +733,9 @@ footer p {
     transform: translateY(0);
 }
 
-.scroll-slide {
-    opacity: 0;
-    transform: translateX(-40px);
-    transition: opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.scroll-slide.is-visible {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.scroll-slide.is-exiting {
-    opacity: 0;
-    transform: translateX(60px);
-}
-
 @media (prefers-reduced-motion: reduce) {
     .scroll-fade,
     .scroll-fade.is-visible {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-
-    .scroll-slide,
-    .scroll-slide.is-visible,
-    .scroll-slide.is-exiting {
         opacity: 1;
         transform: none;
         transition: none;
