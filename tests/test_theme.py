@@ -10,9 +10,9 @@ class ThemePersistenceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # Start a local server to serve the frontend files
-        cls.port = 8003
         handler = http.server.SimpleHTTPRequestHandler
-        cls.httpd = socketserver.TCPServer(("", cls.port), handler)
+        cls.httpd = socketserver.TCPServer(("", 0), handler)
+        cls.port = cls.httpd.server_address[1]
         cls.server_thread = threading.Thread(target=cls.httpd.serve_forever)
         cls.server_thread.daemon = True
         cls.server_thread.start()

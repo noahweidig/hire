@@ -31,8 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let activeSectionId = '';
     let activeNavLink = null;
-    let lastScrollY = window.scrollY;
-    let scrollingDown = true;
     let indicatorTimeout;
 
     const setNavIndicator = (link) => {
@@ -132,22 +130,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Scroll handler only tracks direction now
-    const handleScroll = () => {
-        const currentScrollY = window.scrollY;
-        scrollingDown = currentScrollY > lastScrollY;
-        lastScrollY = currentScrollY;
-    };
-
     if (supportsIO) {
+        // Flag for initial check to ensure visible elements are shown on load
+        let isInitialCheck = true;
+        setTimeout(() => { isInitialCheck = false; }, 1000);
+
         // Observer for scroll animations
         const animationObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                const isBelowViewport = entry.boundingClientRect.top >= window.innerHeight;
-                if (entry.isIntersecting && (scrollingDown || window.scrollY === 0)) {
-                    entry.target.classList.add('is-visible');
-                } else if (!entry.isIntersecting && !scrollingDown && isBelowViewport) {
-                    entry.target.classList.remove('is-visible');
+                const rect = entry.boundingClientRect;
+                const isBelowViewport = rect.top >= window.innerHeight;
+                // Element is entering from bottom if its top edge is visible (or below viewport top)
+                // We use rect.top > 0 to differentiate from entering from top (where rect.top < 0 usually)
+                const isEnteringFromBottom = rect.top > 0;
+
+                if (entry.isIntersecting) {
+                    // Show if:
+                    // 1. Initial load (show everything visible)
+                    // 2. We are at the very top (scrollY=0)
+                    // 3. Element is entering from bottom (scrolling down)
+                    if (isInitialCheck || window.scrollY === 0 || isEnteringFromBottom) {
+                        entry.target.classList.add('is-visible');
+                    }
+                } else {
+                    // Hide if:
+                    // 1. It is below viewport (scrolling up past it)
+                    if (isBelowViewport) {
+                        entry.target.classList.remove('is-visible');
+                    }
                 }
             });
         }, {
@@ -175,8 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         animatedItems.forEach(item => item.classList.add('is-visible'));
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
 
     let resizeRaf;
     window.addEventListener('resize', () => {
