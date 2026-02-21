@@ -137,9 +137,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Observer for scroll animations
         const animationObserver = new IntersectionObserver((entries) => {
+            const currentScrollY = window.scrollY;
+            const viewportHeight = window.innerHeight;
+
             entries.forEach(entry => {
                 const rect = entry.boundingClientRect;
-                const isBelowViewport = rect.top >= window.innerHeight;
+                const isBelowViewport = rect.top >= viewportHeight;
                 // Element is entering from bottom if its top edge is visible (or below viewport top)
                 // We use rect.top > 0 to differentiate from entering from top (where rect.top < 0 usually)
                 const isEnteringFromBottom = rect.top > 0;
@@ -149,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // 1. Initial load (show everything visible)
                     // 2. We are at the very top (scrollY=0)
                     // 3. Element is entering from bottom (scrolling down)
-                    if (isInitialCheck || window.scrollY === 0 || isEnteringFromBottom) {
+                    if (isInitialCheck || currentScrollY === 0 || isEnteringFromBottom) {
                         entry.target.classList.add('is-visible');
                     }
                 } else {
