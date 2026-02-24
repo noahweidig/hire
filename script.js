@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const animatedItems = document.querySelectorAll('main > *, footer > *');
+    const animatedItems = document.querySelectorAll('main > *');
     animatedItems.forEach(item => item.classList.add('scroll-fade'));
 
     // Replaced manual active section tracking with IntersectionObserver
@@ -241,33 +241,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Back to Top Button
     const backToTopBtn = document.getElementById('back-to-top');
-    const heroSection = document.getElementById('hero');
 
-    if (backToTopBtn && heroSection) {
-        if (supportsIO) {
-            const backToTopObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    // If hero is NOT intersecting (user scrolled past it), show button
-                    if (!entry.isIntersecting) {
-                        backToTopBtn.classList.add('is-visible');
-                    } else {
-                        backToTopBtn.classList.remove('is-visible');
-                    }
-                });
-            }, {
-                threshold: 0
-            });
-            backToTopObserver.observe(heroSection);
-        } else {
-            // Fallback for no IntersectionObserver
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 500) {
-                    backToTopBtn.classList.add('is-visible');
-                } else {
-                    backToTopBtn.classList.remove('is-visible');
-                }
-            }, { passive: true });
-        }
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 200) {
+                backToTopBtn.classList.add('is-visible');
+            } else {
+                backToTopBtn.classList.remove('is-visible');
+            }
+        }, { passive: true });
 
         backToTopBtn.addEventListener('click', () => {
             window.scrollTo({
