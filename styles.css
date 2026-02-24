@@ -275,10 +275,17 @@ p {
 }
 
 .nav-actions {
+    --menu-btn-height: 34.4px;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     flex-shrink: 0;
+}
+
+.nav-actions .btn-small {
+    height: var(--menu-btn-height);
+    display: inline-flex;
+    align-items: center;
 }
 
 /* Unused nav-toggle styles removed to keep stylesheet lean. */
@@ -325,10 +332,6 @@ p {
     transform-origin: center;
     will-change: transform;
     animation: hire-pulse 2.6s ease-in-out infinite;
-}
-
-.btn-hire .btn-text-short {
-    display: none;
 }
 
 .btn-hire::before {
@@ -450,14 +453,17 @@ p {
 .theme-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.9rem;
+    justify-content: center;
+    width: var(--menu-btn-height);
+    height: var(--menu-btn-height);
+    padding: 0;
     border-radius: 999px;
     border: 1px solid var(--border-soft);
     background-color: transparent;
     color: var(--text-charcoal);
     font-weight: 600;
     cursor: pointer;
+    flex-shrink: 0;
     transition: border-color 0.2s ease, color 0.2s ease, background-color 0.3s ease;
 }
 
@@ -466,21 +472,7 @@ p {
     color: var(--primary-teal);
 }
 
-.floating-toggle {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    justify-content: center;
-    gap: 0;
-    box-shadow: var(--shadow-tight);
-    background-color: var(--bg-white);
-    z-index: 999;
-}
-
-.floating-toggle .theme-icon {
+.theme-icon {
     font-size: 1.2rem;
 }
 
@@ -805,13 +797,6 @@ footer p {
         display: none;
     }
 
-    .btn-hire .btn-text-short {
-        display: none;
-    }
-
-    .btn-hire .btn-text-full {
-        display: inline;
-    }
 
     .hero-actions {
         flex-direction: column;
@@ -855,13 +840,6 @@ footer p {
         font-size: 0.9rem;
     }
 
-    .nav-actions .btn-hire .btn-text-full {
-        display: none;
-    }
-
-    .nav-actions .btn-hire .btn-text-short {
-        display: inline;
-    }
 
     .nav-actions .btn-small {
         padding: 0.45rem 1.2rem;
@@ -899,6 +877,10 @@ footer p {
 }
 
 @media (max-width: 560px) {
+    .nav-actions {
+        --menu-btn-height: 32.8px;
+    }
+
     .brand {
         font-size: 0.98rem;
         min-width: 0;
