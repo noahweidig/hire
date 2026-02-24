@@ -72,6 +72,26 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Skip Link */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 1000;
+    background: var(--bg-white);
+    color: var(--primary-teal);
+    padding: 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: var(--shadow-soft);
+}
+
+.skip-link:focus {
+    left: 20px;
+    top: 20px;
+    outline: 2px solid var(--primary-teal);
+}
+
 /* Typography */
 h1, h2, h3 {
     margin-top: 0;
