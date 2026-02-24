@@ -33,6 +33,35 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeNavLink = null;
     let indicatorTimeout;
 
+    // Performance: Cache nav link metrics to avoid synchronous reflows during scroll
+    const navLinkMetrics = new Map();
+
+    const updateNavLinkMetrics = () => {
+        if (!navList) return;
+
+        // Only calculate on desktop where indicator is visible
+        if (!desktopQuery.matches) return;
+
+        const listRect = navList.getBoundingClientRect();
+        navLinks.forEach(link => {
+            const linkRect = link.getBoundingClientRect();
+            navLinkMetrics.set(link, {
+                left: linkRect.left - listRect.left,
+                width: linkRect.width
+            });
+        });
+
+        // Also update the current indicator if active, to ensure it snaps to correct position
+        if (activeNavLink) {
+            setNavIndicator(activeNavLink);
+        }
+    };
+
+    // Initialize metrics
+    updateNavLinkMetrics();
+    // Update when fonts load (as text width changes)
+    document.fonts.ready.then(updateNavLinkMetrics);
+
     const setNavIndicator = (link) => {
         if (!navList) {
             return;
@@ -43,9 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const linkRect = link.getBoundingClientRect();
-        const listRect = navList.getBoundingClientRect();
-        const left = linkRect.left - listRect.left;
+        let metrics = navLinkMetrics.get(link);
+
+        // Defensive: Fallback to on-the-fly calculation if metrics missing
+        if (!metrics) {
+            const linkRect = link.getBoundingClientRect();
+            const listRect = navList.getBoundingClientRect();
+            metrics = {
+                left: linkRect.left - listRect.left,
+                width: linkRect.width
+            };
+            // Cache it for next time
+            navLinkMetrics.set(link, metrics);
+        }
+
         const wasHidden = navList.style.getPropertyValue('--indicator-opacity') !== '1';
 
         if (wasHidden) {
@@ -53,8 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
             navList.classList.add('indicator-appear');
         }
 
-        navList.style.setProperty('--indicator-left', `${left}px`);
-        navList.style.setProperty('--indicator-width', `${linkRect.width}px`);
+        navList.style.setProperty('--indicator-left', `${metrics.left}px`);
+        navList.style.setProperty('--indicator-width', `${metrics.width}px`);
         navList.style.setProperty('--indicator-opacity', '1');
 
         if (wasHidden) {
@@ -194,10 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
         if (resizeRaf) cancelAnimationFrame(resizeRaf);
         resizeRaf = requestAnimationFrame(() => {
-            // Re-calculate indicator position for current active link
-            if (activeNavLink) {
-                setNavIndicator(activeNavLink);
-            }
+            // Re-calculate all metrics on resize
+            updateNavLinkMetrics();
         });
     });
 });
