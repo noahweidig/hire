@@ -238,4 +238,47 @@ document.addEventListener('DOMContentLoaded', () => {
             updateNavLinkMetrics();
         });
     });
+
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('back-to-top');
+    const heroSection = document.getElementById('hero');
+
+    if (backToTopBtn && heroSection) {
+        if (supportsIO) {
+            const backToTopObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // If hero is NOT intersecting (user scrolled past it), show button
+                    if (!entry.isIntersecting) {
+                        backToTopBtn.classList.add('is-visible');
+                    } else {
+                        backToTopBtn.classList.remove('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0
+            });
+            backToTopObserver.observe(heroSection);
+        } else {
+            // Fallback for no IntersectionObserver
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    backToTopBtn.classList.add('is-visible');
+                } else {
+                    backToTopBtn.classList.remove('is-visible');
+                }
+            }, { passive: true });
+        }
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            // Accessibility: Move focus to skip link (start of page)
+            const skipLink = document.querySelector('.skip-link');
+            if (skipLink) {
+                skipLink.focus({ preventScroll: true });
+            }
+        });
+    }
 });
