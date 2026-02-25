@@ -5,3 +5,7 @@
 ## 2026-02-20 - Scroll Animation Optimization
 **Learning:** Global scroll event listener caused main thread congestion and race conditions in IntersectionObserver logic (visible elements staying visible on scroll up).
 **Action:** Removed scroll listener and derived scroll direction from `IntersectionObserverEntry.boundingClientRect.top` relative to viewport.
+
+## 2026-02-25 - Back to Top Optimization
+**Learning:** Scroll event listeners for UI visibility toggles are inefficient and can be replaced by IntersectionObserver on a top-level element (like #hero). However, robustness is key: if the target element is missing, fallback logic (like the original scroll listener) must be preserved to avoid feature breakage.
+**Action:** Replaced scroll listener with IntersectionObserver on #hero, with a fallback to scroll listener if #hero is missing or IO is unsupported.
