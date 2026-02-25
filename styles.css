@@ -966,3 +966,216 @@ footer p {
         right: 1.5rem;
     }
 }
+
+/* Responsive Button Text */
+.btn-text-short {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .btn-text-full {
+        display: none;
+    }
+    .btn-text-short {
+        display: inline;
+    }
+}
+
+/* Print Stylesheet */
+@media print {
+    *,
+    *::before,
+    *::after {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        line-height: 1.5;
+        font-family: var(--font-main);
+        background: white !important;
+        color: black !important;
+    }
+
+    /* Hide non-printable or interactive elements */
+    .nav-links,
+    .nav-actions,
+    .theme-toggle,
+    .back-to-top,
+    .skip-link,
+    .hero-actions,
+    .btn-hire,
+    .hero-badge {
+        display: none !important;
+    }
+
+    /* Adjust Header for Print */
+    .sticky-nav {
+        position: relative !important;
+        background: none !important;
+        border-bottom: 2px solid #000;
+        height: auto;
+        padding: 1rem 0;
+        box-shadow: none !important;
+        display: block !important;
+    }
+
+    .brand {
+        font-size: 2rem;
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+
+    .brand-logo {
+        display: none !important;
+    }
+
+    /* Ensure content visibility */
+    .scroll-fade {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .section {
+        padding: 1rem 0;
+        page-break-inside: avoid;
+        content-visibility: visible !important;
+        contain-intrinsic-size: auto !important;
+    }
+
+    .hero-section {
+        padding: 2rem 0;
+        background: none !important;
+        text-align: left;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        text-align: left;
+    }
+
+    .subheading {
+        text-align: left;
+        margin-left: 0;
+    }
+
+    h2, h3 {
+        color: #000 !important;
+        page-break-after: avoid;
+    }
+
+    /* Links */
+    a,
+    a:visited {
+        text-decoration: underline;
+        color: #000 !important;
+    }
+
+    a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 90%;
+    }
+
+    a[href^="#"]::after,
+    a[href^="javascript:"]::after,
+    .brand[href]::after {
+        content: "";
+    }
+
+    /* Skills Marquee - Static List for Print */
+    .skills-marquee {
+        width: auto;
+        margin: 1rem 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+        background: none !important;
+        mask-image: none !important;
+        -webkit-mask-image: none !important;
+    }
+
+    .skills-track {
+        animation: none !important;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        transform: none !important;
+    }
+
+    .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .skills-list[aria-hidden="true"] {
+        display: none !important;
+    }
+
+    .skills-list li {
+        border: 1px solid #ccc;
+        padding: 0.2rem 0.5rem;
+        font-size: 0.85rem;
+        color: #000 !important;
+        border-radius: 4px;
+        background: none !important;
+    }
+
+    /* Layout Adjustments */
+    .hero-metrics {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .metric-card {
+        border: 1px solid #ddd;
+        box-shadow: none;
+        padding: 1rem;
+    }
+
+    .grid-3 {
+        display: block;
+    }
+
+    .card, .work-card {
+        page-break-inside: avoid;
+        margin-bottom: 1.5rem;
+        border: 1px solid #ddd;
+        box-shadow: none;
+    }
+
+    .placeholder-img {
+        height: 100px;
+        background: #eee !important;
+        color: #000 !important;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Footer */
+    footer {
+        border-top: 1px solid #000;
+        padding: 1rem 0;
+    }
+
+    footer::after {
+        content: "View full portfolio at https://noahweidig.com";
+        display: block;
+        margin-top: 0.5rem;
+        font-style: italic;
+        font-size: 0.9rem;
+    }
+}
+
+@media print {
+    /* Hide duplicate skill rows - only show the first comprehensive list */
+    .skills-row + .skills-row {
+        display: none !important;
+    }
+}
