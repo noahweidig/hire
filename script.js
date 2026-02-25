@@ -243,13 +243,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToTopBtn = document.getElementById('back-to-top');
 
     if (backToTopBtn) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 200) {
-                backToTopBtn.classList.add('is-visible');
-            } else {
-                backToTopBtn.classList.remove('is-visible');
-            }
-        }, { passive: true });
+        const hero = document.getElementById('hero');
+        if (supportsIO && hero) {
+            // Performance: Use IntersectionObserver instead of scroll listener to avoid main thread work
+            const backToTopObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        backToTopBtn.classList.add('is-visible');
+                    } else {
+                        backToTopBtn.classList.remove('is-visible');
+                    }
+                });
+            }, { threshold: 0 });
+            backToTopObserver.observe(hero);
+        } else {
+            // Fallback for older browsers or if hero section is missing
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) {
+                    backToTopBtn.classList.add('is-visible');
+                } else {
+                    backToTopBtn.classList.remove('is-visible');
+                }
+            }, { passive: true });
+        }
 
         backToTopBtn.addEventListener('click', () => {
             window.scrollTo({
