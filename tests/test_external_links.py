@@ -63,5 +63,25 @@ class ExternalLinksTest(unittest.TestCase):
             self.assertIn("noopener", rel or "", "Link to noahweidig.com missing 'noopener' in rel attribute")
             self.assertIn("noreferrer", rel or "", "Link to noahweidig.com missing 'noreferrer' in rel attribute")
 
+    def test_project_cards_links(self):
+        """Test that project cards link to external sites with secure attributes."""
+        project_urls = [
+            "https://www.noahweidig.com/quickplot/",
+            "https://rpubs.com/noahweidig/us-wildfire-risk",
+            "https://gee-community-catalog.org/projects/tiger_roads/"
+        ]
+
+        for url in project_urls:
+            link = self.page.locator(f"a[href='{url}']")
+            count = link.count()
+            self.assertEqual(count, 1, f"Link to {url} not found exactly once")
+
+            target = link.get_attribute("target")
+            rel = link.get_attribute("rel")
+
+            self.assertEqual(target, "_blank", f"Link to {url} missing target='_blank'")
+            self.assertIn("noopener", rel or "", f"Link to {url} missing 'noopener' in rel attribute")
+            self.assertIn("noreferrer", rel or "", f"Link to {url} missing 'noreferrer' in rel attribute")
+
 if __name__ == '__main__':
     unittest.main()
