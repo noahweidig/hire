@@ -920,6 +920,16 @@ footer p {
     }
 }
 
+/* Back to Top Sentinel */
+#back-to-top-sentinel {
+    position: absolute;
+    top: 0;
+    height: 200px;
+    width: 1px;
+    pointer-events: none;
+    visibility: hidden;
+}
+
 /* Back to Top Button */
 .back-to-top {
     position: fixed;
