@@ -48,5 +48,21 @@ class SecurityHeadersTest(unittest.TestCase):
         self.assertEqual(content, "strict-origin-when-cross-origin",
                          f"Expected content='strict-origin-when-cross-origin', got '{content}'")
 
+    def test_csp_violations(self):
+        """Test for CSP violations in the browser console."""
+        console_messages = []
+        self.page.on("console", lambda msg: console_messages.append(msg.text))
+
+        self.page.goto(self.base_url)
+        # Wait for potential deferred loading
+        self.page.wait_for_timeout(2000)
+
+        csp_violations = [msg for msg in console_messages if "Content Security Policy" in msg]
+
+        if csp_violations:
+            for violation in csp_violations:
+                print(f"CSP Violation found: {violation}")
+            self.fail(f"Found {len(csp_violations)} CSP violations")
+
 if __name__ == '__main__':
     unittest.main()
