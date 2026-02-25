@@ -243,9 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToTopBtn = document.getElementById('back-to-top');
 
     if (backToTopBtn) {
-        const hero = document.getElementById('hero');
-        if (supportsIO && hero) {
+        const sentinel = document.getElementById('back-to-top-sentinel');
+
+        if (supportsIO && sentinel) {
             // Performance: Use IntersectionObserver instead of scroll listener to avoid main thread work
+            // The sentinel is 200px tall at the top of the body.
+            // When it stops intersecting, it means the user has scrolled past 200px.
             const backToTopObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (!entry.isIntersecting) {
@@ -254,10 +257,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         backToTopBtn.classList.remove('is-visible');
                     }
                 });
-            }, { threshold: 0 });
-            backToTopObserver.observe(hero);
+            }, {
+                threshold: 0,
+                // Optional: ensure it works even if sentinel is slightly off-screen
+                rootMargin: '0px'
+            });
+            backToTopObserver.observe(sentinel);
         } else {
-            // Fallback for older browsers or if hero section is missing
+            // Fallback for older browsers or if sentinel is missing
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 200) {
                     backToTopBtn.classList.add('is-visible');
