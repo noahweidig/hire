@@ -963,9 +963,15 @@ footer p {
     color: var(--primary-teal-dark);
 }
 
+.brand:focus-visible,
+.nav-links a:focus-visible,
+.btn:focus-visible,
+.theme-toggle:focus-visible,
+.work-card:focus-visible,
 .back-to-top:focus-visible {
     outline: 2px solid var(--primary-teal);
     outline-offset: 2px;
+    transition: outline-offset 0.2s ease;
 }
 
 @media (max-width: 560px) {
