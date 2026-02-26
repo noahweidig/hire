@@ -64,5 +64,23 @@ class SecurityHeadersTest(unittest.TestCase):
                 print(f"CSP Violation found: {violation}")
             self.fail(f"Found {len(csp_violations)} CSP violations")
 
+    def test_csp_img_src_no_data(self):
+        """Test that the Content-Security-Policy meta tag does not allow data: in img-src."""
+        self.page.goto(self.base_url)
+        meta_csp = self.page.locator('meta[http-equiv="Content-Security-Policy"]')
+
+        # Verify it exists
+        if meta_csp.count() == 0:
+            self.fail("Content-Security-Policy meta tag is missing from index.html")
+
+        content = meta_csp.get_attribute("content")
+
+        # Parse img-src directive
+        directives = [d.strip() for d in content.split(';')]
+        img_src = next((d for d in directives if d.startswith('img-src')), None)
+
+        self.assertIsNotNone(img_src, "img-src directive is missing in CSP")
+        self.assertNotIn("data:", img_src, "CSP img-src should not contain 'data:'")
+
 if __name__ == '__main__':
     unittest.main()
