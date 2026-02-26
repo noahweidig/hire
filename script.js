@@ -177,23 +177,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Observer for scroll animations
         const animationObserver = new IntersectionObserver((entries) => {
-            // Performance: Cache window properties to avoid synchronous reflows/reads in loop
-            const viewportHeight = window.innerHeight;
-            const scrollY = window.scrollY;
+            // Performance: Avoid accessing window.scrollY/innerHeight to prevent main thread layout thrashing.
+            // Using entry properties is more efficient as they are already calculated.
 
             entries.forEach(entry => {
+                // Use rootBounds for viewport height (fallback to innerHeight if unavailable)
+                const viewportHeight = entry.rootBounds?.height || window.innerHeight;
                 const rect = entry.boundingClientRect;
                 const isBelowViewport = rect.top >= viewportHeight;
-                // Element is entering from bottom if its top edge is visible (or below viewport top)
-                // We use rect.top > 0 to differentiate from entering from top (where rect.top < 0 usually)
-                const isEnteringFromBottom = rect.top > 0;
+
+                // Element is entering from bottom if its top edge is visible (rect.top >= 0)
+                // This covers both scrolling down and elements at the very top (formerly scrollY === 0)
+                const isEnteringFromBottom = rect.top >= 0;
 
                 if (entry.isIntersecting) {
                     // Show if:
                     // 1. Initial load (show everything visible)
-                    // 2. We are at the very top (scrollY=0)
-                    // 3. Element is entering from bottom (scrolling down)
-                    if (isInitialCheck || scrollY === 0 || isEnteringFromBottom) {
+                    // 2. Element is entering from bottom (scrolling down or at top)
+                    if (isInitialCheck || isEnteringFromBottom) {
                         entry.target.classList.add('is-visible');
                     }
                 } else {
