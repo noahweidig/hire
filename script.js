@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             themeText.textContent = isDark ? 'Light' : 'Dark';
         }
         themeToggle.setAttribute('aria-label', isDark ? 'Toggle light mode' : 'Toggle dark mode');
+        themeToggle.setAttribute('title', isDark ? 'Toggle light mode' : 'Toggle dark mode');
     };
 
     const triggerThemeSpin = () => {
