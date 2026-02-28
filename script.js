@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Remove active class from previous link
         if (activeNavLink) {
             activeNavLink.classList.remove('active');
+            activeNavLink.removeAttribute('aria-current');
         }
 
         activeSectionId = id;
@@ -165,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (activeNavLink) {
             activeNavLink.classList.add('active');
+            activeNavLink.setAttribute('aria-current', 'true');
             setNavIndicator(activeNavLink);
         } else {
             setNavIndicator(null);
