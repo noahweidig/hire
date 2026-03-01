@@ -54,6 +54,7 @@ body[data-theme="dark"] .hero-badge {
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--nav-height);
     box-sizing: border-box;
 }
 
