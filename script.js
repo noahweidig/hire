@@ -234,13 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
         animatedItems.forEach(item => item.classList.add('is-visible'));
     }
 
-    let resizeRaf;
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        if (resizeRaf) cancelAnimationFrame(resizeRaf);
-        resizeRaf = requestAnimationFrame(() => {
+        if (resizeTimeout) clearTimeout(resizeTimeout);
+        // Performance: Debounce resize event to prevent excessive main thread layout recalculations
+        resizeTimeout = setTimeout(() => {
             // Re-calculate all metrics on resize
             updateNavLinkMetrics();
-        });
+        }, 150);
     });
 
     // Back to Top Button
