@@ -2,3 +2,8 @@
 **Vulnerability:** The application is built using vanilla JavaScript. While current practices do not show explicit insecure usages like `innerHTML`, future additions might unintentionally introduce DOM-based Cross-Site Scripting (DOM XSS) risks.
 **Learning:** Adding the `require-trusted-types-for 'script'` CSP directive provides an extra layer of defense against DOM XSS by forcing strings to pass through Trusted Types policies before reaching injection sinks.
 **Prevention:** In vanilla JS projects without framework-level protections against DOM XSS, enforcing Trusted Types via the CSP adds a robust safeguard.
+
+## 2026-03-01 - [Defense-in-depth: Strict CSP and Trusted Types]
+**Vulnerability:** The initial Content-Security-Policy included `require-trusted-types-for 'script'`, which is good. However, it did not explicitly disable policy creation via `trusted-types 'none'`. This could potentially allow an attacker to bypass Trusted Types if they find a way to inject a policy creation script, defeating the purpose of requiring Trusted Types in the first place. The original CSP also allowed `form-action 'self'` without any forms on the page, increasing the attack surface unnecessarily.
+**Learning:** Enforcing Trusted Types with `require-trusted-types-for 'script'` is incomplete if the application does not strictly require creating its own custom Trusted Types policies. It's crucial to pair it with `trusted-types 'none'` to lock down policy creation completely.
+**Prevention:** Always pair `require-trusted-types-for 'script'` with `trusted-types 'none'` when no custom policies are intentionally implemented. Eliminate unused permissions like `form-action` and restrict elements like `frame-src` to minimize the attack surface.

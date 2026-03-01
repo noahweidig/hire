@@ -82,5 +82,32 @@ class SecurityHeadersTest(unittest.TestCase):
         self.assertIsNotNone(img_src, "img-src directive is missing in CSP")
         self.assertNotIn("data:", img_src, "CSP img-src should not contain 'data:'")
 
+    def test_csp_strict_directives(self):
+        """Test that the Content-Security-Policy meta tag includes strict directives for forms, frames, and trusted-types."""
+        self.page.goto(self.base_url)
+        meta_csp = self.page.locator('meta[http-equiv="Content-Security-Policy"]')
+
+        # Verify it exists
+        if meta_csp.count() == 0:
+            self.fail("Content-Security-Policy meta tag is missing from index.html")
+
+        content = meta_csp.get_attribute("content")
+        directives = [d.strip() for d in content.split(';')]
+
+        # Verify form-action 'none'
+        form_action = next((d for d in directives if d.startswith("form-action")), None)
+        self.assertIsNotNone(form_action, "form-action directive is missing in CSP")
+        self.assertIn("'none'", form_action, "CSP form-action should be 'none'")
+
+        # Verify frame-src 'none'
+        frame_src = next((d for d in directives if d.startswith("frame-src")), None)
+        self.assertIsNotNone(frame_src, "frame-src directive is missing in CSP")
+        self.assertIn("'none'", frame_src, "CSP frame-src should be 'none'")
+
+        # Verify trusted-types 'none'
+        trusted_types = next((d for d in directives if d.startswith("trusted-types")), None)
+        self.assertIsNotNone(trusted_types, "trusted-types directive is missing in CSP")
+        self.assertIn("'none'", trusted_types, "CSP trusted-types should be 'none'")
+
 if __name__ == '__main__':
     unittest.main()
