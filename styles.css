@@ -992,6 +992,9 @@ footer p {
     .btn-text-full {
         display: none;
     }
+    .nav-actions .btn-hire .btn-text-full {
+        display: inline;
+    }
     .btn-text-short {
         display: inline;
     }
