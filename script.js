@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-links li a');
     const navList = document.querySelector('.nav-links');
     const themeToggle = document.querySelector('.theme-toggle');
-    const themeIcon = document.querySelector('.theme-icon');
     const themeText = document.querySelector('.theme-text');
     const desktopQuery = window.matchMedia('(min-width: 1101px)');
     const supportsIO = 'IntersectionObserver' in window;
@@ -125,19 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.setAttribute('title', isDark ? 'Toggle light mode' : 'Toggle dark mode');
     };
 
-    const triggerThemeSpin = () => {
-        if (!themeIcon) {
-            return;
-        }
-
-        themeIcon.classList.remove('is-spinning');
-        void themeIcon.offsetWidth;
-        themeIcon.classList.add('is-spinning');
-        themeIcon.addEventListener('animationend', () => {
-            themeIcon.classList.remove('is-spinning');
-        }, { once: true });
-    };
-
     const storedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
@@ -157,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             localStorage.setItem('theme', nextTheme);
             updateThemeToggle(nextTheme);
-            triggerThemeSpin();
         });
     }
 
