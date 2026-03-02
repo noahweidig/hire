@@ -87,7 +87,7 @@ body {
     box-shadow: var(--shadow-soft);
 }
 
-.skip-link:focus {
+.skip-link:focus-visible {
     left: 20px;
     top: 20px;
     outline: 2px solid var(--primary-teal);
