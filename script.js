@@ -104,7 +104,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateThemeToggle = (theme) => {
         const isDark = theme === 'dark';
-        themeIcon.textContent = isDark ? '☀️' : '🌙';
+
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
+
+        if (sunIcon && moonIcon) {
+            if (isDark) {
+                sunIcon.removeAttribute('hidden');
+                moonIcon.setAttribute('hidden', '');
+            } else {
+                sunIcon.setAttribute('hidden', '');
+                moonIcon.removeAttribute('hidden');
+            }
+        }
+
         if (themeText) {
             themeText.textContent = isDark ? 'Light' : 'Dark';
         }
