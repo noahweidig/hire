@@ -477,6 +477,10 @@ p {
     font-size: 1.2rem;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 .theme-icon.is-spinning {
     animation: theme-spin 0.6s ease-in-out;
 }
