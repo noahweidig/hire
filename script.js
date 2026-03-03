@@ -289,9 +289,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         backToTopBtn.addEventListener('click', () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
+                behavior: prefersReducedMotion ? 'auto' : 'smooth'
             });
             // Accessibility: Move focus to skip link (start of page)
             const skipLink = document.querySelector('.skip-link');

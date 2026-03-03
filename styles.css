@@ -761,6 +761,10 @@ footer p {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto !important;
+    }
+
     .scroll-fade,
     .scroll-fade.is-visible {
         opacity: 1;
