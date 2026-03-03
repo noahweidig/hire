@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Performance: Dynamically clone skills lists for the marquee to reduce initial HTML payload
+    const skillsTracks = document.querySelectorAll('.skills-track');
+    skillsTracks.forEach(track => {
+        const originalList = track.querySelector('.skills-list');
+        if (originalList) {
+            const clone = originalList.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            track.appendChild(clone);
+        }
+    });
+
     // Dynamic copyright year
     const yearElement = document.getElementById('copyright-year');
     if (yearElement) {
