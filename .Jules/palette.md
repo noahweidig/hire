@@ -13,3 +13,7 @@
 ## 2026-03-02 - Redundant Logo Text & Decorative Emojis
 **Learning:** Screen readers announce emojis natively (e.g., "Bar chart" for 📊), which can clutter project titles if the emoji is purely decorative. Furthermore, having a logo image with alt text immediately preceding the exact same brand text creates redundant and annoying announcements (e.g., "Noah Weidig logo Noah Weidig").
 **Action:** Always wrap decorative emojis in `<span aria-hidden="true">` to prevent screen reader clutter, and use `alt=""` along with `aria-hidden="true"` on logo images when the brand name is clearly provided in adjacent visible text. Additionally, provide `title="Opens in a new tab"` attributes on external cards/links so sighted users receive the same expectation as screen reader users before clicking.
+
+## 2026-03-03 - Smooth Scrolling & Reduced Motion
+**Learning:** While `scroll-behavior: smooth` provides a pleasant navigation experience for most, it can trigger nausea or dizziness for users with vestibular disorders. The `@media (prefers-reduced-motion: reduce)` media query is commonly used for CSS animations but is easily forgotten for document-level smooth scrolling.
+**Action:** Always include `html { scroll-behavior: auto !important; }` within the `prefers-reduced-motion` block to ensure anchor links jump instantly for these users, and ensure JavaScript-driven scrolls (like Back to Top buttons) also respect this OS-level preference.
