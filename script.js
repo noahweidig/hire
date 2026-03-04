@@ -1,10 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Performance: Dynamically clone skills lists for the marquee to reduce initial HTML payload
     const skillsTracks = document.querySelectorAll('.skills-track');
-    skillsTracks.forEach(track => {
-        const originalList = track.querySelector('.skills-list');
-        if (originalList) {
-            const clone = originalList.cloneNode(true);
+    const sourceList = document.querySelector('.skills-track--slow .skills-list');
+
+    skillsTracks.forEach((track, index) => {
+        let listToClone = track.querySelector('.skills-list');
+
+        // If track is empty, populate it with the source list (shifted for visual variety)
+        if (!listToClone && sourceList) {
+            listToClone = sourceList.cloneNode(true);
+            const items = Array.from(listToClone.children);
+            // Shift elements based on track index to prevent identical alignment
+            const shiftAmount = Math.floor(items.length / 3) * index;
+            for (let i = 0; i < shiftAmount; i++) {
+                listToClone.appendChild(items[i]);
+            }
+            track.appendChild(listToClone);
+        }
+
+        // Clone for infinite scroll effect
+        if (listToClone) {
+            const clone = listToClone.cloneNode(true);
             clone.setAttribute('aria-hidden', 'true');
             track.appendChild(clone);
         }
