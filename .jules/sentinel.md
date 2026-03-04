@@ -12,3 +12,8 @@
 **Vulnerability:** The application's Content-Security-Policy allowed `base-uri 'self'` and `connect-src 'self'`. While not immediately exploitable, allowing `base-uri 'self'` could permit base tag injection if an attacker can upload a file or inject HTML. Allowing `connect-src 'self'` provides unnecessary permissions for a static site that does not make fetch/XHR requests.
 **Learning:** Always apply the principle of least privilege to CSP directives. If a feature (like changing the base URI or making network requests) is not needed, its corresponding CSP directive should be set to `'none'` or removed.
 **Prevention:** Restrict `base-uri` to `'none'` and remove unused directives like `connect-src` to minimize the attack surface.
+
+## 2026-03-03 - [Defense-in-depth: Explicit 'none' for unused fetch directives]
+**Vulnerability:** The application's Content-Security-Policy omitted the `connect-src` directive. Since `default-src` was set to `'self'`, any omitted fetch directives implicitly fall back to `'self'`. While this limits connections to the origin, it still represents an unnecessarily broad permission for a fully static site that makes no dynamic network requests, slightly increasing the attack surface.
+**Learning:** In a CSP, omitting a directive does not mean it's blocked; it means it falls back to the `default-src` policy. To strictly block a capability, such as network connections (`connect-src`), it must be explicitly defined and set to `'none'`.
+**Prevention:** For static sites with no dynamic network requests, explicitly set `connect-src 'none'` to definitively block data exfiltration attempts, rather than relying on an implicit `default-src 'self'` fallback.
