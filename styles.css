@@ -58,6 +58,11 @@ html {
     box-sizing: border-box;
 }
 
+/* Security: JavaScript frame-busting defense against clickjacking */
+html.anti-clickjack body {
+    display: none !important;
+}
+
 *, *:before, *:after {
     box-sizing: inherit;
 }
