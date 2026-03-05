@@ -607,8 +607,8 @@ p {
 
 .hero-photo {
     display: block;
-    width: 110px;
-    height: 110px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid rgba(67, 56, 202, 0.45);
