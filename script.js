@@ -135,11 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Performance: Cache theme icons to prevent redundant DOM queries on every toggle
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+
     const updateThemeToggle = (theme) => {
         const isDark = theme === 'dark';
-
-        const sunIcon = document.querySelector('.sun-icon');
-        const moonIcon = document.querySelector('.moon-icon');
 
         if (sunIcon && moonIcon) {
             if (isDark) {
