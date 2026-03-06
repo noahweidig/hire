@@ -966,13 +966,15 @@ footer p {
     justify-content: center;
     cursor: pointer;
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, visibility 0.3s ease;
     z-index: 990;
 }
 
 .back-to-top.is-visible {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
 }
 
