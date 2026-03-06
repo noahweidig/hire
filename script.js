@@ -1,3 +1,10 @@
+// Security: Frame-busting defense against clickjacking
+if (window.self === window.top) {
+    document.documentElement.classList.remove('anti-clickjack');
+} else {
+    window.top.location = window.self.location;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Performance: Dynamically clone skills lists for the marquee to reduce initial HTML payload
     const skillsTracks = document.querySelectorAll('.skills-track');
