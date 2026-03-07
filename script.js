@@ -1,8 +1,13 @@
 // Security: Frame-busting defense against clickjacking
-if (window.self === window.top) {
-    document.documentElement.classList.remove('anti-clickjack');
-} else {
-    window.top.location = window.self.location;
+try {
+    if (window.self === window.top) {
+        document.documentElement.classList.remove('anti-clickjack');
+    } else {
+        window.top.location = window.self.location;
+    }
+} catch (e) {
+    // Fail securely if browser sandbox blocks window.top access
+    console.warn('Frame-busting check blocked by browser sandbox', e);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -159,7 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
         themeToggle.setAttribute('title', isDark ? 'Toggle light mode' : 'Toggle dark mode');
     };
 
-    const storedTheme = localStorage.getItem('theme');
+    let storedTheme = null;
+    try {
+        storedTheme = localStorage.getItem('theme');
+    } catch (e) {
+        // Security: Fail securely if strict privacy settings block localStorage
+        console.warn('localStorage is blocked, falling back to default theme', e);
+    }
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
     if (initialTheme === 'dark') {
@@ -176,7 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 document.body.removeAttribute('data-theme');
             }
-            localStorage.setItem('theme', nextTheme);
+            try {
+                localStorage.setItem('theme', nextTheme);
+            } catch (e) {
+                // Security: Ignore errors from blocked localStorage
+            }
             updateThemeToggle(nextTheme);
         });
     }
