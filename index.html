@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" href="nw-logo.png">
     <!-- Performance: Preload the brand logo to optimize LCP -->
     <link rel="preload" as="image" href="nw-logo.png">
+    <link rel="preload" as="image" href="assets/icons/me.webp" type="image/webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Font loading: Standard link used to comply with CSP (no inline handlers). Preconnect is used for performance. -->
@@ -62,7 +63,10 @@
     <main id="main-content" tabindex="-1">
         <section id="hero" class="hero-section">
             <div class="container">
-                <img src="assets/icons/me.png" alt="Profile photo of Noah Weidig" class="hero-photo">
+                <picture>
+                    <source srcset="assets/icons/me.webp" type="image/webp">
+                    <img src="assets/icons/me.png" alt="Profile photo of Noah Weidig" class="hero-photo" width="160" height="160">
+                </picture>
                 <div class="hero-badge">Data Analytics • Visualization</div>
                 <h1>Data Wrangling, Analytics<br>& Visualization Specialist</h1>
                 <p class="subheading">I transform raw, messy data into trusted pipelines, intuitive dashboards, and story-driven visuals that drive decisions.</p>
