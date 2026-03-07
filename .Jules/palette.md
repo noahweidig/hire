@@ -17,3 +17,7 @@
 ## 2026-03-03 - Smooth Scrolling & Reduced Motion
 **Learning:** While `scroll-behavior: smooth` provides a pleasant navigation experience for most, it can trigger nausea or dizziness for users with vestibular disorders. The `@media (prefers-reduced-motion: reduce)` media query is commonly used for CSS animations but is easily forgotten for document-level smooth scrolling.
 **Action:** Always include `html { scroll-behavior: auto !important; }` within the `prefers-reduced-motion` block to ensure anchor links jump instantly for these users, and ensure JavaScript-driven scrolls (like Back to Top buttons) also respect this OS-level preference.
+
+## 2026-03-07 - Structural Section Landmark Accessibility
+**Learning:** HTML5 `<section>` elements are not automatically exposed as landmark regions to assistive technologies unless they are explicitly provided with an accessible name. Without this, main content areas might be skipped in the screen reader's landmark rotor while smaller marked components (like interactive regions) are included.
+**Action:** Always provide an explicit accessible name to primary `<section>` elements using `aria-labelledby` referencing their heading, or `aria-label` if no visible heading exists, to elevate them into the landmark hierarchy for macro-navigation.
