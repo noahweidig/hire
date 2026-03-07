@@ -26,3 +26,8 @@
 **Vulnerability:** Operations like accessing `localStorage` or `window.top` can throw a `SecurityError` when users have strict privacy settings (e.g., blocking third-party cookies) or when the application is embedded in a sandboxed iframe. Uncaught exceptions halt script execution, breaking unrelated functionality like intersection observers.
 **Learning:** Browser security policies can cause standard DOM/Web APIs to throw exceptions unexpectedly. Applications must be defensive and anticipate these failures to prevent total application crashes.
 **Prevention:** Always wrap operations that interact with browser storage (`localStorage`, `sessionStorage`, `indexedDB`) or top-level navigation (`window.top`) in `try...catch` blocks. Implement graceful fallbacks or silently suppress the errors to ensure the rest of the application remains functional (fail securely).
+
+## 2026-03-07 - [Defense-in-depth: Secure Error Logging]
+**Vulnerability:** The application was catching exceptions from `localStorage` and `window.top` and logging the full raw error object `e` to `console.warn`. While failing securely, this leaked internal browser state, stack traces, and potentially sensitive environment context into the client-side console.
+**Learning:** Even when handling errors gracefully to prevent application crashes, it's critical to avoid exposing internal details. Exposing raw error objects (`e.stack`, `e.message`) gives potential attackers insight into the application's environment and execution flow.
+**Prevention:** When logging errors to the console in client-side code, use generic, sanitized messages that describe the failure without passing the raw error object (e.g., `console.warn("Storage access denied.")` instead of `console.warn("Storage error:", e)`).
