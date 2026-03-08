@@ -20,7 +20,6 @@
     <!-- Performance: Sentinel element for Back to Top button visibility -->
     <div id="back-to-top-sentinel"></div>
     <a href="#main-content" class="skip-link">Skip to content</a>
-
     <header class="sticky-nav">
         <nav class="nav-bar container">
             <a class="brand" href="https://noahweidig.com" rel="noopener noreferrer">
@@ -29,8 +28,8 @@
             </a>
             <ul class="nav-links" role="list">
                 <li><a href="#what-i-do">What I Do</a></li>
-                <li><a href="#skills">Skills & Tools</a></li>
                 <li><a href="#work">Selected Work</a></li>
+                <li><a href="#skills">Skills & Tools</a></li>
                 <li><a href="#why-me">Why Hire Me</a></li>
             </ul>
             <div class="nav-actions">
@@ -59,7 +58,6 @@
             </div>
         </nav>
     </header>
-
     <main id="main-content" tabindex="-1">
         <section id="hero" class="hero-section" aria-labelledby="hero-heading">
             <div class="container">
@@ -118,7 +116,6 @@
                 </div>
             </div>
         </section>
-
         <section id="what-i-do" class="section alt-bg" aria-labelledby="what-i-do-heading">
             <div class="container">
                 <h2 id="what-i-do-heading">What I Do</h2>
@@ -138,8 +135,35 @@
                 </div>
             </div>
         </section>
-
-        <section id="skills" class="section" aria-labelledby="skills-heading">
+        <section id="work" class="section" aria-labelledby="work-heading">
+            <div class="container">
+                <h2 id="work-heading">Selected Work</h2>
+                <div class="grid-3">
+                    <a href="https://www.noahweidig.com/quickplot/" class="work-card" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
+                        <div class="placeholder-img"><span aria-hidden="true">📊</span> Quick Plot</div>
+                        <div class="work-details">
+                            <h3>Data Analysis Dashboard</h3>
+                            <p>Built an Interactive and accessible Shiny application for analyzing, wrangling, and visualizing data.<span class="sr-only"> (opens in a new tab)</span></p>
+                        </div>
+                    </a>
+                    <a href="https://rpubs.com/noahweidig/us-wildfire-risk" class="work-card" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
+                        <div class="placeholder-img"><span aria-hidden="true">🔥</span> Wildfire Risk</div>
+                        <div class="work-details">
+                            <h3>Visualizer for Wildfire Risk</h3>
+                            <p>Created an interactive page for assessing wildfire risk in the WUI, suppression costs, structural damage, and fatalities.<span class="sr-only"> (opens in a new tab)</span></p>
+                        </div>
+                    </a>
+                    <a href="https://gee-community-catalog.org/projects/tiger_roads/" class="work-card" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
+                        <div class="placeholder-img"><span aria-hidden="true">🛣️</span> TIGER Roads</div>
+                        <div class="work-details">
+                            <h3>National Road Database</h3>
+                            <p>Processed TIGER roads and made them publically available via Google Earth Engine (GEE).<span class="sr-only"> (opens in a new tab)</span></p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section id="skills" class="section alt-bg" aria-labelledby="skills-heading">
             <div class="container">
                 <h2 id="skills-heading">Skills & Tools</h2>
                 <div class="skills-marquee" role="region" aria-label="Continuous skills marquee" tabindex="0">
@@ -222,36 +246,6 @@
                 </div>
             </div>
         </section>
-
-        <section id="work" class="section alt-bg" aria-labelledby="work-heading">
-            <div class="container">
-                <h2 id="work-heading">Selected Work</h2>
-                <div class="grid-3">
-                    <a href="https://www.noahweidig.com/quickplot/" class="work-card" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
-                        <div class="placeholder-img"><span aria-hidden="true">📊</span> Quick Plot</div>
-                        <div class="work-details">
-                            <h3>Data Analysis Dashboard</h3>
-                            <p>Built an Interactive and accessible Shiny application for analyzing, wrangling, and visualizing data.<span class="sr-only"> (opens in a new tab)</span></p>
-                        </div>
-                    </a>
-                    <a href="https://rpubs.com/noahweidig/us-wildfire-risk" class="work-card" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
-                        <div class="placeholder-img"><span aria-hidden="true">🔥</span> Wildfire Risk</div>
-                        <div class="work-details">
-                            <h3>Visualizer for Wildfire Risk</h3>
-                            <p>Created an interactive page for assessing wildfire risk in the WUI, suppression costs, structural damage, and fatalities.<span class="sr-only"> (opens in a new tab)</span></p>
-                        </div>
-                    </a>
-                    <a href="https://gee-community-catalog.org/projects/tiger_roads/" class="work-card" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
-                        <div class="placeholder-img"><span aria-hidden="true">🛣️</span> TIGER Roads</div>
-                        <div class="work-details">
-                            <h3>National Road Database</h3>
-                            <p>Processed TIGER roads and made them publically available via Google Earth Engine (GEE).<span class="sr-only"> (opens in a new tab)</span></p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </section>
-
         <section id="why-me" class="section" aria-labelledby="why-me-heading">
             <div class="container">
                 <h2 id="why-me-heading">Why Hire Me</h2>
@@ -267,7 +261,6 @@
                 </div>
             </div>
         </section>
-
         <section id="contact" class="section hero-section" aria-labelledby="contact-heading"> <!-- Reusing hero style for strong closing -->
             <div class="container">
                 <h2 id="contact-heading">Ready to elevate your data story?</h2>
@@ -279,19 +272,16 @@
             </div>
         </section>
     </main>
-
     <footer>
         <div class="container">
             <p>&copy; <span id="copyright-year">2026</span> Noah Weidig · Data Wrangling & Visualization</p>
         </div>
     </footer>
-
     <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 19V5M5 12l7-7 7 7"/>
         </svg>
     </button>
-
     <script src="script.js" defer></script>
 </body>
 </html>
