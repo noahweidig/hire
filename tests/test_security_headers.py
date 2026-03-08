@@ -114,5 +114,10 @@ class SecurityHeadersTest(unittest.TestCase):
         self.assertIsNotNone(connect_src, "connect-src directive is missing in CSP")
         self.assertIn("'none'", connect_src, "CSP connect-src should be 'none'")
 
+        # Verify worker-src 'none'
+        worker_src = next((d for d in directives if d.startswith("worker-src")), None)
+        self.assertIsNotNone(worker_src, "worker-src directive is missing in CSP")
+        self.assertIn("'none'", worker_src, "CSP worker-src should be 'none'")
+
 if __name__ == '__main__':
     unittest.main()
