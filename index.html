@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="nw-logo.png">
     <!-- Performance: Preload the brand logo to optimize LCP -->
-    <link rel="preload" as="image" href="nw-logo.png">
-    <link rel="preload" as="image" href="assets/icons/me.webp" type="image/webp">
+    <link rel="preload" as="image" href="nw-logo.png" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/icons/me.webp" type="image/webp" fetchpriority="high">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Font loading: Standard link used to comply with CSP (no inline handlers). Preconnect is used for performance. -->
@@ -24,7 +24,7 @@
     <header class="sticky-nav">
         <nav class="nav-bar container">
             <a class="brand" href="https://noahweidig.com" rel="noopener noreferrer">
-                <img class="brand-logo" src="nw-logo.png" alt="" aria-hidden="true" width="36" height="36" decoding="async">
+                <img class="brand-logo" src="nw-logo.png" alt="" aria-hidden="true" width="36" height="36" decoding="async" fetchpriority="high">
                 <span>Noah Weidig</span>
             </a>
             <ul class="nav-links" role="list">
@@ -65,7 +65,7 @@
             <div class="container">
                 <picture>
                     <source srcset="assets/icons/me.webp" type="image/webp">
-                    <img src="assets/icons/me.png" alt="Profile photo of Noah Weidig" class="hero-photo" width="160" height="160">
+                    <img src="assets/icons/me.png" alt="Profile photo of Noah Weidig" class="hero-photo" width="160" height="160" fetchpriority="high">
                 </picture>
                 <div class="hero-badge">Data Analytics • Visualization</div>
                 <h1 id="hero-heading">Data Wrangling, Analytics<br>& Visualization Specialist</h1>
