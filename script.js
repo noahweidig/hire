@@ -7,7 +7,7 @@ try {
     }
 } catch (e) {
     // Fail securely if browser sandbox blocks window.top access
-    console.warn('Frame-busting check blocked by browser sandbox', e);
+    console.warn('Frame-busting check blocked by browser sandbox');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         storedTheme = localStorage.getItem('theme');
     } catch (e) {
         // Security: Fail securely if strict privacy settings block localStorage
-        console.warn('localStorage is blocked, falling back to default theme', e);
+        console.warn('localStorage is blocked, falling back to default theme');
     }
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
