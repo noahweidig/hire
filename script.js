@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
             themeText.textContent = isDark ? 'Light' : 'Dark';
         }
         themeToggle.setAttribute('aria-label', isDark ? 'Toggle light mode' : 'Toggle dark mode');
-        themeToggle.setAttribute('title', isDark ? 'Toggle light mode' : 'Toggle dark mode');
+        themeToggle.setAttribute('title', isDark ? 'Toggle light mode (T)' : 'Toggle dark mode (T)');
     };
 
     let storedTheme = null;
@@ -310,6 +310,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Back to Top Button
+    // Keyboard shortcut for theme toggle
+    document.addEventListener('keydown', (e) => {
+        // Allow 't' or 'T' to toggle theme, but ignore if modifier keys are pressed or if user is typing in an input
+        if (e.key.toLowerCase() === 't' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+            if (activeTag !== 'input' && activeTag !== 'textarea') {
+                if (themeToggle) {
+                    themeToggle.click();
+                }
+            }
+        }
+    });
+
     const backToTopBtn = document.getElementById('back-to-top');
 
     if (backToTopBtn) {

@@ -21,3 +21,7 @@
 ## 2026-03-07 - Structural Section Landmark Accessibility
 **Learning:** HTML5 `<section>` elements are not automatically exposed as landmark regions to assistive technologies unless they are explicitly provided with an accessible name. Without this, main content areas might be skipped in the screen reader's landmark rotor while smaller marked components (like interactive regions) are included.
 **Action:** Always provide an explicit accessible name to primary `<section>` elements using `aria-labelledby` referencing their heading, or `aria-label` if no visible heading exists, to elevate them into the landmark hierarchy for macro-navigation.
+
+## 2026-03-09 - Keyboard Shortcut Discoverability
+**Learning:** Power users frequently appreciate keyboard shortcuts for global actions (like toggling themes), but these features remain completely hidden without proper discoverability hints in the UI. Sighted users rely on tooltips to learn these shortcuts.
+**Action:** When adding global keyboard shortcuts, always surface them in the native `title` attribute tooltip (e.g., `title="Toggle dark mode (T)"`) so users discover them naturally during hover interactions without visual clutter.
