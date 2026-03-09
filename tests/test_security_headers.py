@@ -83,7 +83,7 @@ class SecurityHeadersTest(unittest.TestCase):
         self.assertNotIn("data:", img_src, "CSP img-src should not contain 'data:'")
 
     def test_csp_strict_directives(self):
-        """Test that the Content-Security-Policy meta tag includes strict directives for forms, frames, and trusted-types."""
+        """Test that the Content-Security-Policy meta tag includes all strict defense-in-depth directives."""
         self.page.goto(self.base_url)
         meta_csp = self.page.locator('meta[http-equiv="Content-Security-Policy"]')
 
@@ -93,6 +93,30 @@ class SecurityHeadersTest(unittest.TestCase):
 
         content = meta_csp.get_attribute("content")
         directives = [d.strip() for d in content.split(';')]
+
+        # Verify default-src 'none'
+        default_src = next((d for d in directives if d.startswith("default-src")), None)
+        self.assertIsNotNone(default_src, "default-src directive is missing in CSP")
+        self.assertIn("'none'", default_src, "CSP default-src should be 'none'")
+
+        # Verify object-src 'none'
+        object_src = next((d for d in directives if d.startswith("object-src")), None)
+        self.assertIsNotNone(object_src, "object-src directive is missing in CSP")
+        self.assertIn("'none'", object_src, "CSP object-src should be 'none'")
+
+        # Verify base-uri 'none'
+        base_uri = next((d for d in directives if d.startswith("base-uri")), None)
+        self.assertIsNotNone(base_uri, "base-uri directive is missing in CSP")
+        self.assertIn("'none'", base_uri, "CSP base-uri should be 'none'")
+
+        # Verify require-trusted-types-for 'script'
+        req_trusted_types = next((d for d in directives if d.startswith("require-trusted-types-for")), None)
+        self.assertIsNotNone(req_trusted_types, "require-trusted-types-for directive is missing in CSP")
+        self.assertIn("'script'", req_trusted_types, "CSP require-trusted-types-for should be 'script'")
+
+        # Verify upgrade-insecure-requests
+        upgrade_insecure = next((d for d in directives if d.startswith("upgrade-insecure-requests")), None)
+        self.assertIsNotNone(upgrade_insecure, "upgrade-insecure-requests directive is missing in CSP")
 
         # Verify form-action 'none'
         form_action = next((d for d in directives if d.startswith("form-action")), None)
