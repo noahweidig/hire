@@ -11,32 +11,49 @@ try {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Performance: Dynamically clone skills lists for the marquee to reduce initial HTML payload
-    const skillsTracks = document.querySelectorAll('.skills-track');
-    const sourceList = document.querySelector('.skills-track--slow .skills-list');
+    // Performance: Lazily clone skills lists for the marquee to unblock the main thread
+    const initMarquee = () => {
+        const skillsTracks = document.querySelectorAll('.skills-track');
+        const sourceList = document.querySelector('.skills-track--slow .skills-list');
 
-    skillsTracks.forEach((track, index) => {
-        let listToClone = track.querySelector('.skills-list');
+        skillsTracks.forEach((track, index) => {
+            let listToClone = track.querySelector('.skills-list');
 
-        // If track is empty, populate it with the source list (shifted for visual variety)
-        if (!listToClone && sourceList) {
-            listToClone = sourceList.cloneNode(true);
-            const items = Array.from(listToClone.children);
-            // Shift elements based on track index to prevent identical alignment
-            const shiftAmount = Math.floor(items.length / 3) * index;
-            for (let i = 0; i < shiftAmount; i++) {
-                listToClone.appendChild(items[i]);
+            // If track is empty, populate it with the source list (shifted for visual variety)
+            if (!listToClone && sourceList) {
+                listToClone = sourceList.cloneNode(true);
+                const items = Array.from(listToClone.children);
+                // Shift elements based on track index to prevent identical alignment
+                const shiftAmount = Math.floor(items.length / 3) * index;
+                for (let i = 0; i < shiftAmount; i++) {
+                    listToClone.appendChild(items[i]);
+                }
+                track.appendChild(listToClone);
             }
-            track.appendChild(listToClone);
-        }
 
-        // Clone for infinite scroll effect
-        if (listToClone) {
-            const clone = listToClone.cloneNode(true);
-            clone.setAttribute('aria-hidden', 'true');
-            track.appendChild(clone);
-        }
-    });
+            // Clone for infinite scroll effect
+            if (listToClone) {
+                const clone = listToClone.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                track.appendChild(clone);
+            }
+        });
+    };
+
+    const marqueeSection = document.getElementById('skills');
+    if (marqueeSection && 'IntersectionObserver' in window) {
+        const marqueeObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    initMarquee();
+                    observer.disconnect();
+                }
+            });
+        }, { rootMargin: '200px' });
+        marqueeObserver.observe(marqueeSection);
+    } else {
+        initMarquee();
+    }
 
     // Dynamic copyright year
     const yearElement = document.getElementById('copyright-year');
