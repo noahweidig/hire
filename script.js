@@ -3,7 +3,9 @@ try {
     if (window.self === window.top) {
         document.documentElement.classList.remove('anti-clickjack');
     } else {
-        window.top.location = window.self.location;
+        // Security enhancement: Pass the string URL (.href) rather than the Location object
+        // to prevent potential cross-origin object reference errors in strict environments.
+        window.top.location = window.self.location.href;
     }
 } catch (e) {
     // Fail securely if browser sandbox blocks window.top access
