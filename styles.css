@@ -467,6 +467,17 @@ p {
     cursor: pointer;
     flex-shrink: 0;
     transition: border-color 0.2s ease, color 0.2s ease, background-color 0.3s ease;
+    position: relative;
+}
+
+.theme-toggle::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .theme-toggle:hover {
@@ -1020,8 +1031,8 @@ footer p {
 
 @media (max-width: 560px) {
     .back-to-top {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         bottom: 1.5rem;
         right: 1.5rem;
     }
