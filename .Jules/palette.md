@@ -25,3 +25,7 @@
 ## 2026-03-09 - Keyboard Shortcut Discoverability
 **Learning:** Power users frequently appreciate keyboard shortcuts for global actions (like toggling themes), but these features remain completely hidden without proper discoverability hints in the UI. Sighted users rely on tooltips to learn these shortcuts.
 **Action:** When adding global keyboard shortcuts, always surface them in the native `title` attribute tooltip (e.g., `title="Toggle dark mode (T)"`) so users discover them naturally during hover interactions without visual clutter.
+
+## 2026-03-10 - Active State Tactile Feedback
+**Learning:** Adding hover elevations (`transform: translateY(-Xpx)`) without a corresponding `:active` state leaves interactive elements feeling floaty and unresponsive during actual clicks, depriving users of immediate visual confirmation that their input registered.
+**Action:** Always pair hover transformations with an `:active` state that uses a fast transition (e.g., `0.1s`) and a slight scale-down (e.g., `transform: scale(0.96)`) to simulate a physical "press" and ground the element.
