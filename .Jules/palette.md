@@ -37,3 +37,7 @@
 ## 2026-03-11 - Programmatic Focus Outlines
 **Learning:** Elements like `<main>` or `<section>` that use `tabindex="-1"` to manage programmatic focus (e.g., for skip links or scrollspy navigation) can display unsightly, massive focus rings in some browsers when they receive focus, confusing users.
 **Action:** Always remove the default outline for elements with `tabindex="-1"` using `[tabindex="-1"]:focus { outline: none !important; }` to maintain a clean visual experience while preserving screen reader focus management.
+
+## 2026-03-11 - Interactive Navigation Indicators
+**Learning:** A static "active section" navigation indicator informs users of their current scroll position, but adding interactive tracking (where the indicator smoothly follows mouse hover or keyboard focus) provides immediate, satisfying tactile feedback that makes the UI feel highly responsive and alive.
+**Action:** When implementing sliding navigation indicators, bind them to both `mouseenter` and `focus` events on nav links, and ensure they gracefully return to the current active section on `mouseleave` or `focusout`.
