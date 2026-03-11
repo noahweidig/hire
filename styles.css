@@ -283,6 +283,7 @@ p {
 }
 
 .nav-links a:hover,
+.nav-links a:focus-visible,
 .nav-links a.active {
     color: var(--primary-teal);
 }
@@ -322,7 +323,8 @@ p {
     box-shadow: var(--shadow-tight);
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-primary:focus-visible {
     background: linear-gradient(135deg, var(--accent-ice), var(--highlight-warm), var(--accent-coral));
     transform: translateY(-2px);
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
@@ -441,7 +443,8 @@ p {
     background-color: transparent;
 }
 
-.btn-ghost:hover {
+.btn-ghost:hover,
+.btn-ghost:focus-visible {
     border-color: var(--primary-teal);
     color: var(--primary-teal);
     transform: translateY(-2px);
@@ -485,7 +488,8 @@ p {
     min-height: 44px;
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
     border-color: var(--primary-teal);
     color: var(--primary-teal);
 }
@@ -519,7 +523,8 @@ p {
     overflow: hidden;
 }
 
-.card:hover {
+.card:hover,
+.card:focus-visible {
     transform: translateY(-5px);
     box-shadow: 0 18px 30px rgba(15, 23, 42, 0.15);
     border-color: rgba(67, 56, 202, 0.2);
@@ -547,7 +552,9 @@ p {
 }
 
 .card:hover::after,
-.work-card:hover::after {
+.card:focus-visible::after,
+.work-card:hover::after,
+.work-card:focus-visible::after {
     opacity: 1;
 }
 
@@ -699,7 +706,8 @@ body[data-theme="dark"] .hero-photo {
     transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.hero-metrics .metric-card:hover {
+.hero-metrics .metric-card:hover,
+.hero-metrics .metric-card:focus-visible {
     transform: translateY(-4px);
     box-shadow: 0 18px 30px rgba(15, 23, 42, 0.15);
     border-color: rgba(67, 56, 202, 0.2);
@@ -745,7 +753,8 @@ body[data-theme="dark"] .hero-photo {
     position: relative;
 }
 
-.work-card:hover {
+.work-card:hover,
+.work-card:focus-visible {
     transform: translateY(-4px);
     box-shadow: 0 20px 36px rgba(15, 23, 42, 0.18);
 }
@@ -1012,7 +1021,8 @@ footer p {
     pointer-events: auto;
 }
 
-.back-to-top:hover {
+.back-to-top:hover,
+.back-to-top:focus-visible {
     transform: translateY(-3px);
     border-color: var(--primary-teal);
     color: var(--primary-teal-dark);
