@@ -9,3 +9,7 @@
 ## 2026-03-11 - Aligning Core Service Breakdown Terminology
 **Learning:** Terminology mismatch between the primary Hero section promises (e.g., "Analytics", "Visualization") and the detailed capability breakdown ("Analytics & Modeling", "Data Visualization") creates a disjointed narrative and undermines the "one mind speaking" coherence rule.
 **Action:** Always ensure that when detailed services are listed further down a page, their headings perfectly map back to the primary terminology established in the Hero section.
+
+## 2026-03-12 - Service Breakdown Precedes Portfolio Work
+**Learning:** Placing core service definitions ("What I Do") before specific project examples ("Selected Work") ensures that the visitor understands the specialist's actual capabilities and the promises introduced in the Hero section before they see the proof. This prevents jumping straight into examples without necessary context.
+**Action:** When evaluating portfolio sites, verify that a clear explanation of services or offerings bridges the gap between the Hero promise and the detailed portfolio pieces. Reorder sections if necessary to build logical narrative progression.
