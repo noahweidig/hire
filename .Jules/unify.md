@@ -5,3 +5,7 @@
 ## 2024-03-10 - Aligning Core Service Pillars
 **Learning:** The page's three core pillars (Data Wrangling, Analytics, Visualization) were inconsistently presented in the Hero section. The hero badge omitted "Wrangling", and the subheading duplicated "Visualization" outputs (dashboards, visuals) while entirely omitting "Analytics".
 **Action:** Unified the Hero badge and subheading to explicitly reflect all three pillars, ensuring the page's primary narrative and promises perfectly match the detailed breakdown in the "What I Do" section.
+
+## 2026-03-11 - Aligning Core Service Breakdown Terminology
+**Learning:** Terminology mismatch between the primary Hero section promises (e.g., "Analytics", "Visualization") and the detailed capability breakdown ("Analytics & Modeling", "Data Visualization") creates a disjointed narrative and undermines the "one mind speaking" coherence rule.
+**Action:** Always ensure that when detailed services are listed further down a page, their headings perfectly map back to the primary terminology established in the Hero section.
