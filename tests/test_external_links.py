@@ -37,15 +37,17 @@ class ExternalLinksTest(unittest.TestCase):
 
     def test_forms_gle_links(self):
         """Test that links to forms.gle have target='_blank' and rel='noopener noreferrer'."""
-        links = self.page.locator("a[href^='https://forms.gle']")
-        count = links.count()
-        self.assertGreater(count, 0, "No forms.gle links found")
+        # Performance: Use evaluate_all on locator to bulk retrieve data instead of sequential locator operations
+        links_data = self.page.locator("a[href^='https://forms.gle']").evaluate_all(
+            "(elements) => elements.map(a => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') }))"
+        )
 
-        for i in range(count):
-            link = links.nth(i)
-            href = link.get_attribute("href")
-            target = link.get_attribute("target")
-            rel = link.get_attribute("rel")
+        self.assertGreater(len(links_data), 0, "No forms.gle links found")
+
+        for link in links_data:
+            href = link["href"]
+            target = link["target"]
+            rel = link["rel"]
 
             self.assertEqual(target, "_blank", f"Link to {href} missing target='_blank'")
             self.assertIn("noopener", rel or "", f"Link to {href} missing 'noopener' in rel attribute")
@@ -53,13 +55,15 @@ class ExternalLinksTest(unittest.TestCase):
 
     def test_noahweidig_link(self):
         """Test that link to noahweidig.com has rel='noopener noreferrer'."""
-        links = self.page.locator("a[href='https://noahweidig.com']")
-        count = links.count()
-        self.assertGreater(count, 0, "No link to noahweidig.com found")
+        # Performance: Use evaluate_all on locator to bulk retrieve data instead of sequential locator operations
+        links_data = self.page.locator("a[href='https://noahweidig.com']").evaluate_all(
+            "(elements) => elements.map(a => ({ rel: a.getAttribute('rel') }))"
+        )
 
-        for i in range(count):
-            link = links.nth(i)
-            rel = link.get_attribute("rel")
+        self.assertGreater(len(links_data), 0, "No link to noahweidig.com found")
+
+        for link in links_data:
+            rel = link["rel"]
             self.assertIn("noopener", rel or "", "Link to noahweidig.com missing 'noopener' in rel attribute")
             self.assertIn("noreferrer", rel or "", "Link to noahweidig.com missing 'noreferrer' in rel attribute")
 
@@ -72,12 +76,15 @@ class ExternalLinksTest(unittest.TestCase):
         ]
 
         for url in project_urls:
-            link = self.page.locator(f"a[href='{url}']")
-            count = link.count()
-            self.assertEqual(count, 1, f"Link to {url} not found exactly once")
+            # Performance: Use evaluate_all on locator to bulk retrieve data instead of sequential locator operations
+            link_data_list = self.page.locator(f"a[href='{url}']").evaluate_all(
+                "(elements) => elements.map(a => ({ target: a.getAttribute('target'), rel: a.getAttribute('rel') }))"
+            )
 
-            target = link.get_attribute("target")
-            rel = link.get_attribute("rel")
+            self.assertEqual(len(link_data_list), 1, f"Link to {url} not found exactly once")
+
+            target = link_data_list[0]["target"]
+            rel = link_data_list[0]["rel"]
 
             self.assertEqual(target, "_blank", f"Link to {url} missing target='_blank'")
             self.assertIn("noopener", rel or "", f"Link to {url} missing 'noopener' in rel attribute")
