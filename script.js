@@ -93,23 +93,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // Performance: Cache nav link metrics to avoid synchronous reflows during scroll
     const navLinkMetrics = new Map();
 
+    const calculateNavLinkMetrics = (link) => {
+        const linkRect = link.getBoundingClientRect();
+        const listRect = navList.getBoundingClientRect();
+        return {
+            left: linkRect.left - listRect.left,
+            width: linkRect.width
+        };
+    };
+
     const updateNavLinkMetrics = () => {
         if (!navList) return;
 
         // Only calculate on desktop where indicator is visible
         if (!desktopQuery.matches) return;
 
-        const listRect = navList.getBoundingClientRect();
         navLinks.forEach(link => {
-            const linkRect = link.getBoundingClientRect();
-            navLinkMetrics.set(link, {
-                left: linkRect.left - listRect.left,
-                width: linkRect.width
-            });
+            navLinkMetrics.set(link, calculateNavLinkMetrics(link));
         });
 
         // Also update the current indicator if active, to ensure it snaps to correct position
-        if (activeNavLink) {
+        if (activeNavLink && !isInteractingWithNav) {
             setNavIndicator(activeNavLink);
         }
     };
@@ -133,12 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Defensive: Fallback to on-the-fly calculation if metrics missing
         if (!metrics) {
-            const linkRect = link.getBoundingClientRect();
-            const listRect = navList.getBoundingClientRect();
-            metrics = {
-                left: linkRect.left - listRect.left,
-                width: linkRect.width
-            };
+            metrics = calculateNavLinkMetrics(link);
             // Cache it for next time
             navLinkMetrics.set(link, metrics);
         }
@@ -158,6 +157,35 @@ document.addEventListener('DOMContentLoaded', () => {
             indicatorTimeout = setTimeout(() => navList.classList.remove('indicator-appear'), 300);
         }
     };
+
+    let isInteractingWithNav = false;
+
+    // Add interactive indicator tracking for hover and focus
+    if (navList) {
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                isInteractingWithNav = true;
+                setNavIndicator(link);
+            });
+            link.addEventListener('focus', () => {
+                isInteractingWithNav = true;
+                setNavIndicator(link);
+            });
+        });
+
+        navList.addEventListener('mouseleave', () => {
+            isInteractingWithNav = false;
+            setNavIndicator(activeNavLink);
+        });
+
+        navList.addEventListener('focusout', (e) => {
+            // Check if the new focus target is still within the nav list
+            if (!navList.contains(e.relatedTarget)) {
+                isInteractingWithNav = false;
+                setNavIndicator(activeNavLink);
+            }
+        });
+    }
 
     // Performance: Cache theme icons to prevent redundant DOM queries on every toggle
     const sunIcon = document.querySelector('.sun-icon');
@@ -234,9 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeNavLink) {
             activeNavLink.classList.add('active');
             activeNavLink.setAttribute('aria-current', 'true');
-            setNavIndicator(activeNavLink);
+            if (!isInteractingWithNav) {
+                setNavIndicator(activeNavLink);
+            }
         } else {
-            setNavIndicator(null);
+            if (!isInteractingWithNav) {
+                setNavIndicator(null);
+            }
         }
     };
 
