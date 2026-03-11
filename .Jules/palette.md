@@ -33,3 +33,7 @@
 ## 2026-03-11 - Minimum Accessible Touch Targets
 **Learning:** Icon-only buttons (like a theme toggle or mobile back-to-top button) often fall below the WCAG 2.1 minimum recommended touch target size of 44x44px. Changing their visible dimensions can break the layout or visual constraints.
 **Action:** Use an invisible `::after` pseudo-element with `min-width: 44px; min-height: 44px;` positioned absolutely over the center of the button. This expands the clickable touch area without altering the component's visible design. For fixed-size elements like `.back-to-top` in media queries, simply ensure their dimensions don't scale below 44px.
+
+## 2026-03-11 - Programmatic Focus Outlines
+**Learning:** Elements like `<main>` or `<section>` that use `tabindex="-1"` to manage programmatic focus (e.g., for skip links or scrollspy navigation) can display unsightly, massive focus rings in some browsers when they receive focus, confusing users.
+**Action:** Always remove the default outline for elements with `tabindex="-1"` using `[tabindex="-1"]:focus { outline: none !important; }` to maintain a clean visual experience while preserving screen reader focus management.
