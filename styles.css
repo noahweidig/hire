@@ -457,7 +457,7 @@ p {
 
 
 .btn-ghost {
-    border: 2px solid var(--border-soft);
+    border: 2px solid var(--accent-slate);
     color: var(--text-charcoal);
     background-color: transparent;
 }
@@ -467,6 +467,7 @@ p {
     border-color: var(--primary-teal);
     color: var(--primary-teal);
     transform: translateY(-2px);
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.25);
 }
 
 .btn:active {
