@@ -98,6 +98,11 @@ body {
     outline: 2px solid var(--primary-teal);
 }
 
+/* Accessibility: Remove default focus outline for programmatically focused structural elements */
+[tabindex="-1"]:focus {
+    outline: none !important;
+}
+
 /* Typography */
 h1, h2, h3 {
     margin-top: 0;
