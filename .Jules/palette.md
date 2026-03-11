@@ -41,3 +41,7 @@
 ## 2026-03-11 - Interactive Navigation Indicators
 **Learning:** A static "active section" navigation indicator informs users of their current scroll position, but adding interactive tracking (where the indicator smoothly follows mouse hover or keyboard focus) provides immediate, satisfying tactile feedback that makes the UI feel highly responsive and alive.
 **Action:** When implementing sliding navigation indicators, bind them to both `mouseenter` and `focus` events on nav links, and ensure they gracefully return to the current active section on `mouseleave` or `focusout`.
+
+## 2026-03-11 - Focus State Parity with Hover Effects
+**Learning:** Providing a visible focus ring is baseline accessibility, but failing to trigger the same visual elevations, color shifts, and shadow expansions as hover states leaves keyboard users with a visually degraded, less responsive experience.
+**Action:** Always pair `:hover` pseudo-classes with `:focus-visible` when defining rich interaction styles (like `transform` and `box-shadow`) to ensure a polished, egalitarian experience across all input modalities.
