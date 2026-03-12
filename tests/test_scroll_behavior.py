@@ -77,8 +77,8 @@ class ScrollBehaviorTest(unittest.TestCase):
         section_selector = '#skills'
 
         # Scroll down to reveal it
-        self.page.locator(section_selector).scroll_into_view_if_needed()
-        self.page.wait_for_timeout(500)
+        self.page.evaluate(f"document.querySelector('{section_selector}').scrollIntoView()")
+        self.page.wait_for_timeout(1000)
 
         # Verify it is visible
         is_visible_class = self.page.evaluate(f"document.querySelector('{section_selector}').classList.contains('is-visible')")

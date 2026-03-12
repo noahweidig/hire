@@ -45,3 +45,7 @@
 ## 2026-03-11 - Focus State Parity with Hover Effects
 **Learning:** Providing a visible focus ring is baseline accessibility, but failing to trigger the same visual elevations, color shifts, and shadow expansions as hover states leaves keyboard users with a visually degraded, less responsive experience.
 **Action:** Always pair `:hover` pseudo-classes with `:focus-visible` when defining rich interaction styles (like `transform` and `box-shadow`) to ensure a polished, egalitarian experience across all input modalities.
+
+## 2026-03-12 - IntersectionObserver rootMargin Offset Calculations
+**Learning:** When using IntersectionObserver with a `rootMargin` offset (e.g., `-6%` to trigger animations before elements fully enter the viewport), calculating whether an element has exited via the top or bottom of the screen cannot blindly rely on `rect.top >= window.innerHeight`. Due to the offset, the threshold occurs *before* the literal bottom of the window, leading to animation bugs where elements never reset their state if they fall in that 6% gap.
+**Action:** When manually determining exit directions inside an `IntersectionObserver` callback that uses `rootMargin` offsets, use relative directional logic (like `rect.top > 0` for exiting bottom) rather than strict screen-dimension equality checks to ensure bulletproof state resets.
