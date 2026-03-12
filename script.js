@@ -1,17 +1,3 @@
-// Security: Frame-busting defense against clickjacking
-try {
-    if (window.self === window.top) {
-        document.documentElement.classList.remove('anti-clickjack');
-    } else {
-        // Security enhancement: Pass the string URL (.href) rather than the Location object
-        // to prevent potential cross-origin object reference errors in strict environments.
-        window.top.location = window.self.location.href;
-    }
-} catch (e) {
-    // Fail securely if browser sandbox blocks window.top access
-    console.warn('Frame-busting check blocked by browser sandbox');
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     // Performance: Lazily clone skills lists for the marquee to unblock the main thread
     const initMarquee = () => {

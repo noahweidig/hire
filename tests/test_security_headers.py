@@ -143,5 +143,28 @@ class SecurityHeadersTest(unittest.TestCase):
         self.assertIsNotNone(worker_src, "worker-src directive is missing in CSP")
         self.assertIn("'none'", worker_src, "CSP worker-src should be 'none'")
 
+    def test_csp_no_frame_ancestors_in_meta(self):
+        """Test that frame-ancestors is NOT present in the CSP meta tag (as it is unsupported)."""
+        self.page.goto(self.base_url)
+        meta_csp = self.page.locator('meta[http-equiv="Content-Security-Policy"]')
+
+        if meta_csp.count() == 0:
+            self.fail("Content-Security-Policy meta tag is missing from index.html")
+
+        content = meta_csp.get_attribute("content")
+        self.assertNotIn("frame-ancestors", content, "frame-ancestors directive should NOT be used in a meta tag as it is unsupported.")
+
+    def test_clickjacking_defense_files_present(self):
+        """Test that the 'invisible-by-default' clickjacking defense files are present."""
+        self.page.goto(self.base_url)
+
+        # Check for anti-clickjack.css
+        css_link = self.page.locator('link[href="anti-clickjack.css"]')
+        self.assertTrue(css_link.count() > 0, "anti-clickjack.css link is missing from index.html")
+
+        # Check for anti-clickjack.js
+        js_script = self.page.locator('script[src="anti-clickjack.js"]')
+        self.assertTrue(js_script.count() > 0, "anti-clickjack.js script is missing from index.html")
+
 if __name__ == '__main__':
     unittest.main()
