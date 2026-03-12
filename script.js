@@ -269,10 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Using entry properties is more efficient as they are already calculated.
 
             entries.forEach(entry => {
-                // Use rootBounds for viewport height (fallback to innerHeight if unavailable)
-                const viewportHeight = entry.rootBounds?.height || window.innerHeight;
                 const rect = entry.boundingClientRect;
-                const isBelowViewport = rect.top >= viewportHeight;
+                const isBelowViewport = rect.top > 0;
 
                 // Element is entering from bottom if its top edge is visible (rect.top >= 0)
                 // This covers both scrolling down and elements at the very top (formerly scrollY === 0)
