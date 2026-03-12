@@ -1059,6 +1059,16 @@ footer p {
     z-index: 990;
 }
 
+.back-to-top::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 44px;
+    min-height: 44px;
+}
+
 .back-to-top.is-visible {
     opacity: 1;
     visibility: visible;
