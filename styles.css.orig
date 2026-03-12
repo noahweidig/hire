@@ -353,17 +353,6 @@ p {
     cursor: pointer;
 }
 
-/* Focus cue for secondary CTA */
-.focus-cue {
-  animation: gentle-pulse 3s infinite;
-}
-
-@keyframes gentle-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(148, 163, 184, 0.7); }
-  70% { box-shadow: 0 0 0 8px rgba(148, 163, 184, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(148, 163, 184, 0); }
-}
-
 .btn-primary {
     background: linear-gradient(135deg, var(--primary-indigo), var(--primary-teal), var(--accent-lilac));
     color: var(--white);
