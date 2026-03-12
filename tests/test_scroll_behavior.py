@@ -91,10 +91,11 @@ class ScrollBehaviorTest(unittest.TestCase):
 
         # Check if is-visible is removed
         # Wait, if we scroll up, it exits to bottom.
-        # Original code logic: !isIntersecting && !scrollingDown && isBelowViewport
-        # We scrolled up (!scrollingDown is true).
-        # It exited bottom (isBelowViewport is true).
-        # So it should be removed.
+        # Logic: if isBelowViewport, remove is-visible
+        # We scrolled up so element is now below viewport (its top > viewportHeight).
+
+        # Ensure scroll completes and intersection observer fires
+        self.page.wait_for_timeout(500)
 
         is_visible_class = self.page.evaluate(f"document.querySelector('{section_selector}').classList.contains('is-visible')")
         self.assertFalse(is_visible_class, "Section should NOT have 'is-visible' class after scrolling up past it")
@@ -112,21 +113,7 @@ class ScrollBehaviorTest(unittest.TestCase):
         # 1. We loaded at top.
         # 2. Scrolled to bottom.
         # 3. Passed #what-i-do. It entered (got is-visible) and exited top.
-        # Wait, if it exits top, does it keep is-visible?
-        # Logic: !isIntersecting && !scrollingDown && isBelowViewport.
-        # We scrolled down (scrollingDown=true).
-        # It exited top (isBelowViewport=false).
-        # So removal condition failed.
-        # So it HAS is-visible.
-
-        # We want to test entering from top WITHOUT having is-visible first.
-        # This is tricky because we have to pass it to get below it.
-        # Unless we reload at the bottom?
-
-        # Reload page at bottom position
-        # We can simulate this by setting scroll position immediately after navigation?
-        # Or running script?
-        pass # Skipping complex setup for now, let's try reload
+        pass
 
     def test_reload_at_bottom_scroll_up(self):
         """Test behavior when reloading at bottom and scrolling up."""
@@ -136,8 +123,9 @@ class ScrollBehaviorTest(unittest.TestCase):
         self.page.wait_for_timeout(500)
 
         # Now reload. Browser might restore scroll position.
-        # We force it.
         self.page.reload()
+        # Wait longer than the 1000ms initial check timeout in script.js FIRST
+        self.page.wait_for_timeout(1500)
         self.page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         self.page.wait_for_timeout(500)
 
@@ -146,10 +134,8 @@ class ScrollBehaviorTest(unittest.TestCase):
         section_selector = '#what-i-do'
 
         # Note: Depending on load timing, the section might have been revealed during scroll.
-        # We manually hide it to test the "enter from top" behavior cleanly.
+        # We manually hide it to test the "enter from top" behavior cleanly AFTER the initial check has elapsed.
         self.page.evaluate(f"document.querySelector('{section_selector}').classList.remove('is-visible')")
-        # Wait longer than the 1000ms initial check timeout in script.js
-        self.page.wait_for_timeout(1500)
 
         # Check state (hidden)
         is_visible_class = self.page.evaluate(f"document.querySelector('{section_selector}').classList.contains('is-visible')")
@@ -157,10 +143,6 @@ class ScrollBehaviorTest(unittest.TestCase):
 
         # Now scroll UP to reveal it (enter from top)
         # Use instant scroll to ensure we are testing the logic, not animation
-        # We need to scroll UP. So we scroll to a position above the element.
-        # But scroll_into_view_if_needed might use smooth scroll?
-        # Let's use JS to scroll to element position.
-
         # Get element Y and Height
         box = self.page.locator(section_selector).bounding_box()
         element_y = box['y'] + self.page.evaluate("window.scrollY") # Absolute Y
@@ -174,9 +156,8 @@ class ScrollBehaviorTest(unittest.TestCase):
         self.page.wait_for_timeout(1000)
 
         # Check if is-visible is added
-        # Original code: scrollingDown becomes false (scrolling up).
-        # Condition: isIntersecting && (scrollingDown || scrollY=0).
-        # true && (false || false) -> False.
+        # Logic: isEnteringFromBottom (rect.top >= 0) is false because rect.top < 0 (entering from top).
+        # isInitialCheck is false.
         # So is-visible is NOT added.
 
         is_visible_class = self.page.evaluate(f"document.querySelector('{section_selector}').classList.contains('is-visible')")
