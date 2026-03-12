@@ -13,3 +13,7 @@
 ## 2026-03-12 - Service Breakdown Precedes Portfolio Work
 **Learning:** Placing core service definitions ("What I Do") before specific project examples ("Selected Work") ensures that the visitor understands the specialist's actual capabilities and the promises introduced in the Hero section before they see the proof. This prevents jumping straight into examples without necessary context.
 **Action:** When evaluating portfolio sites, verify that a clear explanation of services or offerings bridges the gap between the Hero promise and the detailed portfolio pieces. Reorder sections if necessary to build logical narrative progression.
+
+## 2026-03-12 - Narrative Flow: Proof Before Tools
+**Learning:** Presenting a massive technical toolkit (Skills & Tools) before explaining human working style and value (Why Hire Me) disrupts the narrative arc. Users need to understand the 'why' (methodology and value) before the 'what' (specific tools).
+**Action:** Always sequence 'Why Hire Me' (or equivalent value proposition/credibility sections) before abstract lists of tools or skills to maintain a persuasive storytelling flow. Ensure alternating background CSS classes (e.g., '.alt-bg') are swapped when reordering structural sections to preserve visual rhythm.

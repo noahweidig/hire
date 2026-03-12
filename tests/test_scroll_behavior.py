@@ -146,10 +146,10 @@ class ScrollBehaviorTest(unittest.TestCase):
         section_selector = '#what-i-do'
 
         # Note: Depending on load timing, the section might have been revealed during scroll.
+        # Wait longer than the 1000ms initial check timeout in script.js so that the timeout callback doesn't re-add the class
+        self.page.wait_for_timeout(1500)
         # We manually hide it to test the "enter from top" behavior cleanly.
         self.page.evaluate(f"document.querySelector('{section_selector}').classList.remove('is-visible')")
-        # Wait longer than the 1000ms initial check timeout in script.js
-        self.page.wait_for_timeout(1500)
 
         # Check state (hidden)
         is_visible_class = self.page.evaluate(f"document.querySelector('{section_selector}').classList.contains('is-visible')")
