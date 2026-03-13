@@ -115,6 +115,40 @@ class ScrollBehaviorTest(unittest.TestCase):
         # 3. Passed #what-i-do. It entered (got is-visible) and exited top.
         pass
 
+
+    def test_nav_click_keeps_target_link_active_during_smooth_scroll(self):
+        """Clicking a nav link should not briefly reactivate a previous section."""
+        self.navigate()
+
+        # Start from Selected Work so #work is active
+        self.page.locator('a[href="#work"]').click()
+        self.page.wait_for_timeout(700)
+
+        # Click Why Hire Me and verify #why-me immediately becomes/stays active
+        why_link = self.page.locator('a[href="#why-me"]')
+        why_link.click()
+
+        # Immediately after click, the target should be active
+        self.assertEqual(
+            self.page.evaluate("document.querySelector('a[href=\"#why-me\"]').getAttribute('aria-current')"),
+            'true',
+            "Why Hire Me link should become active immediately on click"
+        )
+
+        # During the smooth scroll transition, #work should not become active again
+        self.page.wait_for_timeout(200)
+        self.assertIsNone(
+            self.page.evaluate("document.querySelector('a[href=\"#work\"]').getAttribute('aria-current')"),
+            "Selected Work link should not reactivate during nav transition"
+        )
+
+        # Final state after scroll should remain on #why-me
+        self.page.wait_for_timeout(1000)
+        self.assertEqual(
+            self.page.evaluate("document.querySelector('a[href=\"#why-me\"]').getAttribute('aria-current')"),
+            'true',
+            "Why Hire Me link should remain active after scroll completes"
+        )
     def test_reload_at_bottom_scroll_up(self):
         """Test behavior when reloading at bottom and scrolling up."""
         self.navigate()
