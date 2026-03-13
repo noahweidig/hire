@@ -75,6 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeSectionId = '';
     let activeNavLink = null;
     let indicatorTimeout;
+    let pendingSectionId = '';
+    let pendingSectionTimeout;
 
     // Performance: Cache nav link metrics to avoid synchronous reflows during scroll
     const navLinkMetrics = new Map();
@@ -258,6 +260,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const clearPendingSection = () => {
+        pendingSectionId = '';
+        clearTimeout(pendingSectionTimeout);
+    };
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const href = link.getAttribute('href');
+            if (!href || !href.startsWith('#')) {
+                clearPendingSection();
+                return;
+            }
+
+            pendingSectionId = href.slice(1);
+            setActiveSection(pendingSectionId);
+
+            // Safety timeout: if navigation is interrupted, resume normal observer updates.
+            clearTimeout(pendingSectionTimeout);
+            pendingSectionTimeout = setTimeout(() => {
+                pendingSectionId = '';
+            }, 1200);
+        });
+    });
+
     if (supportsIO) {
         // Flag for initial check to ensure visible elements are shown on load
         let isInitialCheck = true;
@@ -303,6 +329,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const activeSectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    if (pendingSectionId) {
+                        if (entry.target.id === pendingSectionId) {
+                            setActiveSection(entry.target.id);
+                            clearPendingSection();
+                        }
+                        return;
+                    }
                     setActiveSection(entry.target.id);
                 }
             });
