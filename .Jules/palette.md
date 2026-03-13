@@ -53,3 +53,7 @@
 ## 2024-05-28 - Enhancing Text Contrast for WCAG AA
 **Learning:** Subtle text colors used for subheadings or secondary text (like `--accent-slate` `#64748b` on `--bg-off-white` `#f6f7fb`) can fail WCAG AA 4.5:1 contrast requirements for normal text by a very small margin (4.45:1).
 **Action:** Darkened the `--accent-slate` variable slightly to `#596a7f`, achieving a 5.17:1 contrast ratio to meet WCAG AA standards while maintaining the original brand aesthetic.
+
+## 2026-03-13 - Visual Cues for External Context Shifts
+**Learning:** While `sr-only` text and `title` attributes provide essential context to screen reader and some sighted users about links opening in new tabs, many sighted users do not hover long enough to read tooltips before clicking. This leads to unexpected context shifts when a link looks like internal navigation (e.g., a project card) but acts like an external exit.
+**Action:** Always pair `sr-only` external link warnings with a visible, semantic external link icon (like `external-link.svg`) for sighted users. Ensure the icon is `aria-hidden="true"` to prevent redundant screen reader announcements, and provide subtle hover animations to reinforce interactivity.
