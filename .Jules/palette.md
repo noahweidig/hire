@@ -49,3 +49,7 @@
 ## 2026-03-12 - IntersectionObserver rootMargin Offset Calculations
 **Learning:** When using IntersectionObserver with a `rootMargin` offset (e.g., `-6%` to trigger animations before elements fully enter the viewport), calculating whether an element has exited via the top or bottom of the screen cannot blindly rely on `rect.top >= window.innerHeight`. Due to the offset, the threshold occurs *before* the literal bottom of the window, leading to animation bugs where elements never reset their state if they fall in that 6% gap.
 **Action:** When manually determining exit directions inside an `IntersectionObserver` callback that uses `rootMargin` offsets, use relative directional logic (like `rect.top > 0` for exiting bottom) rather than strict screen-dimension equality checks to ensure bulletproof state resets.
+
+## 2024-05-28 - Enhancing Text Contrast for WCAG AA
+**Learning:** Subtle text colors used for subheadings or secondary text (like `--accent-slate` `#64748b` on `--bg-off-white` `#f6f7fb`) can fail WCAG AA 4.5:1 contrast requirements for normal text by a very small margin (4.45:1).
+**Action:** Darkened the `--accent-slate` variable slightly to `#596a7f`, achieving a 5.17:1 contrast ratio to meet WCAG AA standards while maintaining the original brand aesthetic.
