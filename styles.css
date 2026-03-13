@@ -827,6 +827,24 @@ body[data-theme="dark"] .hero-photo {
 .work-details h3 {
     margin-bottom: 0.5rem;
     font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.external-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.4;
+    transition: transform 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+    flex-shrink: 0;
+}
+
+.work-card:hover .external-icon,
+.work-card:focus-visible .external-icon {
+    opacity: 1;
+    color: var(--primary-teal);
+    transform: translate(2px, -2px);
 }
 
 /* Footer */
