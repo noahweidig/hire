@@ -379,8 +379,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Yields ~13-18x speed improvement for the click operation
         const skipLink = document.querySelector('.skip-link');
 
+        // Performance: Cache matchMedia query to avoid synchronous style recalculations on every click
+        const prefersReducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
         backToTopBtn.addEventListener('click', () => {
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const prefersReducedMotion = prefersReducedMotionQuery.matches;
             window.scrollTo({
                 top: 0,
                 behavior: prefersReducedMotion ? 'auto' : 'smooth'

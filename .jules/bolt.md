@@ -17,3 +17,7 @@
 ## 2026-03-11 - Playwright Loop Optimization
 **Learning:** Sequential Playwright locator operations (like `count()` or `get_attribute()`) inside loops cause excessive network round-trips between the test runner and browser context, drastically slowing down test execution on larger DOM subsets.
 **Action:** Replaced loop-based attribute fetching with bulk data retrieval using `page.evaluate()` to extract all necessary DOM data in a single round-trip, yielding significantly faster and more stable tests.
+
+## 2026-03-12 - matchMedia Query Optimization
+**Learning:** Calling `window.matchMedia()` inside an event handler (like a click listener) triggers a synchronous style and layout recalculation on the main thread, leading to potential jank before the primary action (like a smooth scroll) even begins.
+**Action:** Always cache `window.matchMedia` queries outside of event listeners and read their `.matches` property (which is live) inside the handler to prevent unnecessary synchronous recalculations.
