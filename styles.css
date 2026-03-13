@@ -1107,23 +1107,6 @@ footer p {
     }
 }
 
-/* Responsive Button Text */
-.btn-text-short {
-    display: none;
-}
-
-@media (max-width: 480px) {
-    .btn-text-full {
-        display: none;
-    }
-    .nav-actions .btn-hire .btn-text-full {
-        display: inline;
-    }
-    .btn-text-short {
-        display: inline;
-    }
-}
-
 /* Print Stylesheet */
 @media print {
     *,
