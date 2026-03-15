@@ -81,9 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Performance: Cache nav link metrics to avoid synchronous reflows during scroll
     const navLinkMetrics = new Map();
 
-    const calculateNavLinkMetrics = (link) => {
+    const calculateNavLinkMetrics = (link, listRect = navList.getBoundingClientRect()) => {
         const linkRect = link.getBoundingClientRect();
-        const listRect = navList.getBoundingClientRect();
         return {
             left: linkRect.left - listRect.left,
             width: linkRect.width
@@ -96,8 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Only calculate on desktop where indicator is visible
         if (!desktopQuery.matches) return;
 
+        // Performance: Cache listRect outside loop to avoid redundant synchronous layout calculations
+        const listRect = navList.getBoundingClientRect();
+
         navLinks.forEach(link => {
-            navLinkMetrics.set(link, calculateNavLinkMetrics(link));
+            navLinkMetrics.set(link, calculateNavLinkMetrics(link, listRect));
         });
 
         // Also update the current indicator if active, to ensure it snaps to correct position

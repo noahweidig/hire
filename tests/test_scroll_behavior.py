@@ -121,7 +121,7 @@ class ScrollBehaviorTest(unittest.TestCase):
         self.navigate()
 
         # Start from Selected Work so #work is active
-        self.page.locator('a[href="#work"]').click()
+        self.page.locator('.nav-links a[href="#work"]').click()
         self.page.wait_for_timeout(700)
 
         # Click Why Hire Me and verify #why-me immediately becomes/stays active
