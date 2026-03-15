@@ -21,3 +21,7 @@
 ## 2026-03-12 - matchMedia Query Optimization
 **Learning:** Calling `window.matchMedia()` inside an event handler (like a click listener) triggers a synchronous style and layout recalculation on the main thread, leading to potential jank before the primary action (like a smooth scroll) even begins.
 **Action:** Always cache `window.matchMedia` queries outside of event listeners and read their `.matches` property (which is live) inside the handler to prevent unnecessary synchronous recalculations.
+
+## 2026-03-15 - Loop DOM Query Optimization
+**Learning:** Querying a parent element's bounding rectangle (e.g., `navList.getBoundingClientRect()`) inside a loop over its children causes redundant synchronous layout recalculations (thrashing) on the main thread.
+**Action:** Hoist the parent's layout calculation outside of the loop and pass the cached result into the per-child calculation function to reduce DOM read overhead.
