@@ -362,6 +362,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
+    // Form Validation
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            let isValid = true;
+
+            // Remove existing error messages
+            const existingErrors = contactForm.querySelectorAll('.error-msg');
+            existingErrors.forEach(error => error.remove());
+
+            // Helper to add error message
+            const showError = (input, message) => {
+                const errorSpan = document.createElement('span');
+                errorSpan.className = 'error-msg';
+                errorSpan.textContent = message;
+                input.parentNode.insertBefore(errorSpan, input.nextSibling);
+                isValid = false;
+            };
+
+            // Validate Name
+            const nameInput = document.getElementById('name');
+            if (!nameInput.value.trim()) {
+                showError(nameInput, 'Name is required.');
+            }
+
+            // Validate Email
+            const emailInput = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailInput.value.trim()) {
+                showError(emailInput, 'Email is required.');
+            } else if (!emailRegex.test(emailInput.value.trim())) {
+                showError(emailInput, 'Please enter a valid email address.');
+            }
+
+            // Validate Message
+            const messageInput = document.getElementById('message');
+            if (!messageInput.value.trim()) {
+                showError(messageInput, 'Message is required.');
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+    }
+
     // Back to Top Button
     // Keyboard shortcut for theme toggle
     document.addEventListener('keydown', (e) => {
