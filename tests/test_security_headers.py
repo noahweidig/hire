@@ -118,10 +118,11 @@ class SecurityHeadersTest(unittest.TestCase):
         upgrade_insecure = next((d for d in directives if d.startswith("upgrade-insecure-requests")), None)
         self.assertIsNotNone(upgrade_insecure, "upgrade-insecure-requests directive is missing in CSP")
 
-        # Verify form-action 'none'
+        # Verify form-action allows same-origin and Formspree endpoint
         form_action = next((d for d in directives if d.startswith("form-action")), None)
         self.assertIsNotNone(form_action, "form-action directive is missing in CSP")
-        self.assertIn("'none'", form_action, "CSP form-action should be 'none'")
+        self.assertIn("'self'", form_action, "CSP form-action should include 'self'")
+        self.assertIn("https://formspree.io", form_action, "CSP form-action should include https://formspree.io")
 
         # Verify frame-src 'none'
         frame_src = next((d for d in directives if d.startswith("frame-src")), None)
@@ -133,10 +134,11 @@ class SecurityHeadersTest(unittest.TestCase):
         self.assertIsNotNone(trusted_types, "trusted-types directive is missing in CSP")
         self.assertIn("'none'", trusted_types, "CSP trusted-types should be 'none'")
 
-        # Verify connect-src 'none'
+        # Verify connect-src allows same-origin and Formspree endpoint
         connect_src = next((d for d in directives if d.startswith("connect-src")), None)
         self.assertIsNotNone(connect_src, "connect-src directive is missing in CSP")
-        self.assertIn("'none'", connect_src, "CSP connect-src should be 'none'")
+        self.assertIn("'self'", connect_src, "CSP connect-src should include 'self'")
+        self.assertIn("https://formspree.io", connect_src, "CSP connect-src should include https://formspree.io")
 
         # Verify worker-src 'none'
         worker_src = next((d for d in directives if d.startswith("worker-src")), None)

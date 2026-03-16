@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; connect-src 'none'; worker-src 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self' https://formspree.io; frame-src 'none'; connect-src 'self' https://formspree.io; worker-src 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none';">
     <title>Hire Noah</title>
     <!-- Security: Load clickjacking defense first to minimize flash of invisible content -->
     <link rel="stylesheet" href="anti-clickjack.css">
@@ -40,8 +40,8 @@
                 <li><a href="#why-me">Why Hire Me</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="https://forms.gle/UCx9wFKc7UuAMTME6" class="btn btn-primary btn-small btn-rounded btn-hire" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
-                    Hire Me <svg class="external-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg><span class="sr-only"> (opens in a new tab)</span>
+                <a href="#contact-form" class="btn btn-primary btn-small btn-rounded btn-hire">
+                    Hire Me
                 </a>
                 <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode (T)">
                     <span class="theme-icon" aria-hidden="true">
@@ -76,8 +76,8 @@
                 <h1 id="hero-heading">Data Wrangling, Analytics<br>& Visualization Specialist</h1>
                 <p class="subheading">I transform raw, messy data into trusted pipelines, actionable analytics, and story-driven visuals that drive decisions.</p>
                 <div class="hero-actions">
-                    <a href="https://forms.gle/UCx9wFKc7UuAMTME6" class="btn btn-primary btn-rounded btn-hire" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
-                        Hire Me <svg class="external-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg><span class="sr-only"> (opens in a new tab)</span>
+                    <a href="#contact-form" class="btn btn-primary btn-rounded btn-hire">
+                        Hire Me
                     </a>
                     <a href="#work" class="btn btn-ghost btn-rounded focus-cue" aria-label="View selected work - secondary action">Selected Work</a>
                 </div>
@@ -271,9 +271,26 @@
             <div class="container">
                 <h2 id="contact-heading">Ready to elevate your data story?</h2>
                 <p>Let's discuss how I can help you build cleaner pipelines and sharper insights.</p>
-                <a href="https://forms.gle/UCx9wFKc7UuAMTME6" class="btn btn-primary btn-rounded btn-hire" target="_blank" rel="noopener noreferrer" title="Opens in a new tab">
-                    Hire Me <svg class="external-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg><span class="sr-only"> (opens in a new tab)</span>
+                <a href="#contact-form" class="btn btn-primary btn-rounded btn-hire">
+                    Hire Me
                 </a>
+            </div>
+        </section>
+        <section id="contact-form" class="section" aria-labelledby="contact-form-heading" tabindex="-1">
+            <div class="container">
+                <h2 id="contact-form-heading">Tell me about your project</h2>
+                <form class="contact-form" action="https://formspree.io/f/mnjggoke" method="POST">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" required>
+
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" required>
+
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+
+                    <button type="submit" class="btn btn-primary btn-rounded">Send Message</button>
+                </form>
             </div>
         </section>
     </main>

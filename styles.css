@@ -847,6 +847,38 @@ body[data-theme="dark"] .hero-photo {
     transform: translate(2px, -2px);
 }
 
+.contact-form {
+    max-width: 720px;
+    margin: 0 auto;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    background-color: var(--bg-white);
+    color: var(--text-charcoal);
+    font: inherit;
+}
+
+.contact-form textarea {
+    resize: vertical;
+}
+
+.contact-form input:focus-visible,
+.contact-form textarea:focus-visible {
+    outline: 2px solid var(--primary-teal);
+    outline-offset: 2px;
+}
+
+.contact-form button {
+    justify-self: start;
+}
+
 /* Footer */
 footer {
     background-color: var(--bg-off-white);
