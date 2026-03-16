@@ -1,0 +1,4 @@
+/* Security Enhancement: Ensure No-JS users can view the content */
+html.anti-clickjack body {
+    display: block !important;
+}

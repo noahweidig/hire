@@ -46,3 +46,8 @@
 **Vulnerability:** The 'invisible-by-default' clickjacking defense relied on a frame-busting check inside a deferred script (`script.js`). Because the script execution was deferred until after the document was parsed, the user could experience a visible flash of the hidden body or, more critically, a window of opportunity where the site could be framed and interacted with before the script executed and hid the page.
 **Learning:** Security mechanisms that manipulate the initial rendering state (like hiding the page to prevent clickjacking) must execute as early as possible. Deferring these scripts delays protection and creates a race condition.
 **Prevention:** Extract critical rendering-path security logic (like `anti-clickjack.css` and `anti-clickjack.js`) into separate, lightweight files and link them synchronously in the `<head>` *before* other assets. This guarantees the defense is active before the page is displayed or becomes interactive.
+
+## 2026-03-14 - [Defense-in-depth: No-JS Availability for Clickjacking Defense]
+**Vulnerability:** The 'invisible-by-default' clickjacking defense hides the page permanently for users with JavaScript disabled, effectively causing a self-imposed Denial of Service (Availability issue).
+**Learning:** Security mechanisms that manipulate the initial rendering state via JavaScript must account for environments where JavaScript is disabled to maintain site availability.
+**Prevention:** When implementing an 'invisible-by-default' JavaScript frame-busting defense (e.g., hiding the body with CSS), ensure availability for users with JavaScript disabled by including a fallback `<noscript>` stylesheet that restores visibility (e.g., `display: block !important`).
