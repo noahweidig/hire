@@ -57,3 +57,7 @@
 ## 2026-03-13 - Visual Cues for External Context Shifts
 **Learning:** While `sr-only` text and `title` attributes provide essential context to screen reader and some sighted users about links opening in new tabs, many sighted users do not hover long enough to read tooltips before clicking. This leads to unexpected context shifts when a link looks like internal navigation (e.g., a project card) but acts like an external exit.
 **Action:** Always pair `sr-only` external link warnings with a visible, semantic external link icon (like `external-link.svg`) for sighted users. Ensure the icon is `aria-hidden="true"` to prevent redundant screen reader announcements, and provide subtle hover animations to reinforce interactivity.
+
+## 2024-05-18 - Prevent Unexpected Context Shifts
+**Learning:** External links (`target="_blank"`) without visual cues cause unexpected context shifts for sighted users, disrupting the flow. Appending a consistent, subtly animated external link icon solves this gracefully.
+**Action:** Always append an external link icon to primary CTAs that navigate off-site, applying consistent hover states (`transform: translate(2px, -2px)`) for tactile feedback.
