@@ -35,23 +35,19 @@ class ExternalLinksTest(unittest.TestCase):
     def tearDown(self):
         self.context.close()
 
-    def test_forms_gle_links(self):
-        """Test that links to forms.gle have target='_blank' and rel='noopener noreferrer'."""
-        # Performance: Use evaluate_all on locator to bulk retrieve data instead of sequential locator operations
-        links_data = self.page.locator("a[href^='https://forms.gle']").evaluate_all(
-            "(elements) => elements.map(a => ({ href: a.getAttribute('href'), target: a.getAttribute('target'), rel: a.getAttribute('rel') }))"
+    def test_hire_me_links_to_contact_form(self):
+        """Test that all Hire Me buttons navigate to the in-page contact form."""
+        links_data = self.page.locator("a.btn-hire").evaluate_all(
+            "(elements) => elements.map(a => ({ href: a.getAttribute('href'), target: a.getAttribute('target') }))"
         )
 
-        self.assertGreater(len(links_data), 0, "No forms.gle links found")
+        self.assertGreater(len(links_data), 0, "No Hire Me links found")
 
         for link in links_data:
             href = link["href"]
             target = link["target"]
-            rel = link["rel"]
-
-            self.assertEqual(target, "_blank", f"Link to {href} missing target='_blank'")
-            self.assertIn("noopener", rel or "", f"Link to {href} missing 'noopener' in rel attribute")
-            self.assertIn("noreferrer", rel or "", f"Link to {href} missing 'noreferrer' in rel attribute")
+            self.assertEqual(href, "#contact-form", f"Hire Me link should point to #contact-form, got {href}")
+            self.assertTrue(target in (None, ""), "Hire Me link should not open in a new tab")
 
     def test_noahweidig_link(self):
         """Test that link to noahweidig.com has rel='noopener noreferrer'."""
@@ -89,6 +85,11 @@ class ExternalLinksTest(unittest.TestCase):
             self.assertEqual(target, "_blank", f"Link to {url} missing target='_blank'")
             self.assertIn("noopener", rel or "", f"Link to {url} missing 'noopener' in rel attribute")
             self.assertIn("noreferrer", rel or "", f"Link to {url} missing 'noreferrer' in rel attribute")
+
+    def test_formspree_form_present(self):
+        """Test that the contact form submits to Formspree."""
+        form = self.page.locator("form[action='https://formspree.io/f/mnjggoke'][method='POST']")
+        self.assertEqual(form.count(), 1, "Expected one Formspree contact form")
 
 if __name__ == '__main__':
     unittest.main()

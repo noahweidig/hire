@@ -15,7 +15,7 @@
 [![Python](https://img.shields.io/badge/Tests-Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-[View Live](https://noahweidig.com) · [Hire Me](https://forms.gle/UCx9wFKc7UuAMTME6) · [Report a Bug](https://github.com/noahweidig/hire/issues)
+[View Live](https://noahweidig.com) · [Hire Me](https://noahweidig.com/#contact-form) · [Report a Bug](https://github.com/noahweidig/hire/issues)
 
 </div>
 
