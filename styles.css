@@ -879,6 +879,25 @@ body[data-theme="dark"] .hero-photo {
     justify-self: start;
 }
 
+.required-asterisk {
+    color: var(--accent-coral);
+    margin-left: 0.25rem;
+}
+
+.form-footnote {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0.5rem 0 0 0;
+    justify-self: start;
+}
+
+.error-msg {
+    color: var(--accent-coral);
+    font-size: 0.875rem;
+    display: block;
+    margin-top: -0.5rem; /* pull it closer to the input */
+}
+
 /* Footer */
 footer {
     background-color: var(--bg-off-white);
