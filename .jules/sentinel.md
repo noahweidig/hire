@@ -51,3 +51,8 @@
 **Vulnerability:** The 'invisible-by-default' clickjacking defense hides the page permanently for users with JavaScript disabled, effectively causing a self-imposed Denial of Service (Availability issue).
 **Learning:** Security mechanisms that manipulate the initial rendering state via JavaScript must account for environments where JavaScript is disabled to maintain site availability.
 **Prevention:** When implementing an 'invisible-by-default' JavaScript frame-busting defense (e.g., hiding the body with CSS), ensure availability for users with JavaScript disabled by including a fallback `<noscript>` stylesheet that restores visibility (e.g., `display: block !important`).
+
+## 2026-03-17 - [Defense-in-depth: Input length limits for DoS prevention]
+**Vulnerability:** Client-side input fields (`name`, `email`, `message` in the contact form) lacked `maxlength` attributes, allowing users to paste or type extremely large strings. This creates a risk for client-side Denial of Service (DoS) by causing browser memory issues, or submitting excessively large payloads to the backend or third-party service.
+**Learning:** Client-side validation is a first line of defense. Restricting input length using standard HTML attributes mitigates risk by preventing excessively large data blobs from ever being processed or transmitted.
+**Prevention:** Apply appropriate `maxlength` limits to all text input and textarea fields in forms (e.g., `100` for name, `254` for standard email addresses according to RFCs, and a reasonable limit like `5000` for free-text messages).
