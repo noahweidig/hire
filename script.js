@@ -365,11 +365,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Form Validation
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
+        const submitButton = contactForm.querySelector('.contact-submit-btn');
+
         contactForm.addEventListener('submit', (e) => {
             let isValid = true;
 
-            // Remove existing error messages
-            const existingErrors = contactForm.querySelectorAll('.error-msg');
+            // Remove existing messages
+            const existingErrors = contactForm.querySelectorAll('.error-msg, .form-success-msg');
             existingErrors.forEach(error => {
                 // Remove ARIA attributes from the associated input
                 const input = error.previousSibling;
@@ -420,7 +422,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (firstInvalidInput) {
                     firstInvalidInput.focus();
                 }
+                return;
             }
+
+            if (submitButton) {
+                submitButton.textContent = 'Sending...';
+            }
+            contactForm.classList.add('is-submitting');
+
+            const successMsg = document.createElement('p');
+            successMsg.className = 'form-success-msg';
+            successMsg.textContent = 'Looks great — sending your message now.';
+            contactForm.insertBefore(successMsg, submitButton);
         });
     }
 
