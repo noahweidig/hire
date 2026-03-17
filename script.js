@@ -362,6 +362,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
+    // In Practice — transform toggle
+    const ipSection      = document.getElementById('in-practice');
+    const ipTransformBtn = document.getElementById('ip-transform-btn');
+    const ipResetBtn     = document.getElementById('ip-reset-btn');
+
+    if (ipTransformBtn && ipSection) {
+        ipTransformBtn.addEventListener('click', () => {
+            ipSection.classList.add('ip-transformed');
+        });
+    }
+
+    if (ipResetBtn && ipSection) {
+        ipResetBtn.addEventListener('click', () => {
+            ipSection.classList.remove('ip-transformed');
+        });
+    }
+
     // Form Validation
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
