@@ -370,14 +370,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Remove existing error messages
             const existingErrors = contactForm.querySelectorAll('.error-msg');
-            existingErrors.forEach(error => error.remove());
+            existingErrors.forEach(error => {
+                // Remove ARIA attributes from the associated input
+                const input = error.previousSibling;
+                if (input && input.removeAttribute) {
+                    input.removeAttribute('aria-invalid');
+                    input.removeAttribute('aria-describedby');
+                }
+                error.remove();
+            });
 
             // Helper to add error message
             const showError = (input, message) => {
                 const errorSpan = document.createElement('span');
                 errorSpan.className = 'error-msg';
+                errorSpan.id = `${input.id}-error`;
                 errorSpan.textContent = message;
                 input.parentNode.insertBefore(errorSpan, input.nextSibling);
+                input.setAttribute('aria-invalid', 'true');
+                input.setAttribute('aria-describedby', errorSpan.id);
                 isValid = false;
             };
 
@@ -404,6 +415,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!isValid) {
                 e.preventDefault();
+                // Accessibility: Shift focus to the first invalid input for immediate error recovery
+                const firstInvalidInput = contactForm.querySelector('[aria-invalid="true"]');
+                if (firstInvalidInput) {
+                    firstInvalidInput.focus();
+                }
             }
         });
     }

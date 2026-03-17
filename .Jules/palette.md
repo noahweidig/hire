@@ -61,3 +61,7 @@
 ## 2024-05-18 - Prevent Unexpected Context Shifts
 **Learning:** External links (`target="_blank"`) without visual cues cause unexpected context shifts for sighted users, disrupting the flow. Appending a consistent, subtly animated external link icon solves this gracefully.
 **Action:** Always append an external link icon to primary CTAs that navigate off-site, applying consistent hover states (`transform: translate(2px, -2px)`) for tactile feedback.
+
+## 2025-03-03 - Form Validation Accessibility and Error Recovery
+**Learning:** Visual inline form errors are easily missed by screen reader users if not explicitly linked to the input, and manual error recovery can be disorienting for keyboard users.
+**Action:** When implementing custom form validation, always programmatically tie the error message to the input using `aria-invalid` and `aria-describedby`, and automatically shift focus (`.focus()`) to the first invalid field upon a failed submission.
