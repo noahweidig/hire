@@ -1498,7 +1498,7 @@ body[data-theme="dark"] .cg-axis-title { fill: #aaa; }
 .cn-tick    { font-size: 7px; font-family: var(--font-main), sans-serif; fill: var(--text-muted); text-anchor: middle; }
 .cn-tick-y  { font-size: 7px; font-family: var(--font-main), sans-serif; fill: var(--text-muted); text-anchor: end; }
 
-/* Reveal animation */
+/* Reveal animation — triggered on scroll via IntersectionObserver */
 .ip-reveal {
     opacity: 0.18;
     transition: opacity 0.65s ease;
@@ -1507,37 +1507,19 @@ body[data-theme="dark"] .cg-axis-title { fill: #aaa; }
 .ip-reveal-delay-1 { transition-delay: 0s; }
 .ip-reveal-delay-2 { transition-delay: 0s; }
 
-.ip-section.ip-transformed .ip-reveal          { opacity: 1; }
-.ip-section.ip-transformed .ip-reveal-delay-1  { transition-delay: 0.35s; }
-.ip-section.ip-transformed .ip-reveal-delay-2  { transition-delay: 0.7s; }
+.ip-act.ip-visible .ip-reveal          { opacity: 1; }
+.ip-act.ip-visible .ip-reveal-delay-1  { transition-delay: 0.35s; }
+.ip-act.ip-visible .ip-reveal-delay-2  { transition-delay: 0.7s; }
 
-/* Transform / reset controls */
-.ip-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.25rem;
-    margin-top: 2.5rem;
-}
-
-.ip-reset-btn {
-    display: none;
-    background: none;
-    border: none;
-    font-family: var(--font-main);
-    font-size: 0.8rem;
+/* "and so much more" narrative closer */
+.ip-and-more {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 1.35rem;
+    font-style: italic;
     color: var(--text-muted);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    cursor: pointer;
-    padding: 0;
-    transition: color 0.2s ease;
+    letter-spacing: 0.01em;
 }
-
-.ip-reset-btn:hover { color: var(--text-charcoal); }
-
-.ip-section.ip-transformed .ip-reset-btn { display: inline; }
-.ip-section.ip-transformed #ip-transform-btn { opacity: 0.35; pointer-events: none; }
 
 /* Responsive */
 @media (max-width: 720px) {
