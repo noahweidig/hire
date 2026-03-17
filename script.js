@@ -362,21 +362,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
-    // In Practice — transform toggle
-    const ipSection      = document.getElementById('in-practice');
-    const ipTransformBtn = document.getElementById('ip-transform-btn');
-    const ipResetBtn     = document.getElementById('ip-reset-btn');
+    // In Practice — reveal each act on scroll via IntersectionObserver
+    const ipActs = document.querySelectorAll('.ip-act');
+    if (ipActs.length) {
+        const actObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('ip-visible');
+                    actObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.35 });
 
-    if (ipTransformBtn && ipSection) {
-        ipTransformBtn.addEventListener('click', () => {
-            ipSection.classList.add('ip-transformed');
-        });
-    }
-
-    if (ipResetBtn && ipSection) {
-        ipResetBtn.addEventListener('click', () => {
-            ipSection.classList.remove('ip-transformed');
-        });
+        ipActs.forEach(act => actObserver.observe(act));
     }
 
     // Form Validation
