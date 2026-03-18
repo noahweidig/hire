@@ -1354,34 +1354,72 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
 /* Both panels occupy the same grid cell (overlapping) */
 .ip-scene-panel {
     grid-area: 1 / 1 / 2 / 2;
-    transition: opacity 0.85s ease, transform 0.85s ease;
+    transition: opacity 0.7s ease, transform 0.7s ease, filter 0.7s ease;
 }
 
 .ip-scene-before {
     opacity: 1;
     transform: none;
+    filter: none;
     z-index: 2;
 }
 
 .ip-scene-after {
     opacity: 0;
     transform: translateY(14px) scale(0.99);
+    filter: none;
     pointer-events: none;
     z-index: 1;
 }
 
-/* When sentinel fires: before fades away, after fades in */
+/* When sentinel fires: magic sweep plays, before blurs away, after fades in */
 .ip-scroll-scene.scene-revealed .ip-scene-before {
     opacity: 0;
-    transform: translateY(-10px) scale(0.99);
+    transform: scale(0.97);
+    filter: blur(2px);
     pointer-events: none;
+    transition: opacity 0.42s ease 0.1s, transform 0.42s ease 0.1s, filter 0.38s ease 0.05s;
 }
 
 .ip-scroll-scene.scene-revealed .ip-scene-after {
     opacity: 1;
     transform: none;
+    filter: none;
     pointer-events: auto;
     z-index: 3;
+    transition: opacity 0.58s ease 0.26s, transform 0.58s ease 0.26s;
+}
+
+/* Magic sweep beam — a glowing streak that crosses the panel when revealed */
+.ip-scene-panel-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent 0%,
+        rgba(94, 234, 212, 0.1)  18%,
+        rgba(94, 234, 212, 0.38) 38%,
+        rgba(255, 255, 255, 0.93) 50%,
+        rgba(94, 234, 212, 0.38) 62%,
+        rgba(94, 234, 212, 0.1)  82%,
+        transparent 100%
+    );
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform;
+}
+
+.ip-scroll-scene.scene-revealed .ip-scene-panel-wrap::before {
+    animation: ip-magic-sweep 0.82s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    opacity: 1;
+}
+
+@keyframes ip-magic-sweep {
+    0%   { transform: translateX(-100%); opacity: 1; }
+    88%  { opacity: 1; }
+    100% { transform: translateX(100%);  opacity: 0; }
 }
 
 /* Sentinel element — sits at ~55% through the sticky experience to trigger the reveal */
@@ -1415,6 +1453,7 @@ html.ip-no-sticky .ip-scene-before,
 html.ip-no-sticky .ip-scene-after {
     opacity: 1;
     transform: none;
+    filter: none;
     pointer-events: auto;
 }
 
@@ -1424,6 +1463,17 @@ html.ip-no-sticky .ip-scene-after {
 
 html.ip-no-sticky .ip-scene-trigger {
     display: none;
+}
+
+/* In no-sticky mode the sweep and animated transitions are not needed */
+html.ip-no-sticky .ip-scene-panel-wrap::before {
+    display: none;
+}
+
+html.ip-no-sticky .ip-scroll-scene.scene-revealed .ip-scene-before,
+html.ip-no-sticky .ip-scroll-scene.scene-revealed .ip-scene-after {
+    transition: none;
+    filter: none;
 }
 
 @media (min-width: 1101px) {
@@ -1589,6 +1639,20 @@ html.ip-no-sticky .ip-scene-trigger {
 
 body[data-theme="dark"] .ip-pipe-bad  { background: rgba(249, 115, 22, 0.08); }
 body[data-theme="dark"] .ip-pipe-good { background: rgba(15, 118, 110, 0.08); }
+
+/* Dark mode: soften the white flash so it doesn't blow out dark backgrounds */
+body[data-theme="dark"] .ip-scene-panel-wrap::before {
+    background: linear-gradient(
+        105deg,
+        transparent 0%,
+        rgba(94, 234, 212, 0.08)  18%,
+        rgba(94, 234, 212, 0.32)  38%,
+        rgba(180, 255, 242, 0.68) 50%,
+        rgba(94, 234, 212, 0.32)  62%,
+        rgba(94, 234, 212, 0.08)  82%,
+        transparent 100%
+    );
+}
 
 .ip-badge {
     display: inline-block;
