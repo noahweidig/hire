@@ -389,10 +389,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (supportsIO) {
             const sceneObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
+                    const scene = entry.target.closest('.ip-scroll-scene');
+                    if (!scene) return;
+
                     if (entry.isIntersecting) {
-                        const scene = entry.target.closest('.ip-scroll-scene');
-                        if (scene) scene.classList.add('scene-revealed');
-                        sceneObserver.unobserve(entry.target);
+                        scene.classList.add('scene-revealed');
+                    } else {
+                        scene.classList.remove('scene-revealed');
                     }
                 });
             }, { threshold: 0 });
