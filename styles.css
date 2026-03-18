@@ -1265,7 +1265,7 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
     .ip-act-meta {
         margin-bottom: 0;
         position: sticky;
-        top: calc(var(--nav-height) + 2rem);
+        top: clamp(calc(var(--nav-height) + 1.5rem), calc(50vh - 8rem), calc(100vh - 14rem));
         align-self: start;
     }
 
