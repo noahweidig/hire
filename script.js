@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const inPracticeSection = document.querySelector('.ip-section');
+    if (inPracticeSection) {
+        document.documentElement.classList.add('ip-enhanced');
+    }
+
     // Performance: Lazily clone skills lists for the marquee to unblock the main thread
     const initMarquee = () => {
         const skillsTracks = document.querySelectorAll('.skills-track');
@@ -386,6 +391,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // (threshold: 0 because acts now contain tall scroll scenes; we only need the top edge)
     const ipActs = document.querySelectorAll('.ip-act');
     if (ipActs.length) {
+        const revealVisibleIpActs = () => {
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            ipActs.forEach((act) => {
+                const rect = act.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < viewportHeight) {
+                    act.classList.add('ip-visible');
+                }
+            });
+        };
+
         if (supportsIO) {
             const actObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -397,6 +412,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { threshold: 0, rootMargin: '-80px 0px 0px 0px' });
 
             ipActs.forEach(act => actObserver.observe(act));
+            revealVisibleIpActs();
+            window.addEventListener('resize', revealVisibleIpActs);
+            requestAnimationFrame(() => {
+                if (!document.querySelector('.ip-act.ip-visible')) {
+                    ipActs[0].classList.add('ip-visible');
+                }
+            });
         } else {
             ipActs.forEach(act => act.classList.add('ip-visible'));
         }
