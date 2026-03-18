@@ -364,27 +364,38 @@ document.addEventListener('DOMContentLoaded', () => {
         resizeTimeout = setTimeout(() => {
             // Re-calculate all metrics on resize
             updateNavLinkMetrics();
+            evaluateInPracticeLayout();
         }, 150);
     });
 
     // In Practice — guard against desktop browsers that fail to size the sticky scene
     // correctly, which otherwise leaves a tall blank area while scrolling.
     const ipSceneWraps = document.querySelectorAll('.ip-scene-panel-wrap');
+    const ipScrollScenes = document.querySelectorAll('.ip-scroll-scene');
     const supportsSticky = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('position', 'sticky');
 
-    const enableInPracticeFallbackLayout = () => {
-        document.documentElement.classList.add('ip-no-sticky');
+    const setInPracticeFallbackLayout = (shouldEnable) => {
+        document.documentElement.classList.toggle('ip-no-sticky', shouldEnable);
     };
 
-    if (ipSceneWraps.length && supportsSticky) {
-        requestAnimationFrame(() => {
-            const hasCollapsedScene = Array.from(ipSceneWraps).some((wrap) => wrap.getBoundingClientRect().height < 24);
-            if (hasCollapsedScene) {
-                enableInPracticeFallbackLayout();
-            }
+    const evaluateInPracticeLayout = () => {
+        if (!ipSceneWraps.length) return;
+
+        if (!supportsSticky) {
+            setInPracticeFallbackLayout(true);
+            return;
+        }
+
+        const hasCollapsedScene = Array.from(ipSceneWraps).some((wrap) => {
+            const rect = wrap.getBoundingClientRect();
+            return rect.height < 24 || rect.width < 24;
         });
-    } else if (ipSceneWraps.length) {
-        enableInPracticeFallbackLayout();
+
+        setInPracticeFallbackLayout(hasCollapsedScene);
+    };
+
+    if (ipSceneWraps.length) {
+        requestAnimationFrame(evaluateInPracticeLayout);
     }
 
     // In Practice — add ip-visible to each act as soon as it enters the viewport
@@ -426,29 +437,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // In Practice — crossfade from "before" to "after" when the sentinel
     // element (positioned mid-scene) scrolls into view
-    const sceneTriggers = document.querySelectorAll('.ip-scene-trigger');
-    if (sceneTriggers.length) {
-        if (supportsIO) {
-            const sceneObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const scene = entry.target.closest('.ip-scroll-scene');
-                    if (!scene) return;
+    if (ipScrollScenes.length) {
+        let inPracticeFrame = null;
 
-                    if (entry.isIntersecting) {
-                        scene.classList.add('scene-revealed');
-                    } else {
-                        scene.classList.remove('scene-revealed');
-                    }
-                });
-            }, { threshold: 0 });
+        const syncInPracticeScenes = () => {
+            inPracticeFrame = null;
 
-            sceneTriggers.forEach(trigger => sceneObserver.observe(trigger));
-        } else {
-            sceneTriggers.forEach(trigger => {
-                const scene = trigger.closest('.ip-scroll-scene');
-                if (scene) scene.classList.add('scene-revealed');
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            const revealLine = viewportHeight * 0.58;
+
+            ipScrollScenes.forEach((scene) => {
+                const trigger = scene.querySelector('.ip-scene-trigger');
+
+                if (!trigger || document.documentElement.classList.contains('ip-no-sticky')) {
+                    scene.classList.add('scene-revealed');
+                    return;
+                }
+
+                const triggerRect = trigger.getBoundingClientRect();
+                scene.classList.toggle('scene-revealed', triggerRect.top <= revealLine);
             });
-        }
+        };
+
+        const requestInPracticeSync = () => {
+            if (inPracticeFrame !== null) return;
+            inPracticeFrame = requestAnimationFrame(syncInPracticeScenes);
+        };
+
+        syncInPracticeScenes();
+        window.addEventListener('scroll', requestInPracticeSync, { passive: true });
+        window.addEventListener('resize', requestInPracticeSync);
     }
 
     // Form Validation
