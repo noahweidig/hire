@@ -455,7 +455,8 @@ document.addEventListener('DOMContentLoaded', () => {
             inPracticeFrame = null;
 
             const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            const revealLine = viewportHeight * 0.58;
+            const isMobileViewport = window.matchMedia('(max-width: 720px)').matches;
+            const revealLine = viewportHeight * (isMobileViewport ? 0.78 : 0.58);
 
             ipScrollScenes.forEach((scene) => {
                 const trigger = scene.querySelector('.ip-scene-trigger');
