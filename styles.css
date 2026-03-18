@@ -1217,9 +1217,29 @@ footer p {
 /* Act header */
 .ip-act-meta {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    align-items: flex-start;
+    gap: 0.875rem;
+    margin-bottom: 1.25rem;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.ip-act.ip-visible .ip-act-meta {
+    opacity: 1;
+    transform: none;
+}
+
+.ip-act-text {
+    flex: 1;
+}
+
+.ip-act-desc {
+    margin: 0.4rem 0 0;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 58ch;
 }
 
 .ip-act-num {
@@ -1233,6 +1253,7 @@ footer p {
     border-radius: 5px;
     padding: 3px 9px;
     flex-shrink: 0;
+    margin-top: 0.2rem;
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
@@ -1250,12 +1271,67 @@ footer p {
     color: var(--primary-teal);
 }
 
-/* Before / After panel grid */
-.ip-ba-grid {
+/* Scroll scene: tall container so the sticky panel can "pin" while scrolling */
+.ip-scroll-scene {
+    position: relative;
+    min-height: 180vh;
+}
+
+/* Sticky wrapper — holds both before and after panels, stacked in one cell */
+.ip-scene-panel-wrap {
+    position: sticky;
+    top: calc(50vh - 160px);
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    align-items: start;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+/* Both panels occupy the same grid cell (overlapping) */
+.ip-scene-panel {
+    grid-area: 1 / 1 / 2 / 2;
+    transition: opacity 0.85s ease, transform 0.85s ease;
+}
+
+.ip-scene-before {
+    opacity: 1;
+    transform: none;
+    z-index: 2;
+}
+
+.ip-scene-after {
+    opacity: 0;
+    transform: translateY(14px) scale(0.99);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* When sentinel fires: before fades away, after fades in */
+.ip-scroll-scene.scene-revealed .ip-scene-before {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.99);
+    pointer-events: none;
+}
+
+.ip-scroll-scene.scene-revealed .ip-scene-after {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    z-index: 3;
+}
+
+/* Sentinel element — sits at ~55% through the scene to trigger the reveal */
+.ip-scene-trigger {
+    position: absolute;
+    top: 55vh;
+    left: 0;
+    right: 0;
+    height: 1px;
+    pointer-events: none;
+}
+
+/* Pipeline panel body — no horizontal scroll, full-width nodes */
+.ip-panel-body--pipe {
+    padding: 0.75rem;
 }
 
 .ip-panel {
@@ -1432,13 +1508,6 @@ body[data-theme="dark"] .ip-pipe-good { background: rgba(15, 118, 110, 0.08); }
     color: #fff;
 }
 
-/* Chart grid */
-.ip-chart-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-}
-
 .ip-chart-card {
     background: var(--bg-white);
     border: 1px solid var(--border-soft);
@@ -1458,47 +1527,70 @@ body[data-theme="dark"] .ip-pipe-good { background: rgba(15, 118, 110, 0.08); }
     height: auto;
 }
 
-/* Ugly chart SVG styles */
-.cg-bg         { fill: #eaeaea; }
+/* ---- UGLY chart SVG styles (exaggerated ggplot2 defaults) ---- */
+.cg-bg           { fill: #c8c8c8; }
 body[data-theme="dark"] .cg-bg { fill: #2a2a2a; }
-.cg-grid       { stroke: #fff; stroke-width: 1; }
+/* Major gridlines: thick white stripes */
+.cg-grid         { stroke: #f5f5f5; stroke-width: 1.5; }
 body[data-theme="dark"] .cg-grid { stroke: #1a1a1a; }
-.cg-grid-v     { stroke: #fff; stroke-width: 0.5; }
+/* Minor gridlines: thinner white stripes — extra clutter */
+.cg-grid-minor   { stroke: #e0e0e0; stroke-width: 0.75; }
+body[data-theme="dark"] .cg-grid-minor { stroke: #222; }
+.cg-grid-v       { stroke: #f5f5f5; stroke-width: 1.5; }
 body[data-theme="dark"] .cg-grid-v { stroke: #1a1a1a; }
-.cg-axis       { stroke: #333; stroke-width: 1.5; }
-body[data-theme="dark"] .cg-axis { stroke: #aaa; }
-.cg-line-a     { fill: none; stroke: #F8766D; stroke-width: 1.5; }
-.cg-line-b     { fill: none; stroke: #00BFC4; stroke-width: 1.5; }
-.cg-dot-a      { fill: #F8766D; }
-.cg-dot-b      { fill: #00BFC4; }
-.cg-legend-bg  { fill: var(--bg-white); stroke: #ccc; stroke-width: 0.5; }
-.cg-legend-line-a { stroke: #F8766D; stroke-width: 1.5; }
-.cg-legend-line-b { stroke: #00BFC4; stroke-width: 1.5; }
-.cg-legend-text   { font-size: 7px; font-family: Arial, sans-serif; fill: #333; }
-body[data-theme="dark"] .cg-legend-text { fill: #ccc; }
-.cg-tick       { font-size: 7px; font-family: Arial, sans-serif; fill: #555; text-anchor: middle; }
+.cg-grid-minor-v { stroke: #e0e0e0; stroke-width: 0.75; }
+body[data-theme="dark"] .cg-grid-minor-v { stroke: #222; }
+/* Heavy black axes */
+.cg-axis         { stroke: #111; stroke-width: 2.5; }
+body[data-theme="dark"] .cg-axis { stroke: #bbb; }
+/* Garish ggplot2 salmon-red and bright cyan */
+.cg-line-a       { fill: none; stroke: #F8766D; stroke-width: 2; }
+.cg-line-b       { fill: none; stroke: #00BFC4; stroke-width: 2; }
+.cg-dot-a        { fill: #F8766D; stroke: #F8766D; }
+.cg-dot-b        { fill: #00BFC4; stroke: #00BFC4; }
+/* Heavy legend box */
+.cg-legend-bg    { fill: #f5f5f5; stroke: #888; stroke-width: 1.5; }
+body[data-theme="dark"] .cg-legend-bg { fill: #333; }
+.cg-legend-line-a { stroke: #F8766D; stroke-width: 2; }
+.cg-legend-line-b { stroke: #00BFC4; stroke-width: 2; }
+/* Times New Roman for maximum chart-crime energy */
+.cg-legend-text  { font-size: 7.5px; font-family: "Times New Roman", Times, serif; fill: #222; }
+body[data-theme="dark"] .cg-legend-text { fill: #ddd; }
+.cg-tick         { font-size: 7px; font-family: "Times New Roman", Times, serif; fill: #333; text-anchor: middle; }
 body[data-theme="dark"] .cg-tick { fill: #aaa; }
-.cg-tick-y     { font-size: 7px; font-family: Arial, sans-serif; fill: #555; text-anchor: end; }
+.cg-tick-y       { font-size: 7px; font-family: "Times New Roman", Times, serif; fill: #333; text-anchor: end; }
 body[data-theme="dark"] .cg-tick-y { fill: #aaa; }
-.cg-plot-title { font-size: 8px; font-family: Arial, sans-serif; fill: #333; text-anchor: middle; }
-body[data-theme="dark"] .cg-plot-title { fill: #ccc; }
-.cg-axis-title { font-size: 8px; font-family: Arial, sans-serif; fill: #555; text-anchor: middle; }
+.cg-plot-title   { font-size: 7.5px; font-family: "Times New Roman", Times, serif; fill: #111; text-anchor: middle; font-style: italic; }
+body[data-theme="dark"] .cg-plot-title { fill: #ddd; }
+.cg-plot-subtitle { font-size: 5.5px; font-family: "Times New Roman", Times, serif; fill: #555; text-anchor: middle; }
+body[data-theme="dark"] .cg-plot-subtitle { fill: #999; }
+.cg-axis-title   { font-size: 7px; font-family: "Times New Roman", Times, serif; fill: #444; text-anchor: middle; }
 body[data-theme="dark"] .cg-axis-title { fill: #aaa; }
+.cg-axis-title-y { font-size: 7px; font-family: "Times New Roman", Times, serif; fill: #444; text-anchor: middle; }
+body[data-theme="dark"] .cg-axis-title-y { fill: #aaa; }
 
-/* Nice chart SVG styles */
-.cn-grid   { stroke: var(--border-soft); stroke-width: 0.75; }
-.cn-fill-a { fill: rgba(67, 56, 202, 0.07); }
-.cn-fill-b { fill: rgba(15, 118, 110, 0.07); }
-.cn-line-a { fill: none; stroke: var(--primary-indigo); stroke-width: 2; stroke-linejoin: round; }
-.cn-line-b { fill: none; stroke: var(--primary-teal);   stroke-width: 2; stroke-linejoin: round; }
-.cn-dot-a  { fill: var(--primary-indigo); }
-.cn-dot-b  { fill: var(--primary-teal); }
-.cn-label-a { font-size: 7.5px; font-family: var(--font-main), sans-serif; fill: var(--primary-indigo); font-weight: 600; }
-.cn-label-b { font-size: 7.5px; font-family: var(--font-main), sans-serif; fill: var(--primary-teal); font-weight: 600; }
-.cn-tick    { font-size: 7px; font-family: var(--font-main), sans-serif; fill: var(--text-muted); text-anchor: middle; }
-.cn-tick-y  { font-size: 7px; font-family: var(--font-main), sans-serif; fill: var(--text-muted); text-anchor: end; }
+/* ---- PRETTY chart SVG styles (publication-ready custom theme) ---- */
+.cn-grid     { stroke: var(--border-soft); stroke-width: 0.6; stroke-dasharray: none; }
+.cn-baseline { stroke: var(--text-charcoal); stroke-width: 0.8; opacity: 0.25; }
+/* Gradient fills defined inline in SVG <defs> */
+.cn-fill-a   { fill: url(#grad-a); }
+.cn-fill-b   { fill: url(#grad-b); }
+/* Smooth curves — thick, rounded */
+.cn-line-a   { fill: none; stroke: var(--primary-indigo); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.cn-line-b   { fill: none; stroke: var(--primary-teal);   stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+/* Endpoint dots only */
+.cn-dot-a    { fill: #fff; stroke: var(--primary-indigo); stroke-width: 2; }
+.cn-dot-b    { fill: #fff; stroke: var(--primary-teal);   stroke-width: 2; }
+/* Direct end-of-line labels — bold, colored */
+.cn-label-a  { font-size: 8px; font-family: var(--font-main), sans-serif; fill: var(--primary-indigo); font-weight: 700; }
+.cn-label-b  { font-size: 8px; font-family: var(--font-main), sans-serif; fill: var(--primary-teal);   font-weight: 700; }
+/* Minimal tick labels */
+.cn-tick     { font-size: 7px; font-family: var(--font-main), sans-serif; fill: var(--text-muted); text-anchor: middle; }
+.cn-tick-y   { font-size: 7px; font-family: var(--font-main), sans-serif; fill: var(--text-muted); text-anchor: end; }
+/* Clean, left-aligned title in the brand font */
+.cn-title    { font-size: 9px; font-family: var(--font-main), sans-serif; fill: var(--text-charcoal); font-weight: 600; text-anchor: start; }
 
-/* Reveal animation — triggered on scroll via IntersectionObserver */
+/* Legacy reveal — kept for compatibility, not actively used on scroll scenes */
 .ip-reveal {
     opacity: 0.18;
     transition: opacity 0.65s ease;
@@ -1523,19 +1615,24 @@ body[data-theme="dark"] .cg-axis-title { fill: #aaa; }
 
 /* Responsive */
 @media (max-width: 720px) {
-    .ip-ba-grid,
-    .ip-chart-grid { grid-template-columns: 1fr; }
-
-    .ip-pipeline {
-        grid-template-columns: 1fr;
+    .ip-scroll-scene {
+        min-height: 130vh;
     }
 
-    .ip-pipe-arrow { display: none; }
+    .ip-scene-panel-wrap {
+        top: calc(50vh - 120px);
+    }
 
     .ip-act-title { font-size: 1rem; }
+
+    .ip-act-desc { font-size: 0.88rem; }
 }
 
 @media (max-width: 480px) {
+    .ip-scroll-scene {
+        min-height: 110vh;
+    }
+
     .ip-table { font-size: 0.68rem; }
     .ip-pipe-name { font-size: 0.68rem; }
 }
