@@ -39,6 +39,24 @@ class InPracticeTest(unittest.TestCase):
     def tearDown(self):
         self.context.close()
 
+    def test_in_practice_section_is_not_left_hidden_on_desktop(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        self.page.wait_for_timeout(500)
+
+        section_state = self.page.evaluate("""() => {
+            const section = document.querySelector('#in-practice');
+            const style = getComputedStyle(section);
+            return {
+                hasScrollFade: section.classList.contains('scroll-fade'),
+                hasIsVisible: section.classList.contains('is-visible'),
+                opacity: style.opacity
+            };
+        }""")
+
+        self.assertFalse(section_state["hasScrollFade"], "In Practice should not use the global scroll-fade wrapper on desktop")
+        self.assertTrue(section_state["hasIsVisible"], "In Practice should remain visible on desktop load")
+        self.assertEqual(section_state["opacity"], '1', "In Practice should not remain faded out on desktop load")
+
     def test_in_practice_fallback_without_intersection_observer(self):
         page_errors = []
         self.page.on("pageerror", lambda error: page_errors.append(str(error)))
