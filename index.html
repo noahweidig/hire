@@ -149,49 +149,57 @@
                     <div class="ip-act">
                         <div class="ip-act-meta">
                             <span class="ip-act-num">01</span>
-                            <h3 class="ip-act-title">I clean your data</h3>
+                            <div class="ip-act-text">
+                                <h3 class="ip-act-title">I clean your data</h3>
+                                <p class="ip-act-desc">Real data arrives in chaos — missing IDs, ages spelled out in words, impossible weights, inconsistent codings. I audit every column, flag each anomaly, and repair or document every issue so your downstream analysis stands on solid ground.</p>
+                            </div>
                         </div>
-                        <div class="ip-ba-grid">
-                            <div class="ip-panel">
-                                <div class="ip-panel-head">
-                                    <span class="ip-dot ip-dot-bad"></span>before
+                        <div class="ip-scroll-scene">
+                            <div class="ip-scene-panel-wrap">
+                                <!-- Before: sticks while scrolling, then fades out -->
+                                <div class="ip-panel ip-scene-panel ip-scene-before">
+                                    <div class="ip-panel-head">
+                                        <span class="ip-dot ip-dot-bad"></span>raw — before
+                                    </div>
+                                    <div class="ip-panel-body">
+                                        <table class="ip-table">
+                                            <thead><tr><th>id</th><th>gender</th><th>age</th><th>weight</th></tr></thead>
+                                            <tbody>
+                                                <tr><td class="val-bad">NA</td><td>"female"</td><td class="val-bad">"twenty-two"</td><td class="val-bad">NA</td></tr>
+                                                <tr><td>34</td><td class="val-bad">"M"</td><td>34</td><td>78.2</td></tr>
+                                                <tr><td class="val-bad">999</td><td>"male"</td><td class="val-bad">-7</td><td class="val-bad">NA</td></tr>
+                                                <tr><td>29</td><td>"female"</td><td>29</td><td>65.1</td></tr>
+                                                <tr><td class="val-bad">NA</td><td>"male"</td><td>41</td><td class="val-bad">9999</td></tr>
+                                                <tr><td>51</td><td>"female"</td><td>51</td><td>72.4</td></tr>
+                                                <tr><td class="val-bad">-1</td><td class="val-bad">"FEMALE"</td><td class="val-bad">NA</td><td>61.8</td></tr>
+                                                <tr><td>38</td><td>"male"</td><td>38</td><td class="val-bad">NA</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="ip-panel-body">
-                                    <table class="ip-table">
-                                        <thead><tr><th>id</th><th>gender</th><th>age</th><th>weight</th></tr></thead>
-                                        <tbody>
-                                            <tr><td class="val-bad">NA</td><td>"female"</td><td class="val-bad">"twenty-two"</td><td class="val-bad">NA</td></tr>
-                                            <tr><td>34</td><td class="val-bad">"M"</td><td>34</td><td>78.2</td></tr>
-                                            <tr><td class="val-bad">999</td><td>"male"</td><td class="val-bad">-7</td><td class="val-bad">NA</td></tr>
-                                            <tr><td>29</td><td>"female"</td><td>29</td><td>65.1</td></tr>
-                                            <tr><td class="val-bad">NA</td><td>"male"</td><td>41</td><td class="val-bad">9999</td></tr>
-                                            <tr><td>51</td><td>"female"</td><td>51</td><td>72.4</td></tr>
-                                            <tr><td class="val-bad">-1</td><td class="val-bad">"FEMALE"</td><td class="val-bad">NA</td><td>61.8</td></tr>
-                                            <tr><td>38</td><td>"male"</td><td>38</td><td class="val-bad">NA</td></tr>
-                                        </tbody>
-                                    </table>
+                                <!-- After: hidden, then fades in -->
+                                <div class="ip-panel ip-scene-panel ip-scene-after">
+                                    <div class="ip-panel-head">
+                                        <span class="ip-dot ip-dot-good"></span>analysis-ready — after
+                                    </div>
+                                    <div class="ip-panel-body">
+                                        <table class="ip-table">
+                                            <thead><tr><th>id</th><th>sex</th><th>age</th><th>weight</th><th></th></tr></thead>
+                                            <tbody>
+                                                <tr><td class="val-good">42</td><td>F</td><td class="val-good">22</td><td class="val-good">68.4</td><td><span class="ip-tag">imputed</span></td></tr>
+                                                <tr><td>34</td><td>M</td><td>34</td><td>78.2</td><td></td></tr>
+                                                <tr class="ip-row-drop"><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="ip-tag ip-tag-drop">dropped · outlier</span></td></tr>
+                                                <tr><td>29</td><td>F</td><td>29</td><td>65.1</td><td></td></tr>
+                                                <tr><td>42</td><td>M</td><td>41</td><td class="val-good">—</td><td><span class="ip-tag ip-tag-drop">dropped · outlier</span></td></tr>
+                                                <tr><td>51</td><td>F</td><td>51</td><td>72.4</td><td></td></tr>
+                                                <tr><td class="val-good">—</td><td>F</td><td class="val-good">46</td><td>61.8</td><td><span class="ip-tag">imputed</span></td></tr>
+                                                <tr><td>38</td><td>M</td><td>38</td><td class="val-good">68.4</td><td><span class="ip-tag">imputed</span></td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="ip-panel ip-reveal">
-                                <div class="ip-panel-head">
-                                    <span class="ip-dot ip-dot-good"></span>after
-                                </div>
-                                <div class="ip-panel-body">
-                                    <table class="ip-table">
-                                        <thead><tr><th>id</th><th>sex</th><th>age</th><th>weight</th><th></th></tr></thead>
-                                        <tbody>
-                                            <tr><td class="val-good">42</td><td>F</td><td class="val-good">22</td><td class="val-good">68.4</td><td><span class="ip-tag">imputed</span></td></tr>
-                                            <tr><td>34</td><td>M</td><td>34</td><td>78.2</td><td></td></tr>
-                                            <tr class="ip-row-drop"><td>—</td><td>—</td><td>—</td><td>—</td><td><span class="ip-tag ip-tag-drop">outlier</span></td></tr>
-                                            <tr><td>29</td><td>F</td><td>29</td><td>65.1</td><td></td></tr>
-                                            <tr><td>42</td><td>M</td><td>41</td><td class="val-good">—</td><td><span class="ip-tag ip-tag-drop">outlier</span></td></tr>
-                                            <tr><td>51</td><td>F</td><td>51</td><td>72.4</td><td></td></tr>
-                                            <tr><td class="val-good">—</td><td>F</td><td class="val-good">46</td><td>61.8</td><td><span class="ip-tag">imputed</span></td></tr>
-                                            <tr><td>38</td><td>M</td><td>38</td><td class="val-good">68.4</td><td><span class="ip-tag">imputed</span></td></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <div class="ip-scene-trigger" aria-hidden="true"></div>
                         </div>
                     </div>
 
@@ -199,51 +207,67 @@
                     <div class="ip-act">
                         <div class="ip-act-meta">
                             <span class="ip-act-num">02</span>
-                            <h3 class="ip-act-title">generate reproducible pipelines</h3>
+                            <div class="ip-act-text">
+                                <h3 class="ip-act-title">I build reproducible pipelines</h3>
+                                <p class="ip-act-desc">Brittle scripts that only run on one person's laptop are a liability. I design modular, version-controlled workflows — schema validation on ingest, pure functions, locked dependencies — so any teammate can reproduce your results from a cold start.</p>
+                            </div>
                         </div>
-                        <div class="ip-pipeline">
-                            <div class="ip-pipe-col">
-                                <div class="ip-pipe-node ip-pipe-bad">
-                                    <div class="ip-pipe-name">01_load.R <span class="ip-badge ip-badge-err">Error in read.csv</span></div>
-                                    <div class="ip-pipe-sub">setwd("C:/Users/dan/Desktop") &middot; no one else can run this</div>
+                        <div class="ip-scroll-scene">
+                            <div class="ip-scene-panel-wrap">
+                                <!-- Before: bad pipeline -->
+                                <div class="ip-panel ip-scene-panel ip-scene-before">
+                                    <div class="ip-panel-head">
+                                        <span class="ip-dot ip-dot-bad"></span>brittle scripts — before
+                                    </div>
+                                    <div class="ip-panel-body ip-panel-body--pipe">
+                                        <div class="ip-pipe-col">
+                                            <div class="ip-pipe-node ip-pipe-bad">
+                                                <div class="ip-pipe-name">01_load.R <span class="ip-badge ip-badge-err">Error in read.csv</span></div>
+                                                <div class="ip-pipe-sub">setwd("C:/Users/dan/Desktop") &middot; no one else can run this</div>
+                                            </div>
+                                            <div class="ip-pipe-node ip-pipe-bad">
+                                                <div class="ip-pipe-name">cleaning FINAL.R <span class="ip-badge ip-badge-err">object not found</span></div>
+                                                <div class="ip-pipe-sub">depends on df_raw from a different session &middot; never saved</div>
+                                            </div>
+                                            <div class="ip-pipe-node ip-pipe-bad">
+                                                <div class="ip-pipe-name">model_v4_USE THIS.R <span class="ip-badge ip-badge-err">package missing</span></div>
+                                                <div class="ip-pipe-sub">library() calls buried mid-script &middot; order matters</div>
+                                            </div>
+                                            <div class="ip-pipe-node ip-pipe-bad">
+                                                <div class="ip-pipe-name">make_plots.R <span class="ip-badge ip-badge-err">never reached</span></div>
+                                                <div class="ip-pipe-sub">upstream failure &middot; output files missing</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="ip-pipe-node ip-pipe-bad">
-                                    <div class="ip-pipe-name">cleaning FINAL.R <span class="ip-badge ip-badge-err">object not found</span></div>
-                                    <div class="ip-pipe-sub">depends on df_raw from a different session &middot; never saved</div>
-                                </div>
-                                <div class="ip-pipe-node ip-pipe-bad">
-                                    <div class="ip-pipe-name">model_v4_USE THIS.R <span class="ip-badge ip-badge-err">package missing</span></div>
-                                    <div class="ip-pipe-sub">library() calls buried mid-script &middot; order matters</div>
-                                </div>
-                                <div class="ip-pipe-node ip-pipe-bad">
-                                    <div class="ip-pipe-name">make_plots.R <span class="ip-badge ip-badge-err">never reached</span></div>
-                                    <div class="ip-pipe-sub">upstream failure &middot; output files missing</div>
+                                <!-- After: good pipeline -->
+                                <div class="ip-panel ip-scene-panel ip-scene-after">
+                                    <div class="ip-panel-head">
+                                        <span class="ip-dot ip-dot-good"></span>reproducible pipeline — after
+                                    </div>
+                                    <div class="ip-panel-body ip-panel-body--pipe">
+                                        <div class="ip-pipe-col">
+                                            <div class="ip-pipe-node ip-pipe-good">
+                                                <div class="ip-pipe-name">R/01_ingest.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
+                                                <div class="ip-pipe-sub">here::here() paths &middot; schema validated on load</div>
+                                            </div>
+                                            <div class="ip-pipe-node ip-pipe-good">
+                                                <div class="ip-pipe-name">R/02_clean.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
+                                                <div class="ip-pipe-sub">pure functions &middot; testthat coverage &middot; logged</div>
+                                            </div>
+                                            <div class="ip-pipe-node ip-pipe-good">
+                                                <div class="ip-pipe-name">R/03_model.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
+                                                <div class="ip-pipe-sub">set.seed() &middot; renv.lock &middot; targets DAG</div>
+                                            </div>
+                                            <div class="ip-pipe-node ip-pipe-good">
+                                                <div class="ip-pipe-name">R/04_visualize.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
+                                                <div class="ip-pipe-sub">ggsave() &middot; deterministic &middot; quarto report</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="ip-pipe-arrow" aria-hidden="true">
-                                <svg width="20" height="44" viewBox="0 0 20 44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="10" y1="0" x2="10" y2="34"/>
-                                    <polyline points="4,28 10,36 16,28"/>
-                                </svg>
-                            </div>
-                            <div class="ip-pipe-col ip-reveal ip-reveal-delay-1">
-                                <div class="ip-pipe-node ip-pipe-good">
-                                    <div class="ip-pipe-name">R/01_ingest.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
-                                    <div class="ip-pipe-sub">here::here() paths &middot; schema validated on load</div>
-                                </div>
-                                <div class="ip-pipe-node ip-pipe-good">
-                                    <div class="ip-pipe-name">R/02_clean.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
-                                    <div class="ip-pipe-sub">pure functions &middot; testthat coverage &middot; logged</div>
-                                </div>
-                                <div class="ip-pipe-node ip-pipe-good">
-                                    <div class="ip-pipe-name">R/03_model.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
-                                    <div class="ip-pipe-sub">set.seed() &middot; renv.lock &middot; targets DAG</div>
-                                </div>
-                                <div class="ip-pipe-node ip-pipe-good">
-                                    <div class="ip-pipe-name">R/04_visualize.R <span class="ip-badge ip-badge-ok">&#10003;</span></div>
-                                    <div class="ip-pipe-sub">ggsave() &middot; deterministic &middot; quarto report</div>
-                                </div>
-                            </div>
+                            <div class="ip-scene-trigger" aria-hidden="true"></div>
                         </div>
                     </div>
 
@@ -251,121 +275,165 @@
                     <div class="ip-act">
                         <div class="ip-act-meta">
                             <span class="ip-act-num">03</span>
-                            <h3 class="ip-act-title">create publication-ready visualizations</h3>
+                            <div class="ip-act-text">
+                                <h3 class="ip-act-title">I create publication-ready visualizations</h3>
+                                <p class="ip-act-desc">Default chart themes export visual noise that buries your story. I strip away clutter, apply purposeful color, and use direct labels so readers see your finding immediately — no legend hunting required.</p>
+                            </div>
                         </div>
-                        <div class="ip-chart-grid">
-                            <div class="ip-chart-card">
-                                <div class="ip-panel-head">
-                                    <span class="ip-dot ip-dot-bad"></span>ggplot2 defaults
+                        <div class="ip-scroll-scene">
+                            <div class="ip-scene-panel-wrap">
+                                <!-- Before: ugly chart -->
+                                <div class="ip-chart-card ip-scene-panel ip-scene-before">
+                                    <div class="ip-panel-head">
+                                        <span class="ip-dot ip-dot-bad"></span>ggplot2 defaults
+                                    </div>
+                                    <div class="ip-chart-body">
+                                        <svg class="ip-chart-svg" viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" aria-label="Cluttered default ggplot2 style chart" role="img">
+                                            <!-- Gray plot area background -->
+                                            <rect class="cg-bg" x="38" y="18" width="200" height="130"/>
+                                            <!-- Minor horizontal gridlines -->
+                                            <line class="cg-grid-minor" x1="38" y1="26" x2="238" y2="26"/>
+                                            <line class="cg-grid-minor" x1="38" y1="34" x2="238" y2="34"/>
+                                            <line class="cg-grid-minor" x1="38" y1="50" x2="238" y2="50"/>
+                                            <line class="cg-grid-minor" x1="38" y1="58" x2="238" y2="58"/>
+                                            <line class="cg-grid-minor" x1="38" y1="74" x2="238" y2="74"/>
+                                            <line class="cg-grid-minor" x1="38" y1="82" x2="238" y2="82"/>
+                                            <line class="cg-grid-minor" x1="38" y1="98" x2="238" y2="98"/>
+                                            <line class="cg-grid-minor" x1="38" y1="106" x2="238" y2="106"/>
+                                            <line class="cg-grid-minor" x1="38" y1="122" x2="238" y2="122"/>
+                                            <line class="cg-grid-minor" x1="38" y1="130" x2="238" y2="130"/>
+                                            <!-- Major horizontal gridlines -->
+                                            <line class="cg-grid" x1="38" y1="18" x2="238" y2="18"/>
+                                            <line class="cg-grid" x1="38" y1="42" x2="238" y2="42"/>
+                                            <line class="cg-grid" x1="38" y1="66" x2="238" y2="66"/>
+                                            <line class="cg-grid" x1="38" y1="90" x2="238" y2="90"/>
+                                            <line class="cg-grid" x1="38" y1="114" x2="238" y2="114"/>
+                                            <line class="cg-grid" x1="38" y1="138" x2="238" y2="138"/>
+                                            <!-- Major vertical gridlines -->
+                                            <line class="cg-grid-v" x1="38" y1="18" x2="38" y2="148"/>
+                                            <line class="cg-grid-v" x1="71" y1="18" x2="71" y2="148"/>
+                                            <line class="cg-grid-v" x1="104" y1="18" x2="104" y2="148"/>
+                                            <line class="cg-grid-v" x1="138" y1="18" x2="138" y2="148"/>
+                                            <line class="cg-grid-v" x1="171" y1="18" x2="171" y2="148"/>
+                                            <line class="cg-grid-v" x1="204" y1="18" x2="204" y2="148"/>
+                                            <line class="cg-grid-v" x1="238" y1="18" x2="238" y2="148"/>
+                                            <!-- Minor vertical gridlines -->
+                                            <line class="cg-grid-minor-v" x1="54" y1="18" x2="54" y2="148"/>
+                                            <line class="cg-grid-minor-v" x1="87" y1="18" x2="87" y2="148"/>
+                                            <line class="cg-grid-minor-v" x1="120" y1="18" x2="120" y2="148"/>
+                                            <line class="cg-grid-minor-v" x1="154" y1="18" x2="154" y2="148"/>
+                                            <line class="cg-grid-minor-v" x1="187" y1="18" x2="187" y2="148"/>
+                                            <line class="cg-grid-minor-v" x1="221" y1="18" x2="221" y2="148"/>
+                                            <!-- Data lines -->
+                                            <polyline class="cg-line-a" points="38,107 54,87 71,118 87,71 104,97 120,59 138,77 154,51 171,89 187,68 204,56 221,38"/>
+                                            <polyline class="cg-line-b" points="38,118 54,103 71,91 87,109 104,82 120,95 138,70 154,86 171,61 187,77 204,52 221,58"/>
+                                            <!-- Dots group A — inconsistent sizes -->
+                                            <circle class="cg-dot-a" cx="38" cy="107" r="5"/>
+                                            <circle class="cg-dot-a" cx="54" cy="87" r="4"/>
+                                            <circle class="cg-dot-a" cx="71" cy="118" r="6"/>
+                                            <circle class="cg-dot-a" cx="87" cy="71" r="4.5"/>
+                                            <circle class="cg-dot-a" cx="104" cy="97" r="5"/>
+                                            <circle class="cg-dot-a" cx="120" cy="59" r="4"/>
+                                            <circle class="cg-dot-a" cx="138" cy="77" r="5.5"/>
+                                            <circle class="cg-dot-a" cx="154" cy="51" r="4"/>
+                                            <circle class="cg-dot-a" cx="171" cy="89" r="5"/>
+                                            <circle class="cg-dot-a" cx="187" cy="68" r="4.5"/>
+                                            <circle class="cg-dot-a" cx="204" cy="56" r="6"/>
+                                            <circle class="cg-dot-a" cx="221" cy="38" r="4"/>
+                                            <!-- Dots group B — inconsistent sizes -->
+                                            <circle class="cg-dot-b" cx="38" cy="118" r="4.5"/>
+                                            <circle class="cg-dot-b" cx="54" cy="103" r="5"/>
+                                            <circle class="cg-dot-b" cx="71" cy="91" r="4"/>
+                                            <circle class="cg-dot-b" cx="87" cy="109" r="5.5"/>
+                                            <circle class="cg-dot-b" cx="104" cy="82" r="4"/>
+                                            <circle class="cg-dot-b" cx="120" cy="95" r="5"/>
+                                            <circle class="cg-dot-b" cx="138" cy="70" r="4.5"/>
+                                            <circle class="cg-dot-b" cx="154" cy="86" r="6"/>
+                                            <circle class="cg-dot-b" cx="171" cy="61" r="4"/>
+                                            <circle class="cg-dot-b" cx="187" cy="77" r="5"/>
+                                            <circle class="cg-dot-b" cx="204" cy="52" r="4.5"/>
+                                            <circle class="cg-dot-b" cx="221" cy="58" r="5"/>
+                                            <!-- Axes -->
+                                            <line class="cg-axis" x1="38" y1="18" x2="38" y2="148"/>
+                                            <line class="cg-axis" x1="38" y1="148" x2="238" y2="148"/>
+                                            <!-- Legend box — large, prominent, poorly placed -->
+                                            <rect class="cg-legend-bg" x="244" y="28" width="86" height="62" rx="1"/>
+                                            <line class="cg-legend-line-a" x1="248" y1="44" x2="266" y2="44"/>
+                                            <circle class="cg-dot-a" cx="257" cy="44" r="4"/>
+                                            <text class="cg-legend-text" x="270" y="48">group_a</text>
+                                            <line class="cg-legend-line-b" x1="248" y1="64" x2="266" y2="64"/>
+                                            <circle class="cg-dot-b" cx="257" cy="64" r="4"/>
+                                            <text class="cg-legend-text" x="270" y="68">group_b</text>
+                                            <!-- Tick labels -->
+                                            <text class="cg-tick" x="38" y="162">Jan</text>
+                                            <text class="cg-tick" x="104" y="162">May</text>
+                                            <text class="cg-tick" x="171" y="162">Sep</text>
+                                            <text class="cg-tick" x="238" y="162">Dec</text>
+                                            <text class="cg-tick-y" x="33" y="148">0</text>
+                                            <text class="cg-tick-y" x="33" y="114">10</text>
+                                            <text class="cg-tick-y" x="33" y="90">20</text>
+                                            <text class="cg-tick-y" x="33" y="66">30</text>
+                                            <text class="cg-tick-y" x="33" y="42">40</text>
+                                            <text class="cg-tick-y" x="33" y="18">50</text>
+                                            <!-- Code-formula title + misaligned subtitle -->
+                                            <text class="cg-plot-title" x="138" y="12">value ~ month + group</text>
+                                            <text class="cg-plot-subtitle" x="138" y="19">n=24, method=lm, geom=point+line</text>
+                                            <text class="cg-axis-title" x="138" y="175">month</text>
+                                            <text class="cg-axis-title-y" x="10" y="83" transform="rotate(-90,10,83)">value</text>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div class="ip-chart-body">
-                                    <svg class="ip-chart-svg" viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" aria-label="Default ggplot2 style chart" role="img">
-                                        <rect class="cg-bg" x="30" y="10" width="200" height="130"/>
-                                        <line class="cg-grid" x1="30" y1="10" x2="230" y2="10"/>
-                                        <line class="cg-grid" x1="30" y1="42" x2="230" y2="42"/>
-                                        <line class="cg-grid" x1="30" y1="75" x2="230" y2="75"/>
-                                        <line class="cg-grid" x1="30" y1="107" x2="230" y2="107"/>
-                                        <line class="cg-grid" x1="30" y1="140" x2="230" y2="140"/>
-                                        <line class="cg-grid-v" x1="30" y1="10" x2="30" y2="140"/>
-                                        <line class="cg-grid-v" x1="72" y1="10" x2="72" y2="140"/>
-                                        <line class="cg-grid-v" x1="114" y1="10" x2="114" y2="140"/>
-                                        <line class="cg-grid-v" x1="156" y1="10" x2="156" y2="140"/>
-                                        <line class="cg-grid-v" x1="198" y1="10" x2="198" y2="140"/>
-                                        <line class="cg-grid-v" x1="230" y1="10" x2="230" y2="140"/>
-                                        <polyline class="cg-line-a" points="30,107 48,87 66,118 84,71 102,97 120,59 138,77 156,51 174,89 192,68 210,56 228,38"/>
-                                        <circle class="cg-dot-a" cx="30" cy="107" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="48" cy="87" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="66" cy="118" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="84" cy="71" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="102" cy="97" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="120" cy="59" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="138" cy="77" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="156" cy="51" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="174" cy="89" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="192" cy="68" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="210" cy="56" r="3.5"/>
-                                        <circle class="cg-dot-a" cx="228" cy="38" r="3.5"/>
-                                        <polyline class="cg-line-b" points="30,118 48,103 66,91 84,109 102,82 120,95 138,70 156,86 174,61 192,77 210,52 228,58"/>
-                                        <circle class="cg-dot-b" cx="30" cy="118" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="48" cy="103" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="66" cy="91" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="84" cy="109" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="102" cy="82" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="120" cy="95" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="138" cy="70" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="156" cy="86" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="174" cy="61" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="192" cy="77" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="210" cy="52" r="3.5"/>
-                                        <circle class="cg-dot-b" cx="228" cy="58" r="3.5"/>
-                                        <line class="cg-axis" x1="30" y1="10" x2="30" y2="140"/>
-                                        <line class="cg-axis" x1="30" y1="140" x2="230" y2="140"/>
-                                        <rect class="cg-legend-bg" x="236" y="42" width="58" height="44" rx="2"/>
-                                        <line class="cg-legend-line-a" x1="240" y1="54" x2="254" y2="54"/>
-                                        <circle class="cg-dot-a" cx="247" cy="54" r="3"/>
-                                        <text class="cg-legend-text" x="258" y="58">group_a</text>
-                                        <line class="cg-legend-line-b" x1="240" y1="70" x2="254" y2="70"/>
-                                        <circle class="cg-dot-b" cx="247" cy="70" r="3"/>
-                                        <text class="cg-legend-text" x="258" y="74">group_b</text>
-                                        <text class="cg-tick" x="30" y="157">Jan</text>
-                                        <text class="cg-tick" x="114" y="157">Jun</text>
-                                        <text class="cg-tick" x="213" y="157">Dec</text>
-                                        <text class="cg-tick-y" x="26" y="143">0</text>
-                                        <text class="cg-tick-y" x="26" y="78">20</text>
-                                        <text class="cg-tick-y" x="26" y="14">40</text>
-                                        <text class="cg-plot-title" x="130" y="7">value ~ month + group</text>
-                                        <text class="cg-axis-title" x="130" y="168">month</text>
-                                    </svg>
+                                <!-- After: pretty chart -->
+                                <div class="ip-chart-card ip-scene-panel ip-scene-after">
+                                    <div class="ip-panel-head">
+                                        <span class="ip-dot ip-dot-good"></span>theme_custom()
+                                    </div>
+                                    <div class="ip-chart-body">
+                                        <svg class="ip-chart-svg" viewBox="0 0 300 175" xmlns="http://www.w3.org/2000/svg" aria-label="Publication-ready chart with custom theme" role="img">
+                                            <defs>
+                                                <linearGradient id="grad-a" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stop-color="rgba(67,56,202,0.22)"/>
+                                                    <stop offset="100%" stop-color="rgba(67,56,202,0)"/>
+                                                </linearGradient>
+                                                <linearGradient id="grad-b" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop offset="0%" stop-color="rgba(15,118,110,0.18)"/>
+                                                    <stop offset="100%" stop-color="rgba(15,118,110,0)"/>
+                                                </linearGradient>
+                                            </defs>
+                                            <!-- Minimal horizontal gridlines only -->
+                                            <line class="cn-grid" x1="18" y1="35" x2="225" y2="35"/>
+                                            <line class="cn-grid" x1="18" y1="68" x2="225" y2="68"/>
+                                            <line class="cn-grid" x1="18" y1="101" x2="225" y2="101"/>
+                                            <line class="cn-grid" x1="18" y1="134" x2="225" y2="134"/>
+                                            <!-- Gradient fills (smooth area) -->
+                                            <path class="cn-fill-a" d="M 18,107 C 21,103.7 30,85.2 36,87 C 42,88.8 45,118.5 54,118 C 60,117.5 63,73.5 72,71 C 78,69 81,97.5 90,97 C 96,96.5 99,61.5 108,59 C 114,57 117,77.7 126,77 C 132,76.3 135,52 144,51 C 150,50.5 153,88.5 162,89 C 168,89.3 171,68.7 180,68 C 186,67.5 189,57 198,56 C 204,55.3 210,39.5 216,38 L 216,134 L 18,134 Z"/>
+                                            <path class="cn-fill-b" d="M 18,118 C 21,115.5 30,107.5 36,103 C 42,98.5 45,90.5 54,91 C 60,91.3 63,109.7 72,109 C 78,108.5 81,84 90,82 C 96,80.5 99,96.7 108,95 C 114,93.5 117,71 126,70 C 132,69.3 135,86.7 144,86 C 150,85.5 153,62 162,61 C 168,60.3 171,77.3 180,77 C 186,76.7 189,53 198,52 C 204,51.3 210,57.5 216,58 L 216,134 L 18,134 Z"/>
+                                            <!-- Smooth curves (Catmull-Rom via cubic bezier) -->
+                                            <path class="cn-line-a" d="M 18,107 C 21,103.7 30,85.2 36,87 C 42,88.8 45,118.5 54,118 C 60,117.5 63,73.5 72,71 C 78,69 81,97.5 90,97 C 96,96.5 99,61.5 108,59 C 114,57 117,77.7 126,77 C 132,76.3 135,52 144,51 C 150,50.5 153,88.5 162,89 C 168,89.3 171,68.7 180,68 C 186,67.5 189,57 198,56 C 204,55.3 210,39.5 216,38"/>
+                                            <path class="cn-line-b" d="M 18,118 C 21,115.5 30,107.5 36,103 C 42,98.5 45,90.5 54,91 C 60,91.3 63,109.7 72,109 C 78,108.5 81,84 90,82 C 96,80.5 99,96.7 108,95 C 114,93.5 117,71 126,70 C 132,69.3 135,86.7 144,86 C 150,85.5 153,62 162,61 C 168,60.3 171,77.3 180,77 C 186,76.7 189,53 198,52 C 204,51.3 210,57.5 216,58"/>
+                                            <!-- Endpoint dots only -->
+                                            <circle class="cn-dot-a" cx="216" cy="38" r="3"/>
+                                            <circle class="cn-dot-b" cx="216" cy="58" r="3"/>
+                                            <!-- Direct end-of-line labels -->
+                                            <text class="cn-label-a" x="222" y="42">Group A</text>
+                                            <text class="cn-label-b" x="222" y="62">Group B</text>
+                                            <!-- Baseline -->
+                                            <line class="cn-baseline" x1="18" y1="134" x2="225" y2="134"/>
+                                            <!-- Tick labels -->
+                                            <text class="cn-tick" x="18" y="149">Jan</text>
+                                            <text class="cn-tick" x="117" y="149">Jun</text>
+                                            <text class="cn-tick" x="216" y="149">Dec</text>
+                                            <text class="cn-tick-y" x="14" y="137">0</text>
+                                            <text class="cn-tick-y" x="14" y="104">10</text>
+                                            <text class="cn-tick-y" x="14" y="71">20</text>
+                                            <text class="cn-tick-y" x="14" y="38">30</text>
+                                            <!-- Clean title -->
+                                            <text class="cn-title" x="18" y="10">Monthly value by group</text>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="ip-chart-card ip-reveal ip-reveal-delay-2">
-                                <div class="ip-panel-head">
-                                    <span class="ip-dot ip-dot-good"></span>theme_custom()
-                                </div>
-                                <div class="ip-chart-body">
-                                    <svg class="ip-chart-svg" viewBox="0 0 300 170" xmlns="http://www.w3.org/2000/svg" aria-label="Publication-ready chart with custom theme" role="img">
-                                        <line class="cn-grid" x1="18" y1="42" x2="228" y2="42"/>
-                                        <line class="cn-grid" x1="18" y1="75" x2="228" y2="75"/>
-                                        <line class="cn-grid" x1="18" y1="107" x2="228" y2="107"/>
-                                        <polygon class="cn-fill-a" points="18,107 36,87 54,118 72,71 90,97 108,59 126,77 144,51 162,89 180,68 198,56 216,38 216,140 18,140"/>
-                                        <polygon class="cn-fill-b" points="18,118 36,103 54,91 72,109 90,82 108,95 126,70 144,86 162,61 180,77 198,52 216,58 216,140 18,140"/>
-                                        <polyline class="cn-line-a" points="18,107 36,87 54,118 72,71 90,97 108,59 126,77 144,51 162,89 180,68 198,56 216,38"/>
-                                        <polyline class="cn-line-b" points="18,118 36,103 54,91 72,109 90,82 108,95 126,70 144,86 162,61 180,77 198,52 216,58"/>
-                                        <circle class="cn-dot-a" cx="18" cy="107" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="36" cy="87" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="54" cy="118" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="72" cy="71" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="90" cy="97" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="108" cy="59" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="126" cy="77" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="144" cy="51" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="162" cy="89" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="180" cy="68" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="198" cy="56" r="2.5"/>
-                                        <circle class="cn-dot-a" cx="216" cy="38" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="18" cy="118" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="36" cy="103" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="54" cy="91" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="72" cy="109" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="90" cy="82" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="108" cy="95" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="126" cy="70" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="144" cy="86" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="162" cy="61" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="180" cy="77" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="198" cy="52" r="2.5"/>
-                                        <circle class="cn-dot-b" cx="216" cy="58" r="2.5"/>
-                                        <text class="cn-label-a" x="220" y="41">Group A</text>
-                                        <text class="cn-label-b" x="220" y="61">Group B</text>
-                                        <text class="cn-tick" x="18" y="157">Jan</text>
-                                        <text class="cn-tick" x="117" y="157">Jun</text>
-                                        <text class="cn-tick" x="204" y="157">Dec</text>
-                                        <text class="cn-tick-y" x="14" y="143">0</text>
-                                        <text class="cn-tick-y" x="14" y="78">20</text>
-                                        <text class="cn-tick-y" x="14" y="14">40</text>
-                                    </svg>
-                                </div>
-                            </div>
+                            <div class="ip-scene-trigger" aria-hidden="true"></div>
                         </div>
                     </div>
 

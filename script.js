@@ -362,7 +362,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
-    // In Practice — reveal each act on scroll via IntersectionObserver
+    // In Practice — add ip-visible to each act as soon as it enters the viewport
+    // (threshold: 0 because acts now contain tall scroll scenes; we only need the top edge)
     const ipActs = document.querySelectorAll('.ip-act');
     if (ipActs.length) {
         const actObserver = new IntersectionObserver((entries) => {
@@ -372,9 +373,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     actObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.35 });
+        }, { threshold: 0, rootMargin: '-80px 0px 0px 0px' });
 
         ipActs.forEach(act => actObserver.observe(act));
+    }
+
+    // In Practice — crossfade from "before" to "after" when the sentinel
+    // element (positioned mid-scene) scrolls into view
+    const sceneTriggers = document.querySelectorAll('.ip-scene-trigger');
+    if (sceneTriggers.length) {
+        const sceneObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const scene = entry.target.closest('.ip-scroll-scene');
+                    if (scene) scene.classList.add('scene-revealed');
+                    sceneObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0 });
+
+        sceneTriggers.forEach(trigger => sceneObserver.observe(trigger));
     }
 
     // Form Validation
