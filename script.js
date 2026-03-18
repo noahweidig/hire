@@ -362,6 +362,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 150);
     });
 
+    // In Practice — guard against desktop browsers that fail to size the sticky scene
+    // correctly, which otherwise leaves a tall blank area while scrolling.
+    const ipSceneWraps = document.querySelectorAll('.ip-scene-panel-wrap');
+    const supportsSticky = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('position', 'sticky');
+
+    const enableInPracticeFallbackLayout = () => {
+        document.documentElement.classList.add('ip-no-sticky');
+    };
+
+    if (ipSceneWraps.length && supportsSticky) {
+        requestAnimationFrame(() => {
+            const hasCollapsedScene = Array.from(ipSceneWraps).some((wrap) => wrap.getBoundingClientRect().height < 24);
+            if (hasCollapsedScene) {
+                enableInPracticeFallbackLayout();
+            }
+        });
+    } else if (ipSceneWraps.length) {
+        enableInPracticeFallbackLayout();
+    }
+
     // In Practice — add ip-visible to each act as soon as it enters the viewport
     // (threshold: 0 because acts now contain tall scroll scenes; we only need the top edge)
     const ipActs = document.querySelectorAll('.ip-act');
