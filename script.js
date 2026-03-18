@@ -239,7 +239,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const animatedItems = document.querySelectorAll('main > *');
-    animatedItems.forEach(item => item.classList.add('scroll-fade'));
+    animatedItems.forEach(item => {
+        // The In Practice section is intentionally very tall on desktop because its
+        // sticky scenes span multiple viewport heights. Applying the global
+        // scroll-fade threshold to that container can keep it permanently hidden,
+        // so let its nested animations handle the reveal instead.
+        if (item.classList.contains('ip-section')) {
+            item.classList.add('is-visible');
+            return;
+        }
+
+        item.classList.add('scroll-fade');
+    });
 
     // Replaced manual active section tracking with IntersectionObserver
     const setActiveSection = (id) => {
