@@ -1229,6 +1229,7 @@ footer p {
 
 @media (min-width: 1101px) {
     .ip-act {
+        --ip-sticky-top: clamp(calc(var(--nav-height) + 1.5rem), calc(50vh - 10rem), calc(100vh - 18rem));
         display: grid;
         grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
         gap: clamp(2rem, 4vw, 4rem);
@@ -1265,8 +1266,11 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
     .ip-act-meta {
         margin-bottom: 0;
         position: sticky;
-        top: clamp(calc(var(--nav-height) + 1.5rem), calc(50vh - 8rem), calc(100vh - 14rem));
+        top: var(--ip-sticky-top);
         align-self: start;
+        min-height: min(20rem, calc(100vh - var(--ip-sticky-top) - 2rem));
+        display: flex;
+        align-items: center;
     }
 
     .ip-act:nth-child(even) .ip-act-meta {
@@ -1335,8 +1339,8 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
 /* Sticky wrapper — holds both before and after panels, stacked in one cell */
 .ip-scene-panel-wrap {
     position: sticky;
-    top: 50vh;
-    transform: translateY(-50%);
+    top: var(--ip-sticky-top, 50vh);
+    transform: none;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
