@@ -1203,6 +1203,14 @@ footer p {
    In Practice Section
    ============================================================ */
 
+/* Override content-visibility for the in-practice section: its scroll scenes are
+   much taller than the generic 800px placeholder, causing layout shifts that
+   prevent the scroll-fade observer from detecting entry correctly. */
+.ip-section {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+}
+
 .ip-section .subheading {
     margin-bottom: 3rem;
 }
@@ -1319,10 +1327,10 @@ footer p {
     z-index: 3;
 }
 
-/* Sentinel element — sits at ~55% through the scene to trigger the reveal */
+/* Sentinel element — sits at ~55% through the sticky experience to trigger the reveal */
 .ip-scene-trigger {
     position: absolute;
-    top: 55vh;
+    top: 130vh;
     left: 0;
     right: 0;
     height: 1px;
