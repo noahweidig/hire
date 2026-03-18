@@ -1349,6 +1349,7 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
     min-height: 320px;
     align-items: start;
     z-index: 1;
+    overflow: hidden;
 }
 
 /* Both panels occupy the same grid cell (overlapping) */
