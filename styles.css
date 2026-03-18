@@ -92,6 +92,11 @@ body[data-theme="dark"]::after {
         linear-gradient(90deg, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
 }
 
+/* Security: Honeypot field hidden via class to comply with strict CSP */
+.honeypot-field {
+    display: none !important;
+}
+
 /* Skip Link */
 .skip-link {
     position: absolute;

@@ -56,3 +56,8 @@
 **Vulnerability:** Client-side input fields (`name`, `email`, `message` in the contact form) lacked `maxlength` attributes, allowing users to paste or type extremely large strings. This creates a risk for client-side Denial of Service (DoS) by causing browser memory issues, or submitting excessively large payloads to the backend or third-party service.
 **Learning:** Client-side validation is a first line of defense. Restricting input length using standard HTML attributes mitigates risk by preventing excessively large data blobs from ever being processed or transmitted.
 **Prevention:** Apply appropriate `maxlength` limits to all text input and textarea fields in forms (e.g., `100` for name, `254` for standard email addresses according to RFCs, and a reasonable limit like `5000` for free-text messages).
+
+## 2026-03-18 - [Defense-in-depth: Honeypot Fields and Strict CSP]
+**Vulnerability:** The application's contact form lacked protection against automated spam submissions (a form of abuse/DoS), making it vulnerable to bot-driven form flooding.
+**Learning:** Adding a simple honeypot field (e.g., `<input name="_gotcha">`) is an effective, non-intrusive way to mitigate spam. However, commonly suggested solutions (like `style="display:none"`) violate strict Content Security Policies that block `'unsafe-inline'` styles.
+**Prevention:** When implementing honeypot fields on sites with strict CSPs, avoid inline `style` attributes. Instead, hide the field using a dedicated CSS class (e.g., `.honeypot-field { display: none !important; }`) defined in an external stylesheet.
