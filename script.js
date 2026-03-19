@@ -431,8 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ipActs.length) {
         const revealVisibleIpActs = () => {
             const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            ipActs.forEach((act) => {
-                const rect = act.getBoundingClientRect();
+
+            // Performance: Batch DOM reads to prevent layout thrashing
+            const actMetrics = Array.from(ipActs).map(act => ({
+                act,
+                rect: act.getBoundingClientRect()
+            }));
+
+            actMetrics.forEach(({ act, rect }) => {
                 if (rect.bottom > 0 && rect.top < viewportHeight) {
                     act.classList.add('ip-visible');
                 }
