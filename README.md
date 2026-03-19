@@ -1,10 +1,3 @@
-<div align="center">
-
-<img src="verification_hero.png" alt="Hire Noah — Data Wrangling, Analytics & Visualization" width="100%" style="border-radius:12px;" />
-
-<br/>
-<br/>
-
 # Hire Noah
 
 **A polished, accessible "hire me" page for a Data Wrangling, Analytics & Visualization specialist.**
