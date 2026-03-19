@@ -874,6 +874,11 @@ body[data-theme="dark"] .hero-photo {
     resize: vertical;
 }
 
+/* Security: Hide honeypot field via CSS class due to strict CSP (no inline styles) */
+.honeypot-field {
+    display: none !important;
+}
+
 .contact-form input:focus-visible,
 .contact-form textarea:focus-visible {
     outline: 2px solid var(--primary-teal);
