@@ -531,7 +531,60 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm) {
         const submitButton = contactForm.querySelector('.contact-submit-btn');
 
+        // Time-based bot detection: record when the form section first loads
+        const formLoadTimeInput = document.getElementById('formLoadTime');
+        if (formLoadTimeInput) {
+            formLoadTimeInput.value = Date.now();
+        }
+
+        // Rate limiting via localStorage: max 5 submissions per 15 minutes
+        const RATE_LIMIT_MAX = 5;
+        const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+        function isRateLimited() {
+            const now = Date.now();
+            let timestamps;
+            try {
+                timestamps = JSON.parse(localStorage.getItem('_formSubmits') || '[]');
+            } catch (_) {
+                timestamps = [];
+            }
+            timestamps = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+            if (timestamps.length >= RATE_LIMIT_MAX) return true;
+            timestamps.push(now);
+            try {
+                localStorage.setItem('_formSubmits', JSON.stringify(timestamps));
+            } catch (_) { /* storage unavailable */ }
+            return false;
+        }
+
         contactForm.addEventListener('submit', (e) => {
+            // Bot protection 1: Honeypot — silently reject if the hidden 'company' field is filled
+            const honeypotCompany = contactForm.querySelector('input[name="company"]');
+            if (honeypotCompany && honeypotCompany.value) {
+                e.preventDefault();
+                return;
+            }
+
+            // Bot protection 2: Time-based — reject if form was submitted in under 2 seconds
+            const loadTime = parseInt(formLoadTimeInput ? formLoadTimeInput.value : '0', 10);
+            if (loadTime && Date.now() - loadTime < 2000) {
+                e.preventDefault();
+                return;
+            }
+
+            // Bot protection 3: Rate limiting — max 5 submissions per 15-minute window
+            if (isRateLimited()) {
+                e.preventDefault();
+                const existingRateError = contactForm.querySelector('.error-msg-rate');
+                if (!existingRateError) {
+                    const rateError = document.createElement('p');
+                    rateError.className = 'error-msg error-msg-rate';
+                    rateError.textContent = 'Too many submissions. Please wait a few minutes before trying again.';
+                    contactForm.insertBefore(rateError, submitButton);
+                }
+                return;
+            }
+
             let isValid = true;
 
             // Remove existing messages
