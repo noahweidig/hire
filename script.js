@@ -615,6 +615,62 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    const legalModalTriggers = document.querySelectorAll('[data-legal-modal-target]');
+    const legalModalCloseButtons = document.querySelectorAll('[data-legal-modal-close]');
+
+    const openLegalModal = (modal) => {
+        if (!modal) return;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        const closeButton = modal.querySelector('[data-legal-modal-close]');
+        if (closeButton) {
+            closeButton.focus();
+        }
+    };
+
+    const closeLegalModal = (modal) => {
+        if (!modal) return;
+        modal.hidden = true;
+        const hasOpenModal = Array.from(document.querySelectorAll('.legal-modal-overlay')).some(overlay => !overlay.hidden);
+        if (!hasOpenModal) {
+            document.body.style.overflow = '';
+        }
+    };
+
+    legalModalTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const targetId = trigger.getAttribute('data-legal-modal-target');
+            if (!targetId) return;
+            const modal = document.getElementById(targetId);
+            openLegalModal(modal);
+        });
+    });
+
+    legalModalCloseButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.legal-modal-overlay');
+            closeLegalModal(modal);
+        });
+    });
+
+    document.querySelectorAll('.legal-modal-overlay').forEach((overlay) => {
+        overlay.addEventListener('click', (event) => {
+            if (event.target === overlay) {
+                closeLegalModal(overlay);
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            document.querySelectorAll('.legal-modal-overlay').forEach((overlay) => {
+                if (!overlay.hidden) {
+                    closeLegalModal(overlay);
+                }
+            });
+        }
+    });
+
     const backToTopBtn = document.getElementById('back-to-top');
 
     if (backToTopBtn) {

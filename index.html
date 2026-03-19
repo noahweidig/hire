@@ -626,10 +626,10 @@
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h3 class="footer-col-heading">Resources</h3>
+                    <h3 class="footer-col-heading">Legal</h3>
                     <ul>
-                        <li><a href="#contact-form">Get in Touch</a></li>
-                        <li><a href="https://noahweidig.com" rel="noopener noreferrer" target="_blank">Full Portfolio</a></li>
+                        <li><button class="footer-legal-trigger" type="button" data-legal-modal-target="privacy-policy-modal">Privacy Policy</button></li>
+                        <li><button class="footer-legal-trigger" type="button" data-legal-modal-target="terms-conditions-modal">Terms &amp; Conditions</button></li>
                     </ul>
                 </div>
             </nav>
@@ -641,6 +641,38 @@
             </div>
         </div>
     </footer>
+    <div id="privacy-policy-modal" class="legal-modal-overlay" hidden>
+        <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="privacy-policy-title">
+            <button class="legal-modal-close" type="button" data-legal-modal-close aria-label="Close Privacy Policy popup">&times;</button>
+            <h2 id="privacy-policy-title">Privacy Policy</h2>
+            <p>This website is a static personal site and does not collect, store, or share any personal information. No cookies, forms, or analytics are used.</p>
+            <p>This site may contain links to third-party websites. I am not responsible for the privacy practices of those sites.</p>
+            <p>By using this website, you are not providing any personal data.</p>
+        </div>
+    </div>
+    <div id="terms-conditions-modal" class="legal-modal-overlay" hidden>
+        <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="terms-conditions-title">
+            <button class="legal-modal-close" type="button" data-legal-modal-close aria-label="Close Terms &amp; Conditions popup">&times;</button>
+            <h2 id="terms-conditions-title">Terms &amp; Conditions</h2>
+            <p>Last updated: 3/19/2026</p>
+            <h3>Acceptance of Terms</h3>
+            <p>By accessing or using this website, you agree to be bound by these Terms &amp; Conditions. If you do not agree, please discontinue use. These terms may be updated at any time, with the revised date posted above.</p>
+            <h3>Services</h3>
+            <p>This website provides information about Noah Weidig and freelance services. Any engagement or work will be governed by a separate agreement outlining scope, deliverables, and fees. Content on this site does not constitute professional advice.</p>
+            <h3>Use of Content</h3>
+            <p>All materials on this website are protected by intellectual property laws. You may view, download, or print content for personal reference only. Redistribution, modification, or commercial use without permission is prohibited.</p>
+            <h3>Confidentiality</h3>
+            <p>Any information shared during inquiries or communications may be kept confidential, but no obligation is assumed unless explicitly agreed in writing.</p>
+            <h3>Disclaimers</h3>
+            <p>This website and services are provided “as-is.” Noah Weidig does not guarantee outcomes and is not responsible for events outside of his control.</p>
+            <h3>Limitation of Liability</h3>
+            <p>To the fullest extent allowed by law, liability is limited to the amount paid for services (if any). No indirect, incidental, or consequential damages are assumed.</p>
+            <h3>Governing Law</h3>
+            <p>These terms are governed by the laws of the United States without regard to conflict of law principles.</p>
+            <h3>Contact</h3>
+            <p>Questions regarding these Terms &amp; Conditions can be sent to noah@noahweidig.com.</p>
+        </div>
+    </div>
     <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 19V5M5 12l7-7 7 7"/>
