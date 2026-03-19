@@ -558,13 +558,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         contactForm.addEventListener('submit', (e) => {
-            // Bot protection 1: Honeypot — silently reject if the hidden 'company' field is filled
-            const honeypotCompany = contactForm.querySelector('input[name="company"]');
-            if (honeypotCompany && honeypotCompany.value) {
-                e.preventDefault();
-                return;
-            }
-
             // Bot protection 2: Time-based — reject if form was submitted in under 2 seconds
             const loadTime = parseInt(formLoadTimeInput ? formLoadTimeInput.value : '0', 10);
             if (loadTime && Date.now() - loadTime < 2000) {
