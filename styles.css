@@ -955,6 +955,8 @@ body[data-theme="dark"] .hero-photo {
 .footer-logo {
     border-radius: 10px;
     filter: brightness(1.1);
+    width: 2.75rem;
+    height: 2.75rem;
 }
 
 .footer-name {
@@ -1086,11 +1088,32 @@ body[data-theme="dark"] .hero-photo {
 .legal-modal h3 {
     margin: 1rem 0 0.35rem;
     font-size: 1rem;
+    text-align: left;
 }
 
 .legal-modal p {
     margin: 0 0 0.75rem;
     line-height: 1.55;
+}
+
+.terms-conditions-modal h3 {
+    margin-top: 1.35rem;
+}
+
+.terms-email-reveal {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: #0f766e;
+    text-decoration: underline;
+    font: inherit;
+    line-height: inherit;
+    cursor: pointer;
+}
+
+.terms-email-reveal:hover,
+.terms-email-reveal:focus-visible {
+    color: #115e59;
 }
 
 .legal-modal-close {

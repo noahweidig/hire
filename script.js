@@ -671,6 +671,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    document.querySelectorAll('.terms-email-reveal').forEach((button) => {
+        button.addEventListener('click', () => {
+            const user = button.dataset.emailUser;
+            const domain = button.dataset.emailDomain;
+            if (!user || !domain) return;
+
+            const email = `${user}@${domain}`;
+            const output = button.nextElementSibling;
+            if (!output) return;
+
+            output.textContent = ` ${email}`;
+            button.hidden = true;
+        });
+    });
+
     const backToTopBtn = document.getElementById('back-to-top');
 
     if (backToTopBtn) {
