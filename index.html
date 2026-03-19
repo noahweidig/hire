@@ -588,7 +588,7 @@
                     <input id="email" name="email" type="email" required maxlength="254">
 
                     <label for="message">Message<span class="required-asterisk" aria-hidden="true">*</span></label>
-                    <textarea id="message" name="message" rows="6" required maxlength="5000"></textarea>
+                    <textarea id="message" name="message" rows="6" required maxlength="5000" placeholder="Tell me about your project, key challenges, and timeline..."></textarea>
 
                     <p class="form-footnote"><span class="required-asterisk" aria-hidden="true">*</span> Indicates required field</p>
                     <button type="submit" class="btn btn-primary btn-rounded btn-hire contact-submit-btn">Send Message</button>
@@ -596,9 +596,46 @@
             </div>
         </section>
     </main>
-    <footer>
-        <div class="container">
-            <p>&copy; <span id="copyright-year">2026</span> Noah Weidig · Data Wrangling & Visualization</p>
+    <footer class="site-footer">
+        <div class="footer-top container">
+            <div class="footer-brand">
+                <a class="footer-brand-link" href="https://noahweidig.com" rel="noopener noreferrer">
+                    <img class="footer-logo" src="nw-logo.png" alt="NW logo" width="48" height="48" decoding="async">
+                    <span class="footer-name">Noah Weidig</span>
+                </a>
+                <p class="footer-tagline">Secure, data-driven insights<br>for teams that move fast.</p>
+            </div>
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <div class="footer-col">
+                    <h3 class="footer-col-heading">Work</h3>
+                    <ul>
+                        <li><a href="#work">Portfolio</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#contact-form">Hire Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-col-heading">Connect</h3>
+                    <ul>
+                        <li><a href="https://linkedin.com/in/noahweidig" rel="noopener noreferrer" target="_blank">LinkedIn</a></li>
+                        <li><a href="https://github.com/noahweidig" rel="noopener noreferrer" target="_blank">GitHub</a></li>
+                        <li><a href="mailto:noah@noahweidig.com">Email</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3 class="footer-col-heading">Resources</h3>
+                    <ul>
+                        <li><a href="#contact-form">Get in Touch</a></li>
+                        <li><a href="https://noahweidig.com" rel="noopener noreferrer" target="_blank">Full Portfolio</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <div class="container footer-bottom-inner">
+                <p class="footer-copy">&copy; <span id="copyright-year">2026</span> Noah Weidig. All rights reserved.</p>
+                <p class="footer-built">Data Wrangling &amp; Visualization</p>
+            </div>
         </div>
     </footer>
     <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
