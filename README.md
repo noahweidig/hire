@@ -1,3 +1,4 @@
+<center>
 # Hire Noah
 
 **A polished, accessible "hire me" page for a Data Wrangling, Analytics & Visualization specialist.**
