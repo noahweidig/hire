@@ -63,6 +63,36 @@ class FooterLayoutTest(unittest.TestCase):
             f"Expected all footer column headers to be left-aligned, got: {text_alignments}"
         )
 
+    def test_footer_has_legal_links(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        self.page.wait_for_selector(".footer-col-heading")
+
+        legal_header_count = self.page.locator(".footer-col-heading", has_text="Legal").count()
+        self.assertEqual(legal_header_count, 1, "Expected Legal footer header to exist exactly once")
+
+        privacy_button_count = self.page.locator("button.footer-legal-trigger", has_text="Privacy Policy").count()
+        terms_button_count = self.page.locator("button.footer-legal-trigger", has_text="Terms & Conditions").count()
+        self.assertEqual(privacy_button_count, 1, "Expected Privacy Policy footer legal trigger")
+        self.assertEqual(terms_button_count, 1, "Expected Terms & Conditions footer legal trigger")
+
+    def test_legal_popups_open_and_close(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        privacy_modal = self.page.locator("#privacy-policy-modal")
+        terms_modal = self.page.locator("#terms-conditions-modal")
+
+        self.assertEqual(privacy_modal.get_attribute("hidden"), "", "Privacy modal should be hidden by default")
+        self.assertEqual(terms_modal.get_attribute("hidden"), "", "Terms modal should be hidden by default")
+
+        self.page.click("button.footer-legal-trigger:has-text('Privacy Policy')")
+        self.assertIsNone(privacy_modal.get_attribute("hidden"), "Privacy modal should open after click")
+        self.page.click("#privacy-policy-modal [data-legal-modal-close]")
+        self.assertEqual(privacy_modal.get_attribute("hidden"), "", "Privacy modal should close via close button")
+
+        self.page.click("button.footer-legal-trigger:has-text('Terms & Conditions')")
+        self.assertIsNone(terms_modal.get_attribute("hidden"), "Terms modal should open after click")
+        self.page.keyboard.press("Escape")
+        self.assertEqual(terms_modal.get_attribute("hidden"), "", "Terms modal should close on Escape")
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1009,7 +1009,25 @@ body[data-theme="dark"] .hero-photo {
     transition: color 0.2s ease;
 }
 
+.footer-legal-trigger {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
 .footer-col a:hover {
+    color: #5eead4;
+}
+
+.footer-legal-trigger:hover,
+.footer-legal-trigger:focus-visible {
     color: #5eead4;
 }
 
@@ -1035,6 +1053,59 @@ body[data-theme="dark"] .hero-photo {
 
 .footer-built {
     color: #334155;
+}
+
+.legal-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.legal-modal {
+    width: min(760px, 100%);
+    max-height: min(85vh, 920px);
+    overflow-y: auto;
+    background: var(--surface);
+    color: var(--text-charcoal);
+    border: 1px solid color-mix(in srgb, var(--text-muted) 30%, transparent);
+    border-radius: 14px;
+    padding: 1.25rem 1.1rem 1.1rem;
+    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.35);
+}
+
+.legal-modal h2 {
+    margin: 0 0 0.75rem;
+}
+
+.legal-modal h3 {
+    margin: 1rem 0 0.35rem;
+    font-size: 1rem;
+}
+
+.legal-modal p {
+    margin: 0 0 0.75rem;
+    line-height: 1.55;
+}
+
+.legal-modal-close {
+    float: right;
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.1rem 0.35rem;
+}
+
+.legal-modal-close:hover,
+.legal-modal-close:focus-visible {
+    color: var(--text-charcoal);
 }
 
 /* Placeholder styling */
