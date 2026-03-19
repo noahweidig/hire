@@ -922,19 +922,119 @@ body[data-theme="dark"] .hero-photo {
 }
 
 /* Footer */
-footer {
-    background-color: var(--bg-off-white);
-    color: var(--text-charcoal);
-    padding: 2rem 0;
-    text-align: center;
-    border-top: 1px solid var(--border-soft);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+.site-footer {
+    background-color: #0b1220;
+    color: #e2e8f0;
+    border-top: 1px solid rgba(255,255,255,0.06);
 }
 
-footer p {
-    color: var(--text-muted);
-    margin: 0;
+.footer-top {
+    display: flex;
+    gap: 4rem;
+    padding: 4rem 0 3rem;
+    flex-wrap: wrap;
+}
+
+.footer-brand {
+    flex: 0 0 260px;
+}
+
+.footer-brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+}
+
+.footer-logo {
+    border-radius: 10px;
+    filter: brightness(1.1);
+}
+
+.footer-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: -0.01em;
+}
+
+.footer-tagline {
+    color: #64748b;
     font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 3rem;
+    flex: 1;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.footer-col {
+    min-width: 120px;
+}
+
+.footer-col-heading {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin: 0 0 1rem;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.footer-col a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.footer-col a:hover {
+    color: #5eead4;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 1.25rem 0;
+}
+
+.footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.footer-copy,
+.footer-built {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.footer-built {
+    color: #334155;
+}
+
+/* Placeholder styling */
+textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
 }
 
 .sr-only {
@@ -1821,6 +1921,29 @@ body[data-theme="dark"] .cg-axis-title-y { fill: #aaa; }
     .ip-pipe-name { font-size: 0.68rem; }
 }
 
+/* Footer responsive */
+@media (max-width: 768px) {
+    .footer-top {
+        flex-direction: column;
+        gap: 2.5rem;
+        padding: 3rem 0 2rem;
+    }
+
+    .footer-brand {
+        flex: none;
+    }
+
+    .footer-nav {
+        justify-content: flex-start;
+        gap: 2rem;
+    }
+
+    .footer-bottom-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
 /* Print Stylesheet */
 @media print {
     *,
@@ -1999,17 +2122,26 @@ body[data-theme="dark"] .cg-axis-title-y { fill: #aaa; }
     }
 
     /* Footer */
-    footer {
+    .site-footer {
+        background-color: #fff !important;
+        color: #000 !important;
         border-top: 1px solid #000;
         padding: 1rem 0;
     }
 
-    footer::after {
+    .site-footer::after {
         content: "View full portfolio at https://noahweidig.com";
         display: block;
         margin-top: 0.5rem;
         font-style: italic;
         font-size: 0.9rem;
+    }
+
+    .footer-col a,
+    .footer-name,
+    .footer-copy,
+    .footer-built {
+        color: #000 !important;
     }
 }
 
