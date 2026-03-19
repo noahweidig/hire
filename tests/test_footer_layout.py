@@ -75,6 +75,21 @@ class FooterLayoutTest(unittest.TestCase):
         self.assertEqual(privacy_button_count, 1, "Expected Privacy Policy footer legal trigger")
         self.assertEqual(terms_button_count, 1, "Expected Terms & Conditions footer legal trigger")
 
+    def test_footer_legal_links_match_footer_link_font_size(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        self.page.wait_for_selector(".footer-col-heading")
+
+        font_sizes = self.page.evaluate("""() => ({
+            footerLink: getComputedStyle(document.querySelector('.footer-col a')).fontSize,
+            legalTrigger: getComputedStyle(document.querySelector('.footer-legal-trigger')).fontSize
+        })""")
+
+        self.assertEqual(
+            font_sizes["legalTrigger"],
+            font_sizes["footerLink"],
+            f"Expected legal trigger font-size to match footer link font-size, got: {font_sizes}"
+        )
+
     def test_legal_popups_open_and_close(self):
         self.page.goto(self.base_url, wait_until="domcontentloaded")
         privacy_modal = self.page.locator("#privacy-policy-modal")
@@ -92,6 +107,24 @@ class FooterLayoutTest(unittest.TestCase):
         self.assertIsNone(terms_modal.get_attribute("hidden"), "Terms modal should open after click")
         self.page.keyboard.press("Escape")
         self.assertEqual(terms_modal.get_attribute("hidden"), "", "Terms modal should close on Escape")
+
+    def test_legal_popup_uses_floating_card_style(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        self.page.click("button.footer-legal-trigger:has-text('Privacy Policy')")
+
+        modal_styles = self.page.evaluate("""() => {
+            const modal = document.querySelector('#privacy-policy-modal .legal-modal');
+            const styles = getComputedStyle(modal);
+            return {
+                borderRadius: styles.borderRadius,
+                boxShadow: styles.boxShadow,
+                backgroundColor: styles.backgroundColor
+            };
+        }""")
+
+        self.assertNotEqual(modal_styles["borderRadius"], "0px", f"Expected rounded modal card, got {modal_styles}")
+        self.assertNotEqual(modal_styles["boxShadow"], "none", f"Expected elevated modal card, got {modal_styles}")
+        self.assertNotEqual(modal_styles["backgroundColor"], "rgba(0, 0, 0, 0)", f"Expected solid modal card background, got {modal_styles}")
 
 
 if __name__ == '__main__':

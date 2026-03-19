@@ -1017,7 +1017,8 @@ body[data-theme="dark"] .hero-photo {
     background: transparent;
     border: 0;
     padding: 0;
-    font: inherit;
+    font-family: inherit;
+    line-height: inherit;
     text-align: left;
     cursor: pointer;
 }
@@ -1070,12 +1071,12 @@ body[data-theme="dark"] .hero-photo {
     width: min(760px, 100%);
     max-height: min(85vh, 920px);
     overflow-y: auto;
-    background: var(--surface);
+    background: var(--bg-white);
     color: var(--text-charcoal);
-    border: 1px solid color-mix(in srgb, var(--text-muted) 30%, transparent);
+    border: 1px solid var(--border-soft);
     border-radius: 14px;
     padding: 1.25rem 1.1rem 1.1rem;
-    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow-soft);
 }
 
 .legal-modal h2 {
