@@ -90,6 +90,26 @@ class FooterLayoutTest(unittest.TestCase):
             f"Expected legal trigger font-size to match footer link font-size, got: {font_sizes}"
         )
 
+    def test_footer_logo_is_slightly_smaller(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        self.page.wait_for_selector(".footer-logo")
+
+        footer_logo_size = self.page.evaluate("""() => {
+            const logo = document.querySelector('.footer-logo');
+            const styles = getComputedStyle(logo);
+            return {
+                widthAttr: logo.getAttribute('width'),
+                heightAttr: logo.getAttribute('height'),
+                widthStyle: styles.width,
+                heightStyle: styles.height
+            };
+        }""")
+
+        self.assertEqual(footer_logo_size["widthAttr"], "44", f"Expected footer logo width attribute to be 44, got {footer_logo_size}")
+        self.assertEqual(footer_logo_size["heightAttr"], "44", f"Expected footer logo height attribute to be 44, got {footer_logo_size}")
+        self.assertEqual(footer_logo_size["widthStyle"], "44px", f"Expected footer logo width to be 44px, got {footer_logo_size}")
+        self.assertEqual(footer_logo_size["heightStyle"], "44px", f"Expected footer logo height to be 44px, got {footer_logo_size}")
+
     def test_legal_popups_open_and_close(self):
         self.page.goto(self.base_url, wait_until="domcontentloaded")
         privacy_modal = self.page.locator("#privacy-policy-modal")
@@ -107,6 +127,63 @@ class FooterLayoutTest(unittest.TestCase):
         self.assertIsNone(terms_modal.get_attribute("hidden"), "Terms modal should open after click")
         self.page.keyboard.press("Escape")
         self.assertEqual(terms_modal.get_attribute("hidden"), "", "Terms modal should close on Escape")
+
+    def test_terms_headers_are_left_aligned_and_spaced(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        self.page.click("button.footer-legal-trigger:has-text('Terms & Conditions')")
+
+        heading_styles = self.page.evaluate("""() =>
+            Array.from(document.querySelectorAll('#terms-conditions-modal h3')).map((el) => {
+                const styles = getComputedStyle(el);
+                return {
+                    textAlign: styles.textAlign,
+                    marginTop: styles.marginTop
+                };
+            })
+        """)
+
+        self.assertGreater(len(heading_styles), 0, "Expected Terms & Conditions headings to exist")
+        self.assertTrue(
+            all(style["textAlign"] == "left" for style in heading_styles),
+            f"Expected all Terms headings to be left-aligned, got: {heading_styles}"
+        )
+        self.assertTrue(
+            all(float(style["marginTop"].replace("px", "")) >= 21 for style in heading_styles),
+            f"Expected all Terms headings to have increased top margin, got: {heading_styles}"
+        )
+
+    def test_terms_email_is_obfuscated_until_revealed(self):
+        self.page.goto(self.base_url, wait_until="domcontentloaded")
+        self.page.click("button.footer-legal-trigger:has-text('Terms & Conditions')")
+
+        email_state_before = self.page.evaluate("""() => {
+            const modalText = document.querySelector('#terms-conditions-modal .legal-modal').innerText;
+            const revealButton = document.querySelector('#terms-conditions-modal .terms-email-reveal');
+            const output = document.querySelector('#terms-conditions-modal .terms-email-output');
+            return {
+                hasPlainEmailText: modalText.includes('noah@noahweidig.com'),
+                revealButtonHidden: revealButton.hidden,
+                outputText: output.textContent.trim()
+            };
+        }""")
+
+        self.assertFalse(email_state_before["hasPlainEmailText"], f"Email should not appear in plain text before reveal, got: {email_state_before}")
+        self.assertFalse(email_state_before["revealButtonHidden"], f"Reveal button should be visible before click, got: {email_state_before}")
+        self.assertEqual(email_state_before["outputText"], "", f"Email output should be empty before reveal, got: {email_state_before}")
+
+        self.page.click("#terms-conditions-modal .terms-email-reveal")
+
+        email_state_after = self.page.evaluate("""() => {
+            const revealButton = document.querySelector('#terms-conditions-modal .terms-email-reveal');
+            const output = document.querySelector('#terms-conditions-modal .terms-email-output');
+            return {
+                revealButtonHidden: revealButton.hidden,
+                outputText: output.textContent.trim()
+            };
+        }""")
+
+        self.assertTrue(email_state_after["revealButtonHidden"], f"Reveal button should be hidden after click, got: {email_state_after}")
+        self.assertEqual(email_state_after["outputText"], "noah@noahweidig.com", f"Email should be revealed after click, got: {email_state_after}")
 
     def test_legal_popup_uses_floating_card_style(self):
         self.page.goto(self.base_url, wait_until="domcontentloaded")

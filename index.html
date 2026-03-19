@@ -603,7 +603,7 @@
         <div class="footer-top container">
             <div class="footer-brand">
                 <a class="footer-brand-link" href="https://noahweidig.com" rel="noopener noreferrer">
-                    <img class="footer-logo" src="nw-logo.png" alt="NW logo" width="48" height="48" decoding="async">
+                    <img class="footer-logo" src="nw-logo.png" alt="NW logo" width="44" height="44" decoding="async">
                     <span class="footer-name">Noah Weidig</span>
                 </a>
                 <p class="footer-tagline">Secure, data-driven insights<br>for teams that move fast.</p>
@@ -650,8 +650,8 @@
             <p>By using this website, you are not providing any personal data.</p>
         </div>
     </div>
-    <div id="terms-conditions-modal" class="legal-modal-overlay" hidden>
-        <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="terms-conditions-title">
+        <div id="terms-conditions-modal" class="legal-modal-overlay" hidden>
+            <div class="legal-modal terms-conditions-modal" role="dialog" aria-modal="true" aria-labelledby="terms-conditions-title">
             <button class="legal-modal-close" type="button" data-legal-modal-close aria-label="Close Terms &amp; Conditions popup">&times;</button>
             <h2 id="terms-conditions-title">Terms &amp; Conditions</h2>
             <p>Last updated: 3/19/2026</p>
@@ -670,7 +670,19 @@
             <h3>Governing Law</h3>
             <p>These terms are governed by the laws of the United States without regard to conflict of law principles.</p>
             <h3>Contact</h3>
-            <p>Questions regarding these Terms &amp; Conditions can be sent to noah@noahweidig.com.</p>
+            <p>
+                Questions regarding these Terms &amp; Conditions can be sent to
+                <button
+                    class="terms-email-reveal"
+                    type="button"
+                    data-email-user="noah"
+                    data-email-domain="noahweidig.com"
+                    aria-label="Reveal contact email"
+                >
+                    show email address
+                </button>
+                <span class="terms-email-output" aria-live="polite"></span>.
+            </p>
         </div>
     </div>
     <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top" title="Back to top">
