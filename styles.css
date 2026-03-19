@@ -1363,6 +1363,9 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
     transform: none;
     filter: none;
     z-index: 2;
+    /* Performance: Pre-promote to compositor layer so opacity/transform
+       transitions run on the GPU without triggering a main-thread repaint. */
+    will-change: opacity, transform;
 }
 
 .ip-scene-after {
@@ -1371,6 +1374,7 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
     filter: none;
     pointer-events: none;
     z-index: 1;
+    will-change: opacity, transform;
 }
 
 /* When sentinel fires: magic sweep plays, before blurs away, after fades in */

@@ -385,8 +385,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const ipScrollScenes = document.querySelectorAll('.ip-scroll-scene');
     const supportsSticky = typeof CSS !== 'undefined' && CSS.supports && CSS.supports('position', 'sticky');
 
+    // Declared here so setInPracticeFallbackLayout can access it
+    let sceneRevealObserver = null;
+    let refreshSceneObserver = null;
+
     const setInPracticeFallbackLayout = (shouldEnable) => {
+        const wasEnabled = document.documentElement.classList.contains('ip-no-sticky');
         document.documentElement.classList.toggle('ip-no-sticky', shouldEnable);
+        if (shouldEnable) {
+            // Disconnect the IntersectionObserver — CSS already makes both panels visible
+            if (sceneRevealObserver) {
+                sceneRevealObserver.disconnect();
+                sceneRevealObserver = null;
+            }
+            ipScrollScenes.forEach(scene => scene.classList.add('scene-revealed'));
+        } else if (wasEnabled && refreshSceneObserver) {
+            // Sticky support restored after a resize — rebuild the observer
+            refreshSceneObserver();
+        }
     };
 
     const evaluateInPracticeLayout = () => {
@@ -447,38 +463,67 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // In Practice — crossfade from "before" to "after" when the sentinel
-    // element (positioned mid-scene) scrolls into view
+    // element (positioned mid-scene) scrolls into view.
+    // Uses IntersectionObserver for zero main-thread scroll cost: no scroll
+    // listener, no rAF, no getBoundingClientRect on every frame.
     if (ipScrollScenes.length) {
-        let inPracticeFrame = null;
+        // Performance: Pre-cache trigger elements and their parent scenes once,
+        // avoiding repeated querySelector calls inside any hot path.
+        const triggerToScene = new Map();
+        const cachedTriggers = [];
+        ipScrollScenes.forEach(scene => {
+            const trigger = scene.querySelector('.ip-scene-trigger');
+            if (trigger) {
+                cachedTriggers.push(trigger);
+                triggerToScene.set(trigger, scene);
+            }
+        });
 
-        const syncInPracticeScenes = () => {
-            inPracticeFrame = null;
+        // Performance: Create the MediaQueryList once; check .matches (a cheap
+        // property read) instead of calling matchMedia() on every frame.
+        const mobileQuery = window.matchMedia('(max-width: 720px)');
 
-            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            const isMobileViewport = window.matchMedia('(max-width: 720px)').matches;
-            const revealLine = viewportHeight * (isMobileViewport ? 0.78 : 0.58);
+        const setupSceneRevealObserver = () => {
+            if (sceneRevealObserver) {
+                sceneRevealObserver.disconnect();
+                sceneRevealObserver = null;
+            }
 
-            ipScrollScenes.forEach((scene) => {
-                const trigger = scene.querySelector('.ip-scene-trigger');
+            // In no-sticky mode both panels are already visible via CSS; nothing to observe.
+            if (document.documentElement.classList.contains('ip-no-sticky') || !cachedTriggers.length) return;
 
-                if (!trigger || document.documentElement.classList.contains('ip-no-sticky')) {
-                    scene.classList.add('scene-revealed');
-                    return;
-                }
+            // Shrink the bottom of the viewport detection zone so the observer fires at
+            // the same visual threshold as the previous getBoundingClientRect logic:
+            //   desktop → 58 % from top  →  bottom margin = -(100 - 58) % = -42 %
+            //   mobile  → 78 % from top  →  bottom margin = -(100 - 78) % = -22 %
+            const rootMarginBottom = mobileQuery.matches ? '-22%' : '-42%';
 
-                const triggerRect = trigger.getBoundingClientRect();
-                scene.classList.toggle('scene-revealed', triggerRect.top <= revealLine);
+            sceneRevealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const scene = triggerToScene.get(entry.target);
+                    if (!scene) return;
+                    // Reveal when the trigger is inside the detection zone OR has
+                    // already scrolled above it (top < 0 means above the viewport).
+                    scene.classList.toggle(
+                        'scene-revealed',
+                        entry.isIntersecting || entry.boundingClientRect.top < 0
+                    );
+                });
+            }, {
+                rootMargin: `0px 0px ${rootMarginBottom} 0px`,
+                threshold: 0,
             });
+
+            cachedTriggers.forEach(trigger => sceneRevealObserver.observe(trigger));
         };
 
-        const requestInPracticeSync = () => {
-            if (inPracticeFrame !== null) return;
-            inPracticeFrame = requestAnimationFrame(syncInPracticeScenes);
-        };
+        // Store reference so setInPracticeFallbackLayout can rebuild the observer
+        // if sticky support is restored after a resize.
+        refreshSceneObserver = setupSceneRevealObserver;
 
-        syncInPracticeScenes();
-        window.addEventListener('scroll', requestInPracticeSync, { passive: true });
-        window.addEventListener('resize', requestInPracticeSync);
+        // Recreate with the correct rootMargin when the mobile breakpoint changes.
+        mobileQuery.addEventListener('change', setupSceneRevealObserver);
+        setupSceneRevealObserver();
     }
 
     // Form Validation
