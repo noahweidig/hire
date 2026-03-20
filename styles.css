@@ -1133,6 +1133,7 @@ body[data-theme="dark"] .hero-photo {
 }
 
 /* Placeholder styling */
+input::placeholder,
 textarea::placeholder {
     color: var(--text-muted);
     opacity: 0.7;
