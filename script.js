@@ -238,18 +238,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const animatedItems = document.querySelectorAll('main > *');
-    animatedItems.forEach(item => {
+    const allAnimatedItems = document.querySelectorAll('main > *');
+    const animatedItems = Array.from(allAnimatedItems).filter(item => {
         // The In Practice section is intentionally very tall on desktop because its
         // sticky scenes span multiple viewport heights. Applying the global
         // scroll-fade threshold to that container can keep it permanently hidden,
         // so let its nested animations handle the reveal instead.
         if (item.classList.contains('ip-section')) {
             item.classList.add('is-visible');
-            return;
+            return false;
         }
 
         item.classList.add('scroll-fade');
+        return true;
     });
 
     // Replaced manual active section tracking with IntersectionObserver
@@ -497,6 +498,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const mobileQuery = window.matchMedia('(max-width: 720px)');
 
         const setupSceneRevealObserver = () => {
+            if (!supportsIO) {
+                ipScrollScenes.forEach(scene => scene.classList.add('scene-revealed'));
+                return;
+            }
+
             if (sceneRevealObserver) {
                 sceneRevealObserver.disconnect();
                 sceneRevealObserver = null;
@@ -656,6 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const successMsg = document.createElement('p');
             successMsg.className = 'form-success-msg';
+            successMsg.setAttribute('role', 'status');
             successMsg.textContent = 'Looks great — sending your message now.';
             contactForm.insertBefore(successMsg, submitButton);
         });
