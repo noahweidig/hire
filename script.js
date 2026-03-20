@@ -340,7 +340,11 @@ document.addEventListener('DOMContentLoaded', () => {
             rootMargin: '0px 0px -6% 0px',
         });
 
-        animatedItems.forEach(item => animationObserver.observe(item));
+        animatedItems.forEach(item => {
+            if (!item.classList.contains('ip-section')) {
+                animationObserver.observe(item);
+            }
+        });
 
         // Observer for Active Section
         // rootMargin: '-20% 0px -80% 0px' creates a detection line at 20% from top.
@@ -431,12 +435,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ipActs.length) {
         const revealVisibleIpActs = () => {
             const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+            // Performance: Batch DOM reads to prevent layout thrashing
+            const actsToReveal = [];
             ipActs.forEach((act) => {
                 const rect = act.getBoundingClientRect();
                 if (rect.bottom > 0 && rect.top < viewportHeight) {
-                    act.classList.add('ip-visible');
+                    actsToReveal.push(act);
                 }
             });
+
+            // Performance: Batch DOM writes
+            actsToReveal.forEach(act => act.classList.add('ip-visible'));
         };
 
         if (supportsIO) {
@@ -467,6 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Uses IntersectionObserver for zero main-thread scroll cost: no scroll
     // listener, no rAF, no getBoundingClientRect on every frame.
     if (ipScrollScenes.length) {
+        if (!supportsIO) {
+            ipScrollScenes.forEach(scene => scene.classList.add('scene-revealed'));
+        } else {
         // Performance: Pre-cache trigger elements and their parent scenes once,
         // avoiding repeated querySelector calls inside any hot path.
         const triggerToScene = new Map();
@@ -524,6 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Recreate with the correct rootMargin when the mobile breakpoint changes.
         mobileQuery.addEventListener('change', setupSceneRevealObserver);
         setupSceneRevealObserver();
+        }
     }
 
     // Form Validation

@@ -25,3 +25,7 @@
 ## 2026-03-15 - Loop DOM Query Optimization
 **Learning:** Querying a parent element's bounding rectangle (e.g., `navList.getBoundingClientRect()`) inside a loop over its children causes redundant synchronous layout recalculations (thrashing) on the main thread.
 **Action:** Hoist the parent's layout calculation outside of the loop and pass the cached result into the per-child calculation function to reduce DOM read overhead.
+
+## 2026-03-20 - Prevent Layout Thrashing in Loops
+**Learning:** Querying layout properties (DOM reads like `getBoundingClientRect()`) and applying styles (DOM writes like `classList.add()`) inside the same loop causes excessive main-thread recalculations (layout thrashing).
+**Action:** Batch DOM reads in a first pass and DOM writes in a second pass to prevent layout thrashing, unless it's a read-only short-circuiting loop where evaluating all elements upfront harms performance.
