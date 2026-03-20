@@ -511,29 +511,34 @@ document.addEventListener('DOMContentLoaded', () => {
             // In no-sticky mode both panels are already visible via CSS; nothing to observe.
             if (document.documentElement.classList.contains('ip-no-sticky') || !cachedTriggers.length) return;
 
-            // Shrink the bottom of the viewport detection zone so the observer fires at
-            // the same visual threshold as the previous getBoundingClientRect logic:
-            //   desktop → 58 % from top  →  bottom margin = -(100 - 58) % = -42 %
-            //   mobile  → 78 % from top  →  bottom margin = -(100 - 78) % = -22 %
-            const rootMarginBottom = mobileQuery.matches ? '-22%' : '-42%';
+            if (supportsIO) {
+                // Shrink the bottom of the viewport detection zone so the observer fires at
+                // the same visual threshold as the previous getBoundingClientRect logic:
+                //   desktop → 58 % from top  →  bottom margin = -(100 - 58) % = -42 %
+                //   mobile  → 78 % from top  →  bottom margin = -(100 - 78) % = -22 %
+                const rootMarginBottom = mobileQuery.matches ? '-22%' : '-42%';
 
-            sceneRevealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const scene = triggerToScene.get(entry.target);
-                    if (!scene) return;
-                    // Reveal when the trigger is inside the detection zone OR has
-                    // already scrolled above it (top < 0 means above the viewport).
-                    scene.classList.toggle(
-                        'scene-revealed',
-                        entry.isIntersecting || entry.boundingClientRect.top < 0
-                    );
+                sceneRevealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        const scene = triggerToScene.get(entry.target);
+                        if (!scene) return;
+                        // Reveal when the trigger is inside the detection zone OR has
+                        // already scrolled above it (top < 0 means above the viewport).
+                        scene.classList.toggle(
+                            'scene-revealed',
+                            entry.isIntersecting || entry.boundingClientRect.top < 0
+                        );
+                    });
+                }, {
+                    rootMargin: `0px 0px ${rootMarginBottom} 0px`,
+                    threshold: 0,
                 });
-            }, {
-                rootMargin: `0px 0px ${rootMarginBottom} 0px`,
-                threshold: 0,
-            });
 
-            cachedTriggers.forEach(trigger => sceneRevealObserver.observe(trigger));
+                cachedTriggers.forEach(trigger => sceneRevealObserver.observe(trigger));
+            } else {
+                // Fallback: Reveal all scenes immediately if IntersectionObserver is unavailable
+                ipScrollScenes.forEach(scene => scene.classList.add('scene-revealed'));
+            }
         };
 
         // Store reference so setInPracticeFallbackLayout can rebuild the observer
