@@ -77,6 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    if (sectionIdToNavLink.has('what-i-do')) {
+        sectionIdToNavLink.set('in-practice', sectionIdToNavLink.get('what-i-do'));
+    }
+
     let activeSectionId = '';
     let activeNavLink = null;
     let indicatorTimeout;
