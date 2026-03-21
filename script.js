@@ -579,10 +579,11 @@ document.addEventListener('DOMContentLoaded', () => {
             let timestamps;
             try {
                 timestamps = JSON.parse(localStorage.getItem('_formSubmits') || '[]');
+                if (!Array.isArray(timestamps)) timestamps = [];
             } catch (_) {
                 timestamps = [];
             }
-            timestamps = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+            timestamps = timestamps.filter(t => typeof t === 'number' && now - t < RATE_LIMIT_WINDOW_MS);
             if (timestamps.length >= RATE_LIMIT_MAX) return true;
             timestamps.push(now);
             try {
@@ -592,6 +593,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         contactForm.addEventListener('submit', (e) => {
+            // Bot protection 1: Honeypot — reject if hidden field is filled
+            const gotchaInput = contactForm.querySelector('input[name="_gotcha"]');
+            if (gotchaInput && gotchaInput.value) {
+                e.preventDefault();
+                return;
+            }
+
             // Bot protection 2: Time-based — reject if form was submitted in under 2 seconds
             const loadTime = parseInt(formLoadTimeInput ? formLoadTimeInput.value : '0', 10);
             if (loadTime && Date.now() - loadTime < 2000) {
