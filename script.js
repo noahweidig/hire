@@ -466,7 +466,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             ipActs.forEach(act => actObserver.observe(act));
             revealVisibleIpActs();
-            window.addEventListener('resize', revealVisibleIpActs);
+            let actResizeTimeout;
+            window.addEventListener('resize', () => {
+                if (actResizeTimeout) clearTimeout(actResizeTimeout);
+                // Performance: Debounce resize event to prevent excessive main thread layout recalculations
+                actResizeTimeout = setTimeout(revealVisibleIpActs, 150);
+            });
             requestAnimationFrame(() => {
                 if (!document.querySelector('.ip-act.ip-visible')) {
                     ipActs[0].classList.add('ip-visible');
@@ -729,7 +734,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('.legal-modal-overlay').forEach((overlay) => {
+    // Performance: Cache legal modal overlays to prevent repeated DOM queries on every keydown event
+    const legalModalOverlays = document.querySelectorAll('.legal-modal-overlay');
+
+    legalModalOverlays.forEach((overlay) => {
         overlay.addEventListener('click', (event) => {
             if (event.target === overlay) {
                 closeLegalModal(overlay);
@@ -739,7 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            document.querySelectorAll('.legal-modal-overlay').forEach((overlay) => {
+            legalModalOverlays.forEach((overlay) => {
                 if (!overlay.hidden) {
                     closeLegalModal(overlay);
                 }
