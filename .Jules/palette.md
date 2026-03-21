@@ -65,4 +65,11 @@
 ## 2025-03-03 - Form Validation Accessibility and Error Recovery
 **Learning:** Visual inline form errors are easily missed by screen reader users if not explicitly linked to the input, and manual error recovery can be disorienting for keyboard users.
 **Action:** When implementing custom form validation, always programmatically tie the error message to the input using `aria-invalid` and `aria-describedby`, and automatically shift focus (`.focus()`) to the first invalid field upon a failed submission.
-## 2026-03-20 - Form Autocomplete and Success States\n**Learning:** Sighted users see success notifications, but screen-readers miss them unless they have an appropriate ARIA role. Also, manually typing name/email forms causes friction.\n**Action:** Assign `role="status"` to dynamic success/error notifications so screen-readers hear them immediately. Add `autocomplete` attributes to standard form fields to enable browser auto-fill, speeding up form submission.
+
+## 2026-03-20 - Form Autocomplete and Success States
+**Learning:** Sighted users see success notifications, but screen-readers miss them unless they have an appropriate ARIA role. Also, manually typing name/email forms causes friction.
+**Action:** Assign `role="status"` to dynamic success/error notifications so screen-readers hear them immediately. Add `autocomplete` attributes to standard form fields to enable browser auto-fill, speeding up form submission.
+
+## 2026-03-21 - Visual Error State Parity
+**Learning:** Setting `aria-invalid="true"` programmatically informs screen readers of validation errors, but sighted users need corresponding visual cues (like a distinct border color) directly on the input fields, rather than just relying on adjacent error text which might be overlooked.
+**Action:** Always pair programmatic `aria-invalid="true"` attributes with matching CSS rules (e.g., `input[aria-invalid="true"] { border-color: red; }`) to guarantee visual error state parity.

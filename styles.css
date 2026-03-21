@@ -885,6 +885,16 @@ body[data-theme="dark"] .hero-photo {
     outline-offset: 2px;
 }
 
+.contact-form input[aria-invalid="true"],
+.contact-form textarea[aria-invalid="true"] {
+    border-color: var(--accent-coral);
+}
+
+.contact-form input[aria-invalid="true"]:focus-visible,
+.contact-form textarea[aria-invalid="true"]:focus-visible {
+    outline-color: var(--accent-coral);
+}
+
 .contact-submit-btn {
     justify-self: center;
     min-width: 200px;
