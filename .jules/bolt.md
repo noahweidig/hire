@@ -29,3 +29,7 @@
 ## 2026-03-20 - Prevent Layout Thrashing in Loops
 **Learning:** Querying layout properties (DOM reads like `getBoundingClientRect()`) and applying styles (DOM writes like `classList.add()`) inside the same loop causes excessive main-thread recalculations (layout thrashing).
 **Action:** Batch DOM reads in a first pass and DOM writes in a second pass to prevent layout thrashing, unless it's a read-only short-circuiting loop where evaluating all elements upfront harms performance.
+
+## 2026-03-22 - Debounce High-Frequency Layout Calculations
+**Learning:** Binding layout calculations (e.g., `getBoundingClientRect()`) to raw, synchronous resize or keydown event listeners causes continuous main-thread congestion and layout thrashing, severely degrading UI responsiveness.
+**Action:** Always wrap high-frequency listeners (like `window.resize`) in a debounce utility, and cache static DOM queries (like `querySelectorAll`) outside of global keydown handlers.
