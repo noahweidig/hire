@@ -579,6 +579,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let timestamps;
             try {
                 timestamps = JSON.parse(localStorage.getItem('_formSubmits') || '[]');
+                // Security Enhancement: Validate that parsed JSON is actually an array
+                // before calling array methods, preventing unhandled exceptions if
+                // localStorage was tampered with or corrupted.
                 if (!Array.isArray(timestamps)) timestamps = [];
             } catch (_) {
                 timestamps = [];
