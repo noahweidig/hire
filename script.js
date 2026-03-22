@@ -592,6 +592,18 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
 
+        // UX Improvement: Clear inline validation errors instantly when the user starts typing to correct them
+        contactForm.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.getAttribute('aria-invalid') === 'true') {
+                    input.removeAttribute('aria-invalid');
+                    input.removeAttribute('aria-describedby');
+                    const errorMsg = document.getElementById(`${input.id}-error`);
+                    if (errorMsg) errorMsg.remove();
+                }
+            });
+        });
+
         contactForm.addEventListener('submit', (e) => {
             // Bot protection 1: Honeypot — reject if hidden field is filled
             const gotchaInput = contactForm.querySelector('input[name="_gotcha"]');
@@ -615,6 +627,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const rateError = document.createElement('p');
                     rateError.className = 'error-msg error-msg-rate';
                     rateError.textContent = 'Too many submissions. Please wait a few minutes before trying again.';
+                    rateError.setAttribute('role', 'status');
                     contactForm.insertBefore(rateError, submitButton);
                 }
                 return;
@@ -640,6 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 errorSpan.className = 'error-msg';
                 errorSpan.id = `${input.id}-error`;
                 errorSpan.textContent = message;
+                errorSpan.setAttribute('role', 'status');
                 input.parentNode.insertBefore(errorSpan, input.nextSibling);
                 input.setAttribute('aria-invalid', 'true');
                 input.setAttribute('aria-describedby', errorSpan.id);
@@ -679,6 +693,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (submitButton) {
                 submitButton.textContent = 'Sending...';
+                submitButton.disabled = true;
+                submitButton.setAttribute('aria-disabled', 'true');
             }
             contactForm.classList.add('is-submitting');
 
