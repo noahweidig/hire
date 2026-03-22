@@ -723,6 +723,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const legalModalTriggers = document.querySelectorAll('[data-legal-modal-target]');
     const legalModalCloseButtons = document.querySelectorAll('[data-legal-modal-close]');
 
+    // Performance: Cache legal modal overlays to prevent repeated DOM queries on every keydown event
+    const legalModalOverlays = document.querySelectorAll('.legal-modal-overlay');
+
     const openLegalModal = (modal) => {
         if (!modal) return;
         modal.hidden = false;
@@ -736,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeLegalModal = (modal) => {
         if (!modal) return;
         modal.hidden = true;
-        const hasOpenModal = Array.from(document.querySelectorAll('.legal-modal-overlay')).some(overlay => !overlay.hidden);
+        const hasOpenModal = Array.from(legalModalOverlays).some(overlay => !overlay.hidden);
         if (!hasOpenModal) {
             document.body.style.overflow = '';
         }
@@ -757,9 +760,6 @@ document.addEventListener('DOMContentLoaded', () => {
             closeLegalModal(modal);
         });
     });
-
-    // Performance: Cache legal modal overlays to prevent repeated DOM queries on every keydown event
-    const legalModalOverlays = document.querySelectorAll('.legal-modal-overlay');
 
     legalModalOverlays.forEach((overlay) => {
         overlay.addEventListener('click', (event) => {
