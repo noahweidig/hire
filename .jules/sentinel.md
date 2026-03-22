@@ -65,3 +65,8 @@
 **Vulnerability:** The application used the modern `IntersectionObserver` API directly without feature detection. In older browsers or restrictive environments (like certain headless test runners), this caused an unhandled JavaScript exception, halting execution context and potentially breaking critical subsequent security logic (like frame-busting scripts or secure event handlers).
 **Learning:** Assuming browser API availability can lead to brittle "fail insecurely" scenarios. If an unhandled exception halts the main thread, any security mechanisms initialized later in the script or dependent on the event loop may fail silently, leaving the application unprotected.
 **Prevention:** Always use feature detection (e.g., `if ('IntersectionObserver' in window)`) before invoking modern APIs. Ensure the application degrades gracefully to a safe fallback state (e.g., making hidden elements visible by default) to prevent unhandled exceptions from compromising the execution context.
+
+## 2026-03-21 - [Defense-in-depth: Secure parsing of localStorage data]
+**Vulnerability:** Unsafe parsing of `localStorage` data expected to be an array, which could lead to unhandled exceptions when calling array methods like `.filter` if the data is maliciously or accidentally modified to a different type.
+**Learning:** Always validate the structure and type of parsed JSON data from `localStorage` before acting on it.
+**Prevention:** Use `Array.isArray()` or similar checks to ensure the parsed data matches the expected type before executing type-specific operations, mitigating potential application crashes.
