@@ -1035,8 +1035,25 @@ body[data-theme="dark"] .hero-photo {
     cursor: pointer;
 }
 
-.footer-col a:hover {
+.footer-col a:hover,
+.footer-col a:focus-visible {
     color: #5eead4;
+}
+
+.footer-col a.external-link {
+    display: inline-flex;
+    align-items: center;
+}
+
+.footer-col a.external-link .external-icon {
+    margin-left: 4px;
+}
+
+.footer-col a.external-link:hover .external-icon,
+.footer-col a.external-link:focus-visible .external-icon {
+    opacity: 1;
+    color: #5eead4;
+    transform: translate(2px, -2px);
 }
 
 .footer-legal-trigger:hover,
