@@ -605,7 +605,8 @@
         <div class="footer-top container">
             <div class="footer-brand">
                 <a class="footer-brand-link" href="https://noahweidig.com" rel="noopener noreferrer">
-                    <img class="footer-logo" src="nw-logo.png" alt="" aria-hidden="true" width="44" height="44" decoding="async">
+                    <!-- Performance: Add lazy loading to images below the fold to save bandwidth and improve initial load time -->
+                    <img class="footer-logo" src="nw-logo.png" alt="" aria-hidden="true" width="44" height="44" decoding="async" loading="lazy">
                     <span class="footer-name">Noah Weidig</span>
                 </a>
                 <p class="footer-tagline">Secure, data-driven insights<br>for teams that move fast.</p>
