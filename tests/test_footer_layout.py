@@ -72,8 +72,10 @@ class FooterLayoutTest(unittest.TestCase):
 
         privacy_button_count = self.page.locator("button.footer-legal-trigger", has_text="Privacy Policy").count()
         terms_button_count = self.page.locator("button.footer-legal-trigger", has_text="Terms & Conditions").count()
+        accessibility_button_count = self.page.locator("button.footer-legal-trigger", has_text="Accessibility").count()
         self.assertEqual(privacy_button_count, 1, "Expected Privacy Policy footer legal trigger")
         self.assertEqual(terms_button_count, 1, "Expected Terms & Conditions footer legal trigger")
+        self.assertEqual(accessibility_button_count, 1, "Expected Accessibility footer legal trigger")
 
     def test_footer_legal_links_match_footer_link_font_size(self):
         self.page.goto(self.base_url, wait_until="domcontentloaded")
@@ -114,9 +116,11 @@ class FooterLayoutTest(unittest.TestCase):
         self.page.goto(self.base_url, wait_until="domcontentloaded")
         privacy_modal = self.page.locator("#privacy-policy-modal")
         terms_modal = self.page.locator("#terms-conditions-modal")
+        accessibility_modal = self.page.locator("#accessibility-modal")
 
         self.assertEqual(privacy_modal.get_attribute("hidden"), "", "Privacy modal should be hidden by default")
         self.assertEqual(terms_modal.get_attribute("hidden"), "", "Terms modal should be hidden by default")
+        self.assertEqual(accessibility_modal.get_attribute("hidden"), "", "Accessibility modal should be hidden by default")
 
         self.page.click("button.footer-legal-trigger:has-text('Privacy Policy')")
         self.assertIsNone(privacy_modal.get_attribute("hidden"), "Privacy modal should open after click")
@@ -127,6 +131,11 @@ class FooterLayoutTest(unittest.TestCase):
         self.assertIsNone(terms_modal.get_attribute("hidden"), "Terms modal should open after click")
         self.page.keyboard.press("Escape")
         self.assertEqual(terms_modal.get_attribute("hidden"), "", "Terms modal should close on Escape")
+
+        self.page.click("button.footer-legal-trigger:has-text('Accessibility')")
+        self.assertIsNone(accessibility_modal.get_attribute("hidden"), "Accessibility modal should open after click")
+        self.page.click("#accessibility-modal [data-legal-modal-close]")
+        self.assertEqual(accessibility_modal.get_attribute("hidden"), "", "Accessibility modal should close via close button")
 
     def test_terms_headers_are_left_aligned_and_spaced(self):
         self.page.goto(self.base_url, wait_until="domcontentloaded")
