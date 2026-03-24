@@ -1,3 +1,0 @@
-## 2026-03-22 - Dynamic form error messaging improvements
-**Learning:** Screen readers might miss dynamically injected form errors if they do not include the `role="status"` attribute, and CSS `pointer-events: none` is insufficient for conveying a disabled button state to AT users. Additionally, clearing inline validation errors as soon as a user starts typing creates a more responsive and less frustrating experience than waiting for the next submission attempt.
-**Action:** Always pair `role="status"` (or `role="alert"`) with dynamically added error/success messages, apply the native `disabled` property alongside `aria-disabled="true"` for processing states, and bind validation reset logic to the `input` event on fields.
