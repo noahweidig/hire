@@ -617,7 +617,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Bot protection 2: Time-based — reject if form was submitted in under 2 seconds
             const loadTime = parseInt(formLoadTimeInput ? formLoadTimeInput.value : '0', 10);
-            if (loadTime && Date.now() - loadTime < 2000) {
+            if (!loadTime || Date.now() - loadTime < 2000) {
                 e.preventDefault();
                 return;
             }
