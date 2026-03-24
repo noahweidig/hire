@@ -901,6 +901,14 @@ body[data-theme="dark"] .hero-photo {
     text-align: center;
 }
 
+.submit-spinner {
+    animation: btn-spin 1s linear infinite;
+}
+
+@keyframes btn-spin {
+    100% { transform: rotate(360deg); }
+}
+
 .required-asterisk {
     color: var(--accent-coral);
     margin-left: 0.25rem;

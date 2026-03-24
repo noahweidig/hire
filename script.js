@@ -695,7 +695,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (submitButton) {
-                submitButton.textContent = 'Sending...';
+                const submitText = submitButton.querySelector('.submit-text');
+                const submitSpinner = submitButton.querySelector('.submit-spinner');
+                if (submitText) submitText.textContent = 'Sending...';
+                if (submitSpinner) submitSpinner.removeAttribute('hidden');
                 submitButton.disabled = true;
                 submitButton.setAttribute('aria-disabled', 'true');
             }

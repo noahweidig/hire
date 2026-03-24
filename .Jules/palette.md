@@ -73,3 +73,6 @@
 ## 2026-03-21 - Visual Error State Parity
 **Learning:** Setting `aria-invalid="true"` programmatically informs screen readers of validation errors, but sighted users need corresponding visual cues (like a distinct border color) directly on the input fields, rather than just relying on adjacent error text which might be overlooked.
 **Action:** Always pair programmatic `aria-invalid="true"` attributes with matching CSS rules (e.g., `input[aria-invalid="true"] { border-color: red; }`) to guarantee visual error state parity.
+## 2026-03-24 - Async Loading States for Form Submissions
+**Learning:** Changing a submit button's text to "Sending..." provides some feedback, but replacing the button's `textContent` completely can break its internal structure (if it contains icons) and lacks the familiar, universally recognized visual affordance of a loading spinner, leaving users uncertain if the form is actually processing.
+**Action:** When handling async form submissions, preserve the button's internal DOM structure (e.g., wrap text in a `span`) and dynamically reveal a hidden SVG spinner alongside the text to provide clear, accessible, and reassuring visual feedback.
