@@ -1,4 +1,243 @@
+const initHeroNeuralNetwork = () => {
+    const heroSection = document.getElementById('hero');
+    const canvas = document.getElementById('hero-neural-canvas');
+    if (!heroSection || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    let width = 0;
+    let height = 0;
+    const mouse = { x: -9999, y: -9999, active: false };
+    const CONNECTION_DISTANCE = 130;
+    const MOUSE_RADIUS = 200;
+    const BASE_SPEED = 0.35;
+    const MAX_SPEED = 0.75;
+    const REPULSION_DIST = 80;
+    const CLICK_RADIUS = 200;
+    const nodes = [];
+
+    const getThemeAwareHue = () => {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        return isDark ? 190 : 200;
+    };
+
+    const resize = () => {
+        const rect = heroSection.getBoundingClientRect();
+        width = Math.max(1, Math.floor(rect.width));
+        height = Math.max(1, Math.floor(rect.height));
+        canvas.width = width;
+        canvas.height = height;
+    };
+
+    const createNodes = () => {
+        const area = width * height;
+        const nodeCount = Math.max(48, Math.min(96, Math.round(area / 22000)));
+        const cols = Math.ceil(Math.sqrt(nodeCount * (width / height)));
+        const rows = Math.ceil(nodeCount / cols);
+        const cellW = width / cols;
+        const cellH = height / rows;
+        nodes.length = 0;
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                if (nodes.length >= nodeCount) break;
+                const x = col * cellW + Math.random() * cellW;
+                const y = row * cellH + Math.random() * cellH;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = BASE_SPEED * (0.6 + Math.random() * 0.8);
+                nodes.push({
+                    x,
+                    y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    radius: 1.2 + Math.random() * 1.2,
+                    pulse: Math.random() * Math.PI * 2,
+                    pulseSpeed: 0.008 + Math.random() * 0.01,
+                    hue: getThemeAwareHue() + Math.random() * 40
+                });
+            }
+        }
+    };
+
+    const setMouseFromEvent = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;
+        mouse.active = true;
+    };
+
+    const drawNode = (node) => {
+        const glow = Math.sin(node.pulse) * 0.5 + 0.5;
+        const radius = node.radius + glow * 0.6;
+
+        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, radius * 2.5);
+        gradient.addColorStop(0, `hsla(${node.hue}, 70%, 75%, ${0.28 + glow * 0.15})`);
+        gradient.addColorStop(1, `hsla(${node.hue}, 70%, 60%, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${node.hue}, 60%, 80%, 0.55)`;
+        ctx.fill();
+    };
+
+    const drawConnections = () => {
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const a = nodes[i];
+                const b = nodes[j];
+                const dx = b.x - a.x;
+                const dy = b.y - a.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < CONNECTION_DISTANCE) {
+                    const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.14;
+
+                    const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+                    gradient.addColorStop(0, `hsla(${a.hue}, 70%, 65%, ${alpha})`);
+                    gradient.addColorStop(1, `hsla(${b.hue}, 70%, 65%, ${alpha})`);
+
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 0.7;
+                    ctx.stroke();
+                }
+            }
+        }
+    };
+
+    const updateNodes = () => {
+        nodes.forEach((node, i) => {
+            node.pulse += node.pulseSpeed;
+
+            const mdx = mouse.x - node.x;
+            const mdy = mouse.y - node.y;
+            const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+            if (mouse.active && mdist < MOUSE_RADIUS && mdist > 0) {
+                const closeZone = MOUSE_RADIUS * 0.3;
+                if (mdist < closeZone) {
+                    const force = (1 - mdist / closeZone) * 0.025;
+                    node.vx -= (mdx / mdist) * force;
+                    node.vy -= (mdy / mdist) * force;
+                } else {
+                    const force = (1 - mdist / MOUSE_RADIUS) * 0.004;
+                    node.vx += (mdx / mdist) * force;
+                    node.vy += (mdy / mdist) * force;
+                }
+            }
+
+            for (let j = 0; j < nodes.length; j++) {
+                if (i === j) continue;
+                const other = nodes[j];
+                const dx = node.x - other.x;
+                const dy = node.y - other.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < REPULSION_DIST && dist > 0) {
+                    const force = (1 - dist / REPULSION_DIST) * 0.012;
+                    node.vx += (dx / dist) * force;
+                    node.vy += (dy / dist) * force;
+                }
+            }
+
+            const speed = Math.sqrt(node.vx * node.vx + node.vy * node.vy);
+            if (speed > MAX_SPEED) {
+                node.vx = (node.vx / speed) * MAX_SPEED;
+                node.vy = (node.vy / speed) * MAX_SPEED;
+            }
+
+            if (speed < 0.05) {
+                const angle = Math.random() * Math.PI * 2;
+                node.vx += Math.cos(angle) * 0.05;
+                node.vy += Math.sin(angle) * 0.05;
+            }
+
+            node.vx *= 0.998;
+            node.vy *= 0.998;
+            node.x += node.vx;
+            node.y += node.vy;
+
+            if (node.x < 0) node.x = width;
+            if (node.x > width) node.x = 0;
+            if (node.y < 0) node.y = height;
+            if (node.y > height) node.y = 0;
+        });
+    };
+
+    const animate = () => {
+        ctx.clearRect(0, 0, width, height);
+        drawConnections();
+        nodes.forEach(drawNode);
+        updateNodes();
+        window.requestAnimationFrame(animate);
+    };
+
+    const onClick = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const clickY = event.clientY - rect.top;
+
+        nodes.forEach(node => {
+            const dx = node.x - clickX;
+            const dy = node.y - clickY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < CLICK_RADIUS && dist > 0) {
+                const force = (1 - dist / CLICK_RADIUS) * 1.8;
+                node.vx += (dx / dist) * force;
+                node.vy += (dy / dist) * force;
+            }
+        });
+    };
+
+    const resetMouse = () => {
+        mouse.active = false;
+        mouse.x = -9999;
+        mouse.y = -9999;
+    };
+
+    const onThemeChange = () => {
+        const baseHue = getThemeAwareHue();
+        nodes.forEach(node => {
+            node.hue = baseHue + Math.random() * 40;
+        });
+    };
+
+    resize();
+    createNodes();
+    animate();
+
+    heroSection.addEventListener('mousemove', setMouseFromEvent);
+    heroSection.addEventListener('mouseleave', resetMouse);
+    heroSection.addEventListener('click', onClick);
+    window.addEventListener('themechange', onThemeChange);
+
+    if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(() => {
+            resize();
+            createNodes();
+        });
+        observer.observe(heroSection);
+    } else {
+        window.addEventListener('resize', () => {
+            resize();
+            createNodes();
+        });
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+    initHeroNeuralNetwork();
+
     const inPracticeSection = document.querySelector('.ip-section');
     if (inPracticeSection) {
         document.documentElement.classList.add('ip-enhanced');
@@ -239,6 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Security: Ignore errors from blocked localStorage
             }
             updateThemeToggle(nextTheme);
+            window.dispatchEvent(new Event('themechange'));
         });
     }
 
