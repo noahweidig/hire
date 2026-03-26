@@ -19,17 +19,20 @@ const initHeroNeuralNetwork = () => {
     const REPULSION_DIST = 80;
     const CLICK_RADIUS = 200;
     const nodes = [];
+
+    // Performance: Cache theme state outside the animation loop to prevent layout thrashing
+    // from repeated synchronous DOM reads.
+    let isDarkTheme = document.body.getAttribute('data-theme') === 'dark';
+
     const getConnectionStrength = () => {
-        const isDark = document.body.getAttribute('data-theme') === 'dark';
         return {
-            alphaBoost: isDark ? 0.2 : 0.29,
-            lineWidth: isDark ? 1.05 : 1.25
+            alphaBoost: isDarkTheme ? 0.2 : 0.29,
+            lineWidth: isDarkTheme ? 1.05 : 1.25
         };
     };
 
     const getThemeAwareHue = () => {
-        const isDark = document.body.getAttribute('data-theme') === 'dark';
-        return isDark ? 190 : 200;
+        return isDarkTheme ? 190 : 200;
     };
 
     const resize = () => {
@@ -217,6 +220,7 @@ const initHeroNeuralNetwork = () => {
     };
 
     const onThemeChange = () => {
+        isDarkTheme = document.body.getAttribute('data-theme') === 'dark';
         const baseHue = getThemeAwareHue();
         nodes.forEach(node => {
             node.hue = baseHue + Math.random() * 40;
