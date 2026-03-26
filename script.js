@@ -37,6 +37,13 @@ const initHeroNeuralNetwork = () => {
     let isDocumentVisible = !document.hidden;
     let frameCounter = 0;
 
+    // Performance: Pre-allocated shared buffers to avoid per-frame array/object allocation
+    const CONNECTION_BINS = 8;
+    const binCoords = Array.from({ length: CONNECTION_BINS }, () => []);
+    const binAlphaSum = new Float64Array(CONNECTION_BINS);
+    const binCount = new Int32Array(CONNECTION_BINS);
+    const sharedNeighbors = [];
+
     // Performance: Cache theme state outside the animation loop to prevent layout thrashing
     // from repeated synchronous DOM reads.
     let isDarkTheme = document.body.getAttribute('data-theme') === 'dark';
@@ -92,23 +99,23 @@ const initHeroNeuralNetwork = () => {
         }
     };
 
+    // Performance: Integer key avoids string allocation on every grid lookup
     const getCellKey = (x, y) => {
-        const cellX = Math.floor(x / GRID_CELL_SIZE);
-        const cellY = Math.floor(y / GRID_CELL_SIZE);
-        return `${cellX},${cellY}`;
+        return Math.floor(x / GRID_CELL_SIZE) * 1000 + Math.floor(y / GRID_CELL_SIZE);
     };
 
     const rebuildSpatialGrid = () => {
         spatialGrid.clear();
-        nodes.forEach((node, index) => {
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
             const key = getCellKey(node.x, node.y);
             let bucket = spatialGrid.get(key);
             if (!bucket) {
                 bucket = [];
                 spatialGrid.set(key, bucket);
             }
-            bucket.push(index);
-        });
+            bucket.push(i);
+        }
     };
 
     const getNeighborIndices = (node, neighbors) => {
@@ -118,7 +125,8 @@ const initHeroNeuralNetwork = () => {
 
         for (let offsetY = -1; offsetY <= 1; offsetY++) {
             for (let offsetX = -1; offsetX <= 1; offsetX++) {
-                const key = `${baseCellX + offsetX},${baseCellY + offsetY}`;
+                // Performance: Integer key avoids string allocation on every cell lookup
+                const key = (baseCellX + offsetX) * 1000 + (baseCellY + offsetY);
                 const bucket = spatialGrid.get(key);
                 if (bucket) {
                     for (let i = 0; i < bucket.length; i++) {
@@ -161,14 +169,25 @@ const initHeroNeuralNetwork = () => {
         // Performance: Cache connection strength outside the loops to avoid severe DOM read overhead and layout thrashing
         // from repeated calls to getAttribute('data-theme') on every frame.
         const { alphaBoost, lineWidth } = getConnectionStrength();
-        const nearbyIndices = [];
+
+        // Performance: Reset pre-allocated bins instead of creating new arrays each frame.
+        // Batching connections into alpha bins reduces GPU draw calls from ~300 to CONNECTION_BINS,
+        // and eliminates createLinearGradient() — the biggest per-frame allocation bottleneck.
+        for (let b = 0; b < CONNECTION_BINS; b++) {
+            binCoords[b].length = 0;
+            binAlphaSum[b] = 0;
+            binCount[b] = 0;
+        }
+
+        // Representative hue for connections: midpoint of each node's hue range per theme
+        const baseHue = isDarkTheme ? 210 : 220;
 
         for (let i = 0; i < nodes.length; i++) {
             const a = nodes[i];
-            getNeighborIndices(a, nearbyIndices);
+            getNeighborIndices(a, sharedNeighbors);
 
-            for (let n = 0; n < nearbyIndices.length; n++) {
-                const j = nearbyIndices[n];
+            for (let n = 0; n < sharedNeighbors.length; n++) {
+                const j = sharedNeighbors[n];
                 if (j <= i) continue;
                 const b = nodes[j];
                 const dx = b.x - a.x;
@@ -177,26 +196,35 @@ const initHeroNeuralNetwork = () => {
 
                 if (distSq < CONNECTION_DISTANCE_SQ) {
                     const dist = Math.sqrt(distSq);
-                    const alpha = (1 - dist / CONNECTION_DISTANCE) * alphaBoost;
-
-                    const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-                    gradient.addColorStop(0, `hsla(${a.hue}, 70%, 65%, ${alpha})`);
-                    gradient.addColorStop(1, `hsla(${b.hue}, 70%, 65%, ${alpha})`);
-
-                    ctx.beginPath();
-                    ctx.moveTo(a.x, a.y);
-                    ctx.lineTo(b.x, b.y);
-                    ctx.strokeStyle = gradient;
-                    ctx.lineWidth = lineWidth;
-                    ctx.stroke();
+                    const ratio = 1 - dist / CONNECTION_DISTANCE;
+                    const alpha = ratio * alphaBoost;
+                    const binIdx = Math.min(CONNECTION_BINS - 1, (ratio * CONNECTION_BINS) | 0);
+                    const coords = binCoords[binIdx];
+                    coords.push(a.x, a.y, b.x, b.y);
+                    binAlphaSum[binIdx] += alpha;
+                    binCount[binIdx]++;
                 }
             }
+        }
+
+        ctx.lineWidth = lineWidth;
+        for (let b = 0; b < CONNECTION_BINS; b++) {
+            const count = binCount[b];
+            if (!count) continue;
+            const avgAlpha = binAlphaSum[b] / count;
+            ctx.strokeStyle = `hsla(${baseHue}, 70%, 65%, ${avgAlpha})`;
+            ctx.beginPath();
+            const coords = binCoords[b];
+            for (let p = 0; p < coords.length; p += 4) {
+                ctx.moveTo(coords[p], coords[p + 1]);
+                ctx.lineTo(coords[p + 2], coords[p + 3]);
+            }
+            ctx.stroke();
         }
     };
 
     const updateNodes = () => {
         const closeZone = MOUSE_RADIUS * 0.3;
-        const nearbyIndices = [];
 
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
@@ -219,9 +247,10 @@ const initHeroNeuralNetwork = () => {
                 }
             }
 
-            getNeighborIndices(node, nearbyIndices);
-            for (let n = 0; n < nearbyIndices.length; n++) {
-                const j = nearbyIndices[n];
+            // Performance: Reuse sharedNeighbors to avoid allocating a new array each node iteration
+            getNeighborIndices(node, sharedNeighbors);
+            for (let n = 0; n < sharedNeighbors.length; n++) {
+                const j = sharedNeighbors[n];
                 if (i === j) continue;
                 const other = nodes[j];
                 const dx = node.x - other.x;
@@ -295,7 +324,8 @@ const initHeroNeuralNetwork = () => {
         const clickX = event.offsetX;
         const clickY = event.offsetY;
 
-        nodes.forEach(node => {
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
             const dx = node.x - clickX;
             const dy = node.y - clickY;
             const distSq = dx * dx + dy * dy;
@@ -305,7 +335,7 @@ const initHeroNeuralNetwork = () => {
                 node.vx += (dx / dist) * force;
                 node.vy += (dy / dist) * force;
             }
-        });
+        }
     };
 
     const resetMouse = () => {
@@ -317,9 +347,9 @@ const initHeroNeuralNetwork = () => {
     const onThemeChange = () => {
         isDarkTheme = document.body.getAttribute('data-theme') === 'dark';
         const baseHue = getThemeAwareHue();
-        nodes.forEach(node => {
-            node.hue = baseHue + Math.random() * 40;
-        });
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].hue = baseHue + Math.random() * 40;
+        }
     };
 
     resize();
@@ -408,6 +438,11 @@ const initHeroIntro = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Performance: Activate preloaded font CSS now that the DOM is ready,
+    // keeping the initial render unblocked by the external font request.
+    const fontLink = document.getElementById('google-fonts-link');
+    if (fontLink) fontLink.rel = 'stylesheet';
+
     const runWhenIdle = (callback) => {
         if ('requestIdleCallback' in window) {
             window.requestIdleCallback(callback, { timeout: 350 });
