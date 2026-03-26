@@ -1668,10 +1668,10 @@ html.ip-enhanced .ip-act.ip-visible .ip-act-meta {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     width: 100%;
-    min-height: 320px;
     align-items: start;
     z-index: 1;
     overflow: hidden;
+    border-radius: 14px;
 }
 
 /* Both panels occupy the same grid cell (overlapping) */

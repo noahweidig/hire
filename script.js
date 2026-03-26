@@ -901,6 +901,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let sceneRevealObserver = null;
     let refreshSceneObserver = null;
 
+    // Tracks scenes already animated so scroll-lock only fires on first reveal
+    const ipAnimatedScenes = new WeakSet();
+    let ipScrollLockTimer = null;
+
+    const ipLockScroll = () => {
+        if (ipScrollLockTimer) clearTimeout(ipScrollLockTimer);
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.documentElement.style.overflow = 'hidden';
+        if (scrollbarWidth > 0) document.documentElement.style.paddingRight = scrollbarWidth + 'px';
+        // Hold for animation (0.82s) + buffer to appreciate the after state
+        ipScrollLockTimer = setTimeout(() => {
+            document.documentElement.style.overflow = '';
+            document.documentElement.style.paddingRight = '';
+            ipScrollLockTimer = null;
+        }, 1400);
+    };
+
     const setInPracticeFallbackLayout = (shouldEnable) => {
         const wasEnabled = document.documentElement.classList.contains('ip-no-sticky');
         document.documentElement.classList.toggle('ip-no-sticky', shouldEnable);
@@ -1036,10 +1053,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!scene) return;
                         // Reveal when the trigger is inside the detection zone OR has
                         // already scrolled above it (top < 0 means above the viewport).
-                        scene.classList.toggle(
-                            'scene-revealed',
-                            entry.isIntersecting || entry.boundingClientRect.top < 0
-                        );
+                        const shouldReveal = entry.isIntersecting || entry.boundingClientRect.top < 0;
+                        scene.classList.toggle('scene-revealed', shouldReveal);
+                        // On first reveal (not on scroll-back), briefly lock scroll so the
+                        // swipe animation can complete before the page moves on. Skip on
+                        // mobile where touch physics behave differently.
+                        if (entry.isIntersecting && !ipAnimatedScenes.has(scene) && !mobileQuery.matches) {
+                            ipAnimatedScenes.add(scene);
+                            ipLockScroll();
+                        }
                     });
                 }, {
                     rootMargin: `0px 0px ${rootMarginBottom} 0px`,
