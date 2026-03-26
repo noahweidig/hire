@@ -12,7 +12,7 @@ const initHeroNeuralNetwork = () => {
     let width = 0;
     let height = 0;
     const mouse = { x: -9999, y: -9999, active: false };
-    const CONNECTION_DISTANCE = 130;
+    const CONNECTION_DISTANCE = 160;
     const MOUSE_RADIUS = 200;
     const BASE_SPEED = 0.35;
     const MAX_SPEED = 0.75;
@@ -35,7 +35,7 @@ const initHeroNeuralNetwork = () => {
 
     const createNodes = () => {
         const area = width * height;
-        const nodeCount = Math.max(48, Math.min(96, Math.round(area / 22000)));
+        const nodeCount = Math.max(56, Math.min(110, Math.round(area / 19000)));
         const cols = Math.ceil(Math.sqrt(nodeCount * (width / height)));
         const rows = Math.ceil(nodeCount / cols);
         const cellW = width / cols;
@@ -99,7 +99,7 @@ const initHeroNeuralNetwork = () => {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < CONNECTION_DISTANCE) {
-                    const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.14;
+                    const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.2;
 
                     const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
                     gradient.addColorStop(0, `hsla(${a.hue}, 70%, 65%, ${alpha})`);
@@ -109,7 +109,7 @@ const initHeroNeuralNetwork = () => {
                     ctx.moveTo(a.x, a.y);
                     ctx.lineTo(b.x, b.y);
                     ctx.strokeStyle = gradient;
-                    ctx.lineWidth = 0.7;
+                    ctx.lineWidth = 1.05;
                     ctx.stroke();
                 }
             }
