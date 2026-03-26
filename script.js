@@ -252,8 +252,6 @@ const initHeroIntro = () => {
         .trim();
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    heroHeading.classList.add('hero-gradient-text');
-
     if (prefersReducedMotion) {
         heroHeading.textContent = fullHeadingText;
         heroSection.classList.add('hero-intro-started');
