@@ -1,0 +1,25 @@
+# Cache static assets for ~3 weeks to improve repeat visits without over-caching.
+/*.css
+  Cache-Control: public, max-age=1814400
+  Expires: Thu, 16 Apr 2026 00:00:00 GMT
+
+/*.js
+  Cache-Control: public, max-age=1814400
+  Expires: Thu, 16 Apr 2026 00:00:00 GMT
+
+/assets/*
+  Cache-Control: public, max-age=1814400
+  Expires: Thu, 16 Apr 2026 00:00:00 GMT
+
+/*.svg
+  Cache-Control: public, max-age=1814400
+  Expires: Thu, 16 Apr 2026 00:00:00 GMT
+
+/*.webp
+  Cache-Control: public, max-age=1814400
+  Expires: Thu, 16 Apr 2026 00:00:00 GMT
+
+# Keep HTML fresh while still cacheable for a short period.
+/
+  Cache-Control: public, max-age=300
+  Expires: Thu, 26 Mar 2026 00:05:00 GMT
