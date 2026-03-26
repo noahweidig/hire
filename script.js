@@ -97,6 +97,10 @@ const initHeroNeuralNetwork = () => {
     };
 
     const drawConnections = () => {
+        // Performance: Cache connection strength outside the loops to avoid severe DOM read overhead and layout thrashing
+        // from repeated calls to getAttribute('data-theme') on every frame.
+        const { alphaBoost, lineWidth } = getConnectionStrength();
+
         for (let i = 0; i < nodes.length; i++) {
             for (let j = i + 1; j < nodes.length; j++) {
                 const a = nodes[i];
@@ -106,7 +110,6 @@ const initHeroNeuralNetwork = () => {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < CONNECTION_DISTANCE) {
-                    const { alphaBoost, lineWidth } = getConnectionStrength();
                     const alpha = (1 - dist / CONNECTION_DISTANCE) * alphaBoost;
 
                     const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
