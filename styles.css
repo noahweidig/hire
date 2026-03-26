@@ -1160,6 +1160,17 @@ body[data-theme="dark"] .hero-photo {
     line-height: 1;
     cursor: pointer;
     padding: 0.1rem 0.35rem;
+    position: relative;
+}
+
+.legal-modal-close::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .legal-modal-close:hover,
