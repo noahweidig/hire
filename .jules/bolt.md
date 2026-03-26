@@ -33,3 +33,6 @@
 ## 2026-03-22 - Debounce High-Frequency Layout Calculations
 **Learning:** Binding layout calculations (e.g., `getBoundingClientRect()`) to raw, synchronous resize or keydown event listeners causes continuous main-thread congestion and layout thrashing, severely degrading UI responsiveness.
 **Action:** Always wrap high-frequency listeners (like `window.resize`) in a debounce utility, and cache static DOM queries (like `querySelectorAll`) outside of global keydown handlers.
+## 2026-03-26 - Mouse Event Layout Thrashing
+**Learning:** Calling `canvas.getBoundingClientRect()` inside high-frequency mouse event listeners like `mousemove` causes layout thrashing and severely blocks the main thread, especially if other elements (like typing animations) are modifying the DOM. Simply caching the viewport-relative bounding rect on resize is brittle because the cached coordinates become stale when the user scrolls the page.
+**Action:** When optimizing high-frequency pointer events to avoid synchronous layout reads, use target-relative properties like `event.offsetX` and `event.offsetY` instead of manually caching and computing offsets from a viewport-relative bounding box.

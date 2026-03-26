@@ -74,9 +74,9 @@ const initHeroNeuralNetwork = () => {
     };
 
     const setMouseFromEvent = (event) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = event.clientX - rect.left;
-        mouse.y = event.clientY - rect.top;
+        // Performance: Use offsetX/Y instead of getBoundingClientRect() to avoid synchronous main-thread layout thrashing
+        mouse.x = event.offsetX;
+        mouse.y = event.offsetY;
         mouse.active = true;
     };
 
@@ -197,9 +197,9 @@ const initHeroNeuralNetwork = () => {
     };
 
     const onClick = (event) => {
-        const rect = canvas.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const clickY = event.clientY - rect.top;
+        // Performance: Use offsetX/Y instead of getBoundingClientRect() to avoid synchronous main-thread layout thrashing
+        const clickX = event.offsetX;
+        const clickY = event.offsetY;
 
         nodes.forEach(node => {
             const dx = node.x - clickX;
