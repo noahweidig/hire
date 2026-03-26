@@ -42,7 +42,25 @@ const initHeroNeuralNetwork = () => {
     const binCoords = Array.from({ length: CONNECTION_BINS }, () => []);
     const binAlphaSum = new Float64Array(CONNECTION_BINS);
     const binCount = new Int32Array(CONNECTION_BINS);
-    const sharedNeighbors = [];
+
+    // Performance: Pre-render each node's glow to an offscreen canvas once at creation time.
+    // Eliminates createRadialGradient() — the largest per-frame allocation bottleneck (~N objects/frame).
+    // drawImage() from a cached texture is significantly cheaper than re-building gradients each frame.
+    const createGlowSprite = (hue, maxGlowRadius, spriteSize) => {
+        const sprite = typeof OffscreenCanvas !== 'undefined'
+            ? new OffscreenCanvas(spriteSize, spriteSize)
+            : (() => { const c = document.createElement('canvas'); c.width = spriteSize; c.height = spriteSize; return c; })();
+        const sCtx = sprite.getContext('2d');
+        const cx = spriteSize / 2;
+        const gradient = sCtx.createRadialGradient(cx, cx, 0, cx, cx, maxGlowRadius);
+        gradient.addColorStop(0, `hsla(${hue}, 70%, 75%, 1)`);
+        gradient.addColorStop(1, `hsla(${hue}, 70%, 60%, 0)`);
+        sCtx.beginPath();
+        sCtx.arc(cx, cx, maxGlowRadius, 0, Math.PI * 2);
+        sCtx.fillStyle = gradient;
+        sCtx.fill();
+        return sprite;
+    };
 
     // Performance: Cache theme state outside the animation loop to prevent layout thrashing
     // from repeated synchronous DOM reads.
@@ -85,15 +103,26 @@ const initHeroNeuralNetwork = () => {
                 const y = row * cellH + Math.random() * cellH;
                 const angle = Math.random() * Math.PI * 2;
                 const speed = BASE_SPEED * (0.6 + Math.random() * 0.8);
+                const radius = 1.2 + Math.random() * 1.2;
+                const hue = getThemeAwareHue() + Math.random() * 40;
+                const maxGlowRadius = (radius + 0.6) * 2.5;
+                const spriteSize = Math.ceil(maxGlowRadius) * 2 + 2;
                 nodes.push({
                     x,
                     y,
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed,
-                    radius: 1.2 + Math.random() * 1.2,
+                    radius,
                     pulse: Math.random() * Math.PI * 2,
                     pulseSpeed: 0.008 + Math.random() * 0.01,
-                    hue: getThemeAwareHue() + Math.random() * 40
+                    hue,
+                    // Performance: Pre-computed to avoid per-frame string allocation
+                    fillColor: `hsla(${hue}, 60%, 80%, 0.55)`,
+                    // Performance: Pre-rendered glow texture; avoids createRadialGradient each frame
+                    glowSprite: createGlowSprite(hue, maxGlowRadius, spriteSize),
+                    glowSpriteSize: spriteSize,
+                    // Performance: Per-node neighbor cache; populated once per frame after grid rebuild
+                    cachedNeighbors: []
                 });
             }
         }
@@ -139,6 +168,15 @@ const initHeroNeuralNetwork = () => {
         return neighbors;
     };
 
+    // Performance: Build per-node neighbor caches once per frame after grid rebuild.
+    // Both drawConnections and updateNodes can then read node.cachedNeighbors,
+    // halving the total getNeighborIndices calls from 2N to N per frame.
+    const cacheAllNeighbors = () => {
+        for (let i = 0; i < nodes.length; i++) {
+            getNeighborIndices(nodes[i], nodes[i].cachedNeighbors);
+        }
+    };
+
     const setMouseFromEvent = (event) => {
         // Performance: Use offsetX/Y instead of getBoundingClientRect() to avoid synchronous main-thread layout thrashing
         mouse.x = event.offsetX;
@@ -149,19 +187,19 @@ const initHeroNeuralNetwork = () => {
     const drawNode = (node) => {
         const glow = Math.sin(node.pulse) * 0.5 + 0.5;
         const radius = node.radius + glow * 0.6;
+        const glowRadius = radius * 2.5;
 
-        const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, radius * 2.5);
-        gradient.addColorStop(0, `hsla(${node.hue}, 70%, 75%, ${0.28 + glow * 0.15})`);
-        gradient.addColorStop(1, `hsla(${node.hue}, 70%, 60%, 0)`);
-
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, radius * 2.5, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
+        // Performance: drawImage from pre-rendered texture avoids per-frame createRadialGradient.
+        // globalAlpha varies the intensity (0.28–0.43) exactly as the original gradient alpha did.
+        // Scaling drawImage to the live glowRadius preserves the pulsing size animation.
+        ctx.globalAlpha = 0.28 + glow * 0.15;
+        const drawSize = glowRadius * 2;
+        ctx.drawImage(node.glowSprite, node.x - glowRadius, node.y - glowRadius, drawSize, drawSize);
+        ctx.globalAlpha = 1;
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${node.hue}, 60%, 80%, 0.55)`;
+        ctx.fillStyle = node.fillColor;
         ctx.fill();
     };
 
@@ -184,10 +222,10 @@ const initHeroNeuralNetwork = () => {
 
         for (let i = 0; i < nodes.length; i++) {
             const a = nodes[i];
-            getNeighborIndices(a, sharedNeighbors);
+            const neighbors = a.cachedNeighbors;
 
-            for (let n = 0; n < sharedNeighbors.length; n++) {
-                const j = sharedNeighbors[n];
+            for (let n = 0; n < neighbors.length; n++) {
+                const j = neighbors[n];
                 if (j <= i) continue;
                 const b = nodes[j];
                 const dx = b.x - a.x;
@@ -247,10 +285,9 @@ const initHeroNeuralNetwork = () => {
                 }
             }
 
-            // Performance: Reuse sharedNeighbors to avoid allocating a new array each node iteration
-            getNeighborIndices(node, sharedNeighbors);
-            for (let n = 0; n < sharedNeighbors.length; n++) {
-                const j = sharedNeighbors[n];
+            const neighbors = node.cachedNeighbors;
+            for (let n = 0; n < neighbors.length; n++) {
+                const j = neighbors[n];
                 if (i === j) continue;
                 const other = nodes[j];
                 const dx = node.x - other.x;
@@ -304,6 +341,7 @@ const initHeroNeuralNetwork = () => {
         }
 
         rebuildSpatialGrid();
+        cacheAllNeighbors();
         ctx.clearRect(0, 0, width, height);
         drawConnections();
         for (let i = 0; i < nodes.length; i++) {
@@ -348,13 +386,19 @@ const initHeroNeuralNetwork = () => {
         isDarkTheme = document.body.getAttribute('data-theme') === 'dark';
         const baseHue = getThemeAwareHue();
         for (let i = 0; i < nodes.length; i++) {
-            nodes[i].hue = baseHue + Math.random() * 40;
+            const node = nodes[i];
+            node.hue = baseHue + Math.random() * 40;
+            node.fillColor = `hsla(${node.hue}, 60%, 80%, 0.55)`;
+            const maxGlowRadius = (node.radius + 0.6) * 2.5;
+            const spriteSize = Math.ceil(maxGlowRadius) * 2 + 2;
+            node.glowSprite = createGlowSprite(node.hue, maxGlowRadius, spriteSize);
         }
     };
 
     resize();
     createNodes();
     rebuildSpatialGrid();
+    cacheAllNeighbors();
     ensureAnimation();
 
     heroSection.addEventListener('mousemove', setMouseFromEvent, { passive: true });
@@ -575,8 +619,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Initialize metrics
-    updateNavLinkMetrics();
+    // Initialize metrics after first paint to avoid forcing synchronous layout on startup
+    requestAnimationFrame(updateNavLinkMetrics);
     // Update when fonts load (as text width changes)
     document.fonts.ready.then(updateNavLinkMetrics);
 
