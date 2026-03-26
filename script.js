@@ -235,8 +235,52 @@ const initHeroNeuralNetwork = () => {
     }
 };
 
+const initHeroIntro = () => {
+    const heroSection = document.getElementById('hero');
+    const heroHeading = document.getElementById('hero-heading');
+    if (!heroSection || !heroHeading) return;
+
+    const heroLoadItems = heroSection.querySelectorAll('.hero-load-item');
+    heroLoadItems.forEach((item, index) => {
+        item.style.setProperty('--hero-delay', `${180 + (index * 120)}ms`);
+    });
+
+    const fullHeadingText = heroHeading.textContent.replace(/\s*\n\s*/g, '\n').trim();
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    heroHeading.classList.add('hero-gradient-text');
+
+    if (prefersReducedMotion) {
+        heroHeading.textContent = fullHeadingText;
+        heroSection.classList.add('hero-loaded');
+        return;
+    }
+
+    heroHeading.textContent = '';
+    heroHeading.classList.add('hero-is-typing');
+
+    let charIndex = 0;
+    const typingSpeedMs = 36;
+
+    const typeNextCharacter = () => {
+        charIndex += 1;
+        heroHeading.textContent = fullHeadingText.slice(0, charIndex);
+
+        if (charIndex < fullHeadingText.length) {
+            window.setTimeout(typeNextCharacter, typingSpeedMs);
+            return;
+        }
+
+        heroHeading.classList.remove('hero-is-typing');
+        heroSection.classList.add('hero-loaded');
+    };
+
+    typeNextCharacter();
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     initHeroNeuralNetwork();
+    initHeroIntro();
 
     const inPracticeSection = document.querySelector('.ip-section');
     if (inPracticeSection) {
