@@ -242,6 +242,9 @@ p {
     z-index: 0;
     pointer-events: none;
     opacity: 0.92;
+    /* Performance: Force a dedicated GPU compositing layer so canvas redraws are
+       isolated and do not trigger repaints of surrounding page content. */
+    will-change: transform;
 }
 
 body[data-theme="dark"] .hero-neural-canvas {
