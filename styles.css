@@ -140,7 +140,9 @@ h1 {
     background: linear-gradient(120deg, #4338ca 0%, #0f766e 45%, #f97316 100%);
     -webkit-background-clip: text;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
     color: transparent;
+    display: inline-block;
 }
 
 body[data-theme="dark"] #hero-heading.hero-gradient-text {
@@ -237,6 +239,12 @@ p {
 .hero-section.hero-loaded .hero-load-item {
     opacity: 1;
     transform: translateY(0);
+}
+
+.hero-section.hero-intro-started .hero-sync-item {
+    opacity: 1;
+    transform: translateY(0);
+    transition-duration: 0.28s;
 }
 
 .hero-neural-canvas {
