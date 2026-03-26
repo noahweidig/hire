@@ -18,6 +18,10 @@ const initHeroNeuralNetwork = () => {
     const MAX_SPEED = 0.75;
     const REPULSION_DIST = 80;
     const CLICK_RADIUS = 200;
+    const CONNECTION_DISTANCE_SQ = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
+    const REPULSION_DIST_SQ = REPULSION_DIST * REPULSION_DIST;
+    const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS;
+    const CLICK_RADIUS_SQ = CLICK_RADIUS * CLICK_RADIUS;
     const GRID_CELL_SIZE = CONNECTION_DISTANCE;
     const nodes = [];
     const spatialGrid = new Map();
@@ -97,17 +101,19 @@ const initHeroNeuralNetwork = () => {
         });
     };
 
-    const getNeighborIndices = (node) => {
+    const getNeighborIndices = (node, neighbors) => {
+        neighbors.length = 0;
         const baseCellX = Math.floor(node.x / GRID_CELL_SIZE);
         const baseCellY = Math.floor(node.y / GRID_CELL_SIZE);
-        const neighbors = [];
 
         for (let offsetY = -1; offsetY <= 1; offsetY++) {
             for (let offsetX = -1; offsetX <= 1; offsetX++) {
                 const key = `${baseCellX + offsetX},${baseCellY + offsetY}`;
                 const bucket = spatialGrid.get(key);
                 if (bucket) {
-                    neighbors.push(...bucket);
+                    for (let i = 0; i < bucket.length; i++) {
+                        neighbors.push(bucket[i]);
+                    }
                 }
             }
         }
@@ -145,11 +151,11 @@ const initHeroNeuralNetwork = () => {
         // Performance: Cache connection strength outside the loops to avoid severe DOM read overhead and layout thrashing
         // from repeated calls to getAttribute('data-theme') on every frame.
         const { alphaBoost, lineWidth } = getConnectionStrength();
-        const connectionDistanceSq = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
+        const nearbyIndices = [];
 
         for (let i = 0; i < nodes.length; i++) {
             const a = nodes[i];
-            const nearbyIndices = getNeighborIndices(a);
+            getNeighborIndices(a, nearbyIndices);
 
             for (let n = 0; n < nearbyIndices.length; n++) {
                 const j = nearbyIndices[n];
@@ -159,7 +165,7 @@ const initHeroNeuralNetwork = () => {
                 const dy = b.y - a.y;
                 const distSq = dx * dx + dy * dy;
 
-                if (distSq < connectionDistanceSq) {
+                if (distSq < CONNECTION_DISTANCE_SQ) {
                     const dist = Math.sqrt(distSq);
                     const alpha = (1 - dist / CONNECTION_DISTANCE) * alphaBoost;
 
@@ -179,18 +185,18 @@ const initHeroNeuralNetwork = () => {
     };
 
     const updateNodes = () => {
-        const repulsionDistSq = REPULSION_DIST * REPULSION_DIST;
-        const mouseRadiusSq = MOUSE_RADIUS * MOUSE_RADIUS;
         const closeZone = MOUSE_RADIUS * 0.3;
+        const nearbyIndices = [];
 
-        nodes.forEach((node, i) => {
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
             node.pulse += node.pulseSpeed;
 
             const mdx = mouse.x - node.x;
             const mdy = mouse.y - node.y;
             const mdistSq = mdx * mdx + mdy * mdy;
 
-            if (mouse.active && mdistSq < mouseRadiusSq && mdistSq > 0) {
+            if (mouse.active && mdistSq < MOUSE_RADIUS_SQ && mdistSq > 0) {
                 const mdist = Math.sqrt(mdistSq);
                 if (mdist < closeZone) {
                     const force = (1 - mdist / closeZone) * 0.025;
@@ -203,7 +209,7 @@ const initHeroNeuralNetwork = () => {
                 }
             }
 
-            const nearbyIndices = getNeighborIndices(node);
+            getNeighborIndices(node, nearbyIndices);
             for (let n = 0; n < nearbyIndices.length; n++) {
                 const j = nearbyIndices[n];
                 if (i === j) continue;
@@ -211,7 +217,7 @@ const initHeroNeuralNetwork = () => {
                 const dx = node.x - other.x;
                 const dy = node.y - other.y;
                 const distSq = dx * dx + dy * dy;
-                if (distSq < repulsionDistSq && distSq > 0) {
+                if (distSq < REPULSION_DIST_SQ && distSq > 0) {
                     const dist = Math.sqrt(distSq);
                     const force = (1 - dist / REPULSION_DIST) * 0.012;
                     node.vx += (dx / dist) * force;
@@ -240,7 +246,7 @@ const initHeroNeuralNetwork = () => {
             if (node.x > width) node.x = 0;
             if (node.y < 0) node.y = height;
             if (node.y > height) node.y = 0;
-        });
+        }
     };
 
     const animate = () => {
@@ -252,7 +258,9 @@ const initHeroNeuralNetwork = () => {
         rebuildSpatialGrid();
         ctx.clearRect(0, 0, width, height);
         drawConnections();
-        nodes.forEach(drawNode);
+        for (let i = 0; i < nodes.length; i++) {
+            drawNode(nodes[i]);
+        }
         updateNodes();
         animationFrameId = window.requestAnimationFrame(animate);
     };
@@ -272,7 +280,7 @@ const initHeroNeuralNetwork = () => {
             const dx = node.x - clickX;
             const dy = node.y - clickY;
             const distSq = dx * dx + dy * dy;
-            if (distSq < CLICK_RADIUS * CLICK_RADIUS && distSq > 0) {
+            if (distSq < CLICK_RADIUS_SQ && distSq > 0) {
                 const dist = Math.sqrt(distSq);
                 const force = (1 - dist / CLICK_RADIUS) * 1.8;
                 node.vx += (dx / dist) * force;
