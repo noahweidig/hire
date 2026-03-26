@@ -136,19 +136,6 @@ h1 {
     white-space: pre-line;
 }
 
-#hero-heading.hero-gradient-text {
-    background: linear-gradient(120deg, #4338ca 0%, #0f766e 45%, #f97316 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    display: inline-block;
-}
-
-body[data-theme="dark"] #hero-heading.hero-gradient-text {
-    background: linear-gradient(120deg, #93c5fd 0%, #5dead4 50%, #fdba74 100%);
-}
-
 #hero-heading.hero-is-typing::after {
     content: "|";
     margin-left: 0.15em;
