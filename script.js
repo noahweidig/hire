@@ -3,19 +3,26 @@ const initHeroNeuralNetwork = () => {
     const canvas = document.getElementById('hero-neural-canvas');
     if (!heroSection || !canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { desynchronized: true });
     if (!ctx) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
+
+    // Performance: Scale animation complexity on lower-power devices while
+    // preserving visual behavior on typical desktops.
+    const lowPowerDevice =
+        (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+        (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+        (navigator.connection && navigator.connection.saveData);
 
     let width = 0;
     let height = 0;
     const mouse = { x: -9999, y: -9999, active: false };
     const CONNECTION_DISTANCE = 160;
     const MOUSE_RADIUS = 200;
-    const BASE_SPEED = 0.35;
-    const MAX_SPEED = 0.75;
+    const BASE_SPEED = lowPowerDevice ? 0.32 : 0.35;
+    const MAX_SPEED = lowPowerDevice ? 0.68 : 0.75;
     const REPULSION_DIST = 80;
     const CLICK_RADIUS = 200;
     const CONNECTION_DISTANCE_SQ = CONNECTION_DISTANCE * CONNECTION_DISTANCE;
@@ -28,6 +35,7 @@ const initHeroNeuralNetwork = () => {
     let animationFrameId = null;
     let isHeroVisible = true;
     let isDocumentVisible = !document.hidden;
+    let frameCounter = 0;
 
     // Performance: Cache theme state outside the animation loop to prevent layout thrashing
     // from repeated synchronous DOM reads.
@@ -54,7 +62,9 @@ const initHeroNeuralNetwork = () => {
 
     const createNodes = () => {
         const area = width * height;
-        const nodeCount = Math.max(70, Math.min(130, Math.round(area / 16500)));
+        const minNodes = lowPowerDevice ? 50 : 70;
+        const maxNodes = lowPowerDevice ? 96 : 130;
+        const nodeCount = Math.max(minNodes, Math.min(maxNodes, Math.round(area / 16500)));
         const cols = Math.ceil(Math.sqrt(nodeCount * (width / height)));
         const rows = Math.ceil(nodeCount / cols);
         const cellW = width / cols;
@@ -255,6 +265,15 @@ const initHeroNeuralNetwork = () => {
             return;
         }
 
+        if (lowPowerDevice) {
+            frameCounter = (frameCounter + 1) % 2;
+            if (frameCounter !== 0) {
+                updateNodes();
+                animationFrameId = window.requestAnimationFrame(animate);
+                return;
+            }
+        }
+
         rebuildSpatialGrid();
         ctx.clearRect(0, 0, width, height);
         drawConnections();
@@ -389,7 +408,18 @@ const initHeroIntro = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    initHeroNeuralNetwork();
+    const runWhenIdle = (callback) => {
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(callback, { timeout: 350 });
+            return;
+        }
+        window.setTimeout(callback, 0);
+    };
+
+    // Defer non-critical work so first paint and interaction become snappier.
+    window.requestAnimationFrame(() => {
+        initHeroNeuralNetwork();
+    });
     initHeroIntro();
 
     const inPracticeSection = document.querySelector('.ip-section');
@@ -431,14 +461,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const marqueeObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    initMarquee();
+                    runWhenIdle(initMarquee);
                     observer.disconnect();
                 }
             });
         }, { rootMargin: '200px' });
         marqueeObserver.observe(marqueeSection);
     } else {
-        initMarquee();
+        runWhenIdle(initMarquee);
     }
 
     // Dynamic copyright year
