@@ -241,7 +241,7 @@ p {
     height: 100%;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.85;
+    opacity: 0.92;
 }
 
 body[data-theme="dark"] .hero-neural-canvas {

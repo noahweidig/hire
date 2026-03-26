@@ -19,6 +19,13 @@ const initHeroNeuralNetwork = () => {
     const REPULSION_DIST = 80;
     const CLICK_RADIUS = 200;
     const nodes = [];
+    const getConnectionStrength = () => {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        return {
+            alphaBoost: isDark ? 0.2 : 0.29,
+            lineWidth: isDark ? 1.05 : 1.25
+        };
+    };
 
     const getThemeAwareHue = () => {
         const isDark = document.body.getAttribute('data-theme') === 'dark';
@@ -35,7 +42,7 @@ const initHeroNeuralNetwork = () => {
 
     const createNodes = () => {
         const area = width * height;
-        const nodeCount = Math.max(56, Math.min(110, Math.round(area / 19000)));
+        const nodeCount = Math.max(70, Math.min(130, Math.round(area / 16500)));
         const cols = Math.ceil(Math.sqrt(nodeCount * (width / height)));
         const rows = Math.ceil(nodeCount / cols);
         const cellW = width / cols;
@@ -99,7 +106,8 @@ const initHeroNeuralNetwork = () => {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < CONNECTION_DISTANCE) {
-                    const alpha = (1 - dist / CONNECTION_DISTANCE) * 0.2;
+                    const { alphaBoost, lineWidth } = getConnectionStrength();
+                    const alpha = (1 - dist / CONNECTION_DISTANCE) * alphaBoost;
 
                     const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
                     gradient.addColorStop(0, `hsla(${a.hue}, 70%, 65%, ${alpha})`);
@@ -109,7 +117,7 @@ const initHeroNeuralNetwork = () => {
                     ctx.moveTo(a.x, a.y);
                     ctx.lineTo(b.x, b.y);
                     ctx.strokeStyle = gradient;
-                    ctx.lineWidth = 1.05;
+                    ctx.lineWidth = lineWidth;
                     ctx.stroke();
                 }
             }
