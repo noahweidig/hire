@@ -440,10 +440,16 @@ const initHeroIntro = () => {
     if (!heroSection || !heroHeading) return;
 
     const heroLoadItems = heroSection.querySelectorAll('.hero-load-item');
-    heroLoadItems.forEach((item, index) => {
+    let asyncIndex = 0;
+    heroLoadItems.forEach((item) => {
         const isSyncItem = item.classList.contains('hero-sync-item');
-        const delay = isSyncItem ? 0 : (180 + (index * 120));
-        item.style.setProperty('--hero-delay', `${delay}ms`);
+        if (isSyncItem) {
+            item.style.setProperty('--hero-delay', '0ms');
+        } else {
+            // Stagger async items so they cascade in as typing nears completion
+            item.style.setProperty('--hero-delay', `${380 + (asyncIndex * 100)}ms`);
+            asyncIndex++;
+        }
     });
 
     const fullHeadingText = (heroHeading.dataset.fullText || heroHeading.textContent)
@@ -461,6 +467,9 @@ const initHeroIntro = () => {
     heroHeading.textContent = '';
     heroHeading.classList.add('hero-is-typing');
     heroSection.classList.add('hero-intro-started');
+    // Add hero-loaded immediately so async items begin their delayed fade-ins
+    // concurrently with typing, rather than waiting for typing to complete.
+    heroSection.classList.add('hero-loaded');
 
     let charIndex = 0;
     const typingSpeedMs = 36;
@@ -475,7 +484,6 @@ const initHeroIntro = () => {
         }
 
         heroHeading.classList.remove('hero-is-typing');
-        heroSection.classList.add('hero-loaded');
     };
 
     typeNextCharacter();
@@ -495,11 +503,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.setTimeout(callback, 0);
     };
 
-    // Defer non-critical work so first paint and interaction become snappier.
-    window.requestAnimationFrame(() => {
-        initHeroNeuralNetwork();
-    });
+    // Start hero intro immediately to begin typing animation on first paint.
     initHeroIntro();
+
+    // Defer canvas init past first paint so it doesn't compete with critical
+    // hero text rendering. Double-rAF ensures at least one frame has been painted.
+    window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(initHeroNeuralNetwork);
+    });
 
     const inPracticeSection = document.querySelector('.ip-section');
     if (inPracticeSection) {
