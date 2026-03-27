@@ -877,10 +877,6 @@ document.addEventListener('DOMContentLoaded', () => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     if (pendingSectionId) {
-                        if (entry.target.id === pendingSectionId) {
-                            setActiveSection(entry.target.id);
-                            clearPendingSection();
-                        }
                         return;
                     }
                     setActiveSection(entry.target.id);
