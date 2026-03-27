@@ -420,17 +420,23 @@ const initHeroNeuralNetwork = () => {
         heroVisibilityObserver.observe(heroSection);
     }
 
-    if ('ResizeObserver' in window) {
-        const observer = new ResizeObserver(() => {
-            resize();
+    let canvasResizeTimeout;
+    const handleCanvasResize = () => {
+        // Performance: Lightweight structural resize fires immediately for visual continuity
+        resize();
+        if (canvasResizeTimeout) clearTimeout(canvasResizeTimeout);
+        // Performance: Debounce heavy allocations (like OffscreenCanvas in createNodes)
+        // to prevent main-thread lag and GC pressure during high-frequency resize events
+        canvasResizeTimeout = setTimeout(() => {
             createNodes();
-        });
+        }, 150);
+    };
+
+    if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(handleCanvasResize);
         observer.observe(heroSection);
     } else {
-        window.addEventListener('resize', () => {
-            resize();
-            createNodes();
-        });
+        window.addEventListener('resize', handleCanvasResize);
     }
 };
 
