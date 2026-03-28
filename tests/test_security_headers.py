@@ -145,6 +145,11 @@ class SecurityHeadersTest(unittest.TestCase):
         self.assertIsNotNone(worker_src, "worker-src directive is missing in CSP")
         self.assertIn("'none'", worker_src, "CSP worker-src should be 'none'")
 
+        # Verify manifest-src 'none'
+        manifest_src = next((d for d in directives if d.startswith("manifest-src")), None)
+        self.assertIsNotNone(manifest_src, "manifest-src directive is missing in CSP")
+        self.assertIn("'none'", manifest_src, "CSP manifest-src should be 'none'")
+
     def test_csp_no_frame_ancestors_in_meta(self):
         """Test that frame-ancestors is NOT present in the CSP meta tag (as it is unsupported)."""
         self.page.goto(self.base_url)
