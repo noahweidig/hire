@@ -1270,8 +1270,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Performance: Cache legal modal overlays to prevent repeated DOM queries on every keydown event
     const legalModalOverlays = document.querySelectorAll('.legal-modal-overlay');
 
+    let previousFocus = null;
+
     const openLegalModal = (modal) => {
         if (!modal) return;
+        previousFocus = document.activeElement;
         modal.hidden = false;
         document.body.style.overflow = 'hidden';
         const closeButton = modal.querySelector('[data-legal-modal-close]');
@@ -1286,6 +1289,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasOpenModal = Array.from(legalModalOverlays).some(overlay => !overlay.hidden);
         if (!hasOpenModal) {
             document.body.style.overflow = '';
+            if (previousFocus) {
+                previousFocus.focus();
+                previousFocus = null;
+            }
         }
     };
 

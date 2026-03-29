@@ -76,3 +76,7 @@
 ## 2026-03-24 - Async Loading States for Form Submissions
 **Learning:** Changing a submit button's text to "Sending..." provides some feedback, but replacing the button's `textContent` completely can break its internal structure (if it contains icons) and lacks the familiar, universally recognized visual affordance of a loading spinner, leaving users uncertain if the form is actually processing.
 **Action:** When handling async form submissions, preserve the button's internal DOM structure (e.g., wrap text in a `span`) and dynamically reveal a hidden SVG spinner alongside the text to provide clear, accessible, and reassuring visual feedback.
+
+## 2026-03-29 - Modal Focus Restoration
+**Learning:** When a modal dialogue is closed, returning focus to the document root causes severe disorientation for keyboard users, who are forced to navigate the entire page again to find their place.
+**Action:** Always capture `document.activeElement` before opening a custom modal, and restore focus to that specific element upon closing the modal, preserving the user's navigational context.
